@@ -586,8 +586,12 @@ export default function AdminDashboardPage() {
   if (isAuthenticated === null) {
     return (
       <div className="min-h-screen bg-[#02040A] flex flex-col items-center justify-center text-white">
-        <RefreshCw className="w-8 h-8 text-[#F59E0B] animate-spin mb-4" />
-        <p className="font-mono text-sm text-[#94A3B8]">Memeriksa autentikasi Portal Admin...</p>
+        <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-[#F59E0B] to-[#EA580C] p-0.5 shadow-xl shadow-[#F59E0B]/20 mb-4">
+          <div className="w-full h-full bg-[#02040A] rounded-[14px] flex items-center justify-center">
+            <ShieldCheck className="w-5 h-5 text-[#F59E0B]" />
+          </div>
+        </div>
+        <p className="font-mono text-xs text-[#94A3B8]">Memeriksa sesi admin...</p>
       </div>
     );
   }
@@ -607,8 +611,12 @@ export default function AdminDashboardPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-[#02040A] flex flex-col items-center justify-center text-white">
-        <RefreshCw className="w-8 h-8 text-[#F59E0B] animate-spin mb-4" />
-        <p className="font-mono text-sm text-[#94A3B8]">Menghubungkan ke CMS Admin & PostgreSQL...</p>
+        <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-[#F59E0B] to-[#EA580C] p-0.5 shadow-xl shadow-[#F59E0B]/20 mb-4">
+          <div className="w-full h-full bg-[#02040A] rounded-[14px] flex items-center justify-center">
+            <RefreshCw className="w-5 h-5 text-[#F59E0B] animate-spin" />
+          </div>
+        </div>
+        <p className="font-mono text-xs text-[#94A3B8]">Menghubungkan ke CMS Admin...</p>
       </div>
     );
   }
@@ -780,7 +788,7 @@ export default function AdminDashboardPage() {
         <div className="pt-6 border-t border-white/[0.08] space-y-3">
           <div className="px-3.5 py-2 rounded-xl bg-white/[0.03] border border-white/[0.06] text-xs">
             <div className="flex items-center gap-2 text-[#94A3B8] mb-1">
-              <span className="w-2 h-2 rounded-full bg-[#10B981] animate-pulse" />
+              <span className="w-2 h-2 rounded-full bg-[#10B981] shadow-[0_0_8px_#10B981]" />
               <span className="font-mono text-[11px]">Prisma & PostgreSQL</span>
             </div>
             <span className="text-[10px] text-[#64748B] block truncate">

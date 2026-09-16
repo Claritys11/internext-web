@@ -65,10 +65,10 @@ export function AuthPage({ onSuccess, redirectTo = "/admin" }: AuthPageProps) {
     <main className="relative min-h-screen bg-[#02040A] text-[#F8FAFC] md:h-screen md:overflow-hidden lg:grid lg:grid-cols-2">
       {/* Left side: Class Identity & Dynamic Floating Paths */}
       <div className="bg-[#0F172A]/40 relative hidden h-full flex-col border-r border-white/[0.08] p-10 lg:flex overflow-hidden">
-        <div className="from-[#02040A] absolute inset-0 z-10 bg-gradient-to-t via-transparent to-transparent opacity-90" />
+        <div className="from-[#02040A] absolute inset-0 z-0 bg-gradient-to-t via-transparent to-transparent opacity-90 pointer-events-none" />
         
         {/* Brand header */}
-        <div className="z-10 flex items-center gap-3">
+        <div className="relative z-20 flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#F59E0B] to-[#EA580C] p-0.5 shadow-lg shadow-[#F59E0B]/20">
             <div className="w-full h-full bg-[#02040A] rounded-[10px] flex items-center justify-center">
               <Terminal className="w-5 h-5 text-[#F59E0B]" />
@@ -85,7 +85,7 @@ export function AuthPage({ onSuccess, redirectTo = "/admin" }: AuthPageProps) {
         </div>
 
         {/* Quote */}
-        <div className="z-10 mt-auto space-y-4">
+        <div className="relative z-20 mt-auto space-y-4">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#F59E0B]/10 border border-[#F59E0B]/30 text-xs font-mono text-[#F59E0B]">
             <Sparkles className="w-3.5 h-3.5 text-[#EA580C]" />
             <span>Class Control HQ & Portfolio Hub</span>
@@ -103,14 +103,14 @@ export function AuthPage({ onSuccess, redirectTo = "/admin" }: AuthPageProps) {
         </div>
 
         {/* Ambient Animated Paths */}
-        <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute inset-0 pointer-events-none z-10">
           <FloatingPaths position={1} />
           <FloatingPaths position={-1} />
         </div>
       </div>
 
       {/* Right side: Login Form */}
-      <div className="relative flex min-h-screen flex-col justify-center p-6 sm:p-12 lg:p-16">
+      <div className="relative flex h-full min-h-screen lg:min-h-0 flex-col justify-center p-6 sm:p-12 lg:p-16 overflow-y-auto">
         {/* Background glow effects */}
         <div
           aria-hidden
@@ -245,8 +245,8 @@ export function AuthPage({ onSuccess, redirectTo = "/admin" }: AuthPageProps) {
   );
 }
 
-function FloatingPaths({ position }: { position: number }) {
-  const paths = Array.from({ length: 36 }, (_, i) => ({
+const generateStaticPaths = (position: number) =>
+  Array.from({ length: 24 }, (_, i) => ({
     id: i,
     d: `M-${380 - i * 5 * position} -${189 + i * 6}C-${
       380 - i * 5 * position
@@ -255,9 +255,19 @@ function FloatingPaths({ position }: { position: number }) {
     } ${343 - i * 6}C${616 - i * 5 * position} ${470 - i * 6} ${
       684 - i * 5 * position
     } ${875 - i * 6} ${684 - i * 5 * position} ${875 - i * 6}`,
-    color: `rgba(245, 158, 11, ${0.08 + i * 0.015})`,
-    width: 0.6 + i * 0.02,
+    color:
+      position === 1
+        ? `rgba(245, 158, 11, ${0.07 + (i % 5) * 0.012})`
+        : `rgba(234, 88, 12, ${0.05 + (i % 5) * 0.012})`,
+    width: 0.6 + (i % 4) * 0.03,
+    duration: 22 + (i % 6) * 2,
   }));
+
+const STATIC_PATHS_POS = generateStaticPaths(1);
+const STATIC_PATHS_NEG = generateStaticPaths(-1);
+
+const FloatingPaths = React.memo(function FloatingPaths({ position }: { position: number }) {
+  const paths = position === 1 ? STATIC_PATHS_POS : STATIC_PATHS_NEG;
 
   return (
     <div className="pointer-events-none absolute inset-0">
@@ -273,14 +283,13 @@ function FloatingPaths({ position }: { position: number }) {
             d={path.d}
             stroke={path.color}
             strokeWidth={path.width}
-            initial={{ pathLength: 0.3, opacity: 0.6 }}
+            initial={{ pathLength: 0.35, opacity: 0.45 }}
             animate={{
               pathLength: 1,
-              opacity: [0.25, 0.6, 0.25],
-              pathOffset: [0, 1, 0],
+              pathOffset: [0, 1],
             }}
             transition={{
-              duration: 20 + Math.random() * 10,
+              duration: path.duration,
               repeat: Number.POSITIVE_INFINITY,
               ease: "linear",
             }}
@@ -289,4 +298,5 @@ function FloatingPaths({ position }: { position: number }) {
       </svg>
     </div>
   );
-}
+});
+
