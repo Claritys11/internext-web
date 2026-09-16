@@ -4,6 +4,9 @@ import { NewsExplorer } from "@/components/features/NewsExplorer";
 import { getArticles } from "@/lib/api/services";
 import { Newspaper } from "lucide-react";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export default async function NewsPage() {
   const articles = await getArticles();
 

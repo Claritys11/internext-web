@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { getMembers, saveMember } from "@/lib/api/services";
 import { Member } from "@/lib/types";
 
@@ -20,6 +21,8 @@ export async function POST(request: Request) {
       body.id = `m-${Date.now()}`;
     }
     const saved = await saveMember(body);
+    revalidatePath("/", "layout");
+    revalidatePath("/members");
     return NextResponse.json(saved, { status: 201 });
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });

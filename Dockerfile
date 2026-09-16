@@ -23,24 +23,32 @@ ENV NODE_ENV=production
 ENV PORT=3500
 ENV HOSTNAME="0.0.0.0"
 
+# OpenSSL & libc are required by Prisma query engine on Alpine
+RUN apk add --no-cache libc6-compat openssl
+
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
+# Prepare public uploads folder with write permissions
+RUN mkdir -p /app/public/uploads && chown -R nextjs:nodejs /app/public
+
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/prisma ./prisma
-COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
-COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
-
-# Set the correct permission for prerender cache
-RUN mkdir .next
-RUN chown nextjs:nodejs .next
+COPY --from=builder /app/package.json ./package.json
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/docker-entrypoint.sh ./docker-entrypoint.sh
 
 # Automatically leverage output traces to reduce image size
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
+# Set correct permissions
+RUN mkdir -p .next && chown nextjs:nodejs .next
+RUN chown -R nextjs:nodejs /app/public /app/prisma /app/docker-entrypoint.sh
+RUN chmod +x /app/docker-entrypoint.sh
+
 USER nextjs
 
 EXPOSE 3500
 
-CMD ["node", "server.js"]
+CMD ["./docker-entrypoint.sh"]

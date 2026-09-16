@@ -4,6 +4,9 @@ import { siteConfig } from "@/config/site";
 import { getClassProfile } from "@/lib/api/services";
 import { Sparkles, Target, Compass, Flag, Award, History, Users } from "lucide-react";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export default async function AboutPage() {
   const profile = await getClassProfile();
   const school = profile.school || siteConfig.classInfo.school;

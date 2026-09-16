@@ -3,6 +3,9 @@ import { Footer } from "@/components/layout/Footer";
 import { EventsTimelineSection } from "@/components/sections/EventsTimelineSection";
 import { getEvents, getClassProfile } from "@/lib/api/services";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export default async function EventsPage() {
   const [events, profile] = await Promise.all([
     getEvents(),

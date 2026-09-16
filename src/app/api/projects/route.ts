@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { getProjects, saveProject } from "@/lib/api/services";
 import { Project } from "@/lib/types";
 
@@ -23,6 +24,9 @@ export async function POST(request: Request) {
       body.slug = body.title.toLowerCase().replace(/[^a-z0-9]+/g, "-");
     }
     const saved = await saveProject(body);
+    revalidatePath("/", "layout");
+    revalidatePath("/projects");
+    revalidatePath("/members");
     return NextResponse.json(saved, { status: 201 });
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });

@@ -10,6 +10,9 @@ import { EventsTimelineSection } from "@/components/sections/EventsTimelineSecti
 import { ScrollMotionPath } from "@/components/shared/ScrollMotionPath";
 import { getProjects, getArticles, getEvents, getMembers, getClassProfile } from "@/lib/api/services";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export default async function HomePage() {
   const [allProjects, articles, events, members, profile] = await Promise.all([
     getProjects(),

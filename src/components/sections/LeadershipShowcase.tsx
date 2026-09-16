@@ -191,7 +191,7 @@ export function LeadershipShowcase({ members }: LeadershipShowcaseProps) {
                   </p>
 
                   <Link
-                    href={`/members#${member.id}`}
+                    href={`/members/${member.id}`}
                     className="mt-4 inline-flex items-center gap-1 text-[11px] font-mono font-semibold text-[#F59E0B] hover:text-white transition-colors"
                   >
                     <span>Profil Lengkap</span>

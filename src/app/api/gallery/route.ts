@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { getGallery, saveGallery } from "@/lib/api/services";
 import { GalleryItem } from "@/lib/types";
 
@@ -20,6 +21,8 @@ export async function POST(request: Request) {
       body.id = `gal-${Date.now()}`;
     }
     const saved = await saveGallery(body);
+    revalidatePath("/", "layout");
+    revalidatePath("/gallery");
     return NextResponse.json(saved, { status: 201 });
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
