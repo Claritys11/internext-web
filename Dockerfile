@@ -11,6 +11,9 @@ COPY package.json package-lock.json* ./
 COPY prisma ./prisma/
 RUN npm ci
 
+ENV NEXT_TELEMETRY_DISABLED=1
+ENV NODE_OPTIONS="--max-old-space-size=2048"
+
 COPY . .
 RUN npx prisma generate
 RUN npm run build
@@ -20,6 +23,7 @@ FROM base AS runner
 WORKDIR /app
 
 ENV NODE_ENV=production
+ENV NEXT_TELEMETRY_DISABLED=1
 ENV PORT=3500
 ENV HOSTNAME="0.0.0.0"
 
