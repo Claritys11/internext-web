@@ -240,15 +240,33 @@ export default function ContactChatPage() {
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
   const [copiedEmail, setCopiedEmail] = useState<boolean>(false);
 
-  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const messagesContainerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const isInitialMount = useRef(true);
 
-  // Auto scroll when messages change or typing state toggles
+  // Auto scroll ONLY within the chat messages container, NEVER scrolling the window
   const scrollToBottom = (behavior: ScrollBehavior = "smooth") => {
-    messagesEndRef.current?.scrollIntoView({ behavior });
+    if (messagesContainerRef.current) {
+      messagesContainerRef.current.scrollTo({
+        top: messagesContainerRef.current.scrollHeight,
+        behavior,
+      });
+    }
   };
 
   useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      // Guarantee window stays firmly at the top of the page on load
+      if (typeof window !== "undefined") {
+        window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+      }
+      if (messagesContainerRef.current) {
+        messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
+      }
+      return;
+    }
+
     scrollToBottom("smooth");
   }, [messages, isTyping, activeChannelId]);
 
@@ -640,7 +658,10 @@ export default function ContactChatPage() {
             </div>
 
             {/* Messages Scroll Area */}
-            <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4 scroll-smooth">
+            <div
+              ref={messagesContainerRef}
+              className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4 scroll-smooth"
+            >
               {/* Channel Welcome Banner Card */}
               <div className="p-4 rounded-xl bg-gradient-to-r from-[#4F46E5]/10 via-[#06B6D4]/5 to-transparent border border-white/[0.06] mb-4">
                 <div className="flex items-start gap-3">
@@ -839,8 +860,6 @@ export default function ContactChatPage() {
                   </div>
                 </div>
               )}
-
-              <div ref={messagesEndRef} />
             </div>
 
             {/* ============================================================ */}
