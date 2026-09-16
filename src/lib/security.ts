@@ -8,10 +8,12 @@ const protectedMutationPaths = [
   "/api/gallery",
   "/api/profile",
   "/api/upload",
+  "/api/chat",
 ];
 
 export function isProtectedMutation(pathname: string, method: string) {
   if (!["POST", "PUT", "PATCH", "DELETE"].includes(method)) return false;
+  if (pathname === "/api/chat" && method !== "DELETE") return false;
   return protectedMutationPaths.some((path) => pathname === path || pathname.startsWith(`${path}/`));
 }
 
