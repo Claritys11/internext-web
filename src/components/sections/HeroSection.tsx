@@ -10,8 +10,8 @@ export function HeroSection() {
       <div className="absolute top-1/3 left-1/3 w-[300px] h-[250px] bg-[#06B6D4]/15 rounded-full blur-[100px] pointer-events-none" />
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center text-center">
-        {/* Hero Title & Info with opaque text shielding (so background motion path never bleeds through text) */}
-        <div className="relative z-20 bg-[#0A0F1E]/95 shadow-[0_0_50px_40px_#0A0F1E] rounded-3xl p-2 mb-2">
+        {/* Hero Title & Info with clean frosted backdrop */}
+        <div className="relative z-20 max-w-4xl mx-auto mb-6">
           {/* Badge Pill */}
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.1] text-xs font-mono text-[#E2E8F0] backdrop-blur-md mb-8 hover:border-[#06B6D4]/40 transition-colors">
             <Terminal className="w-3.5 h-3.5 text-[#06B6D4]" />
@@ -27,23 +27,23 @@ export function HeroSection() {
           </h1>
 
           {/* Subtitle */}
-          <p className="text-base sm:text-lg lg:text-xl text-[#94A3B8] max-w-2xl mx-auto mb-6 leading-relaxed font-normal">
+          <p className="text-base sm:text-lg lg:text-xl text-[#94A3B8] max-w-2xl mx-auto leading-relaxed font-normal">
             {siteConfig.description}
           </p>
         </div>
 
-        {/* CTA Action Buttons */}
-        <div className="flex flex-col sm:flex-row items-center gap-4 mb-12">
+        {/* CTA Action Buttons - high z-index and clear positioning */}
+        <div className="relative z-30 flex flex-col sm:flex-row items-center gap-4 mb-12">
           <Link
             href="/members"
-            className="btn-gradient px-7 py-3.5 rounded-xl text-sm font-semibold flex items-center gap-2 shadow-lg"
+            className="btn-gradient px-7 py-3.5 rounded-xl text-sm font-semibold flex items-center gap-2 shadow-lg hover:scale-105 transition-transform"
           >
             <span>Jelajahi 36 Anggota</span>
             <ArrowRight className="w-4 h-4" />
           </Link>
           <Link
             href="/projects"
-            className="btn-outline-indigo px-7 py-3.5 rounded-xl text-sm font-semibold flex items-center gap-2"
+            className="btn-outline-indigo px-7 py-3.5 rounded-xl text-sm font-semibold flex items-center gap-2 hover:scale-105 transition-transform"
           >
             <Sparkles className="w-4 h-4 text-[#06B6D4]" />
             <span>Lihat Galeri Karya</span>
