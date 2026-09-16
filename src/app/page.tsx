@@ -26,7 +26,7 @@ export default async function HomePage() {
 
       <Navbar />
 
-      <main className="flex-1 relative z-10 bg-[#0A0F1E] shadow-2xl">
+      <main className="flex-1 relative z-10">
         {/* 1. Hero Section (Clean, without countdown) */}
         <HeroSection />
 
@@ -67,39 +67,6 @@ export default async function HomePage() {
             {events.slice(0, 3).map((event) => (
               <EventCard key={event.id} event={event} />
             ))}
-          </div>
-        </section>
-
-        {/* 7. Call To Action Banner (translucent frosted glass so path shines faintly through) */}
-        <section className="pb-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="relative rounded-3xl overflow-hidden p-8 sm:p-12 lg:p-16 border border-white/[0.1] bg-gradient-to-r from-[#4F46E5]/20 via-[#111827]/70 to-[#06B6D4]/15 backdrop-blur-2xl shadow-2xl">
-            <div className="relative z-10 max-w-2xl">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.08] text-xs font-mono text-white mb-4">
-                <Sparkles className="w-3.5 h-3.5 text-[#06B6D4]" />
-                <span>Buku Tamu Digital</span>
-              </div>
-              <h3 className="font-heading text-2xl sm:text-4xl font-extrabold text-white mb-4">
-                Punya Pesan atau Saran untuk Kelas Kami?
-              </h3>
-              <p className="text-sm sm:text-base text-[#CBD5E1] mb-8 leading-relaxed">
-                Tinggalkan jejak ucapan, kesan, atau motivasi bagi rekan-rekan dan alumni di buku tamu resmi Internext.
-              </p>
-              <div className="flex flex-wrap items-center gap-4">
-                <Link
-                  href="/contact"
-                  className="btn-gradient px-6 py-3 rounded-xl text-sm font-semibold flex items-center gap-2"
-                >
-                  <span>Tulis di Buku Tamu</span>
-                  <ArrowRight className="w-4 h-4" />
-                </Link>
-                <Link
-                  href="/about"
-                  className="px-6 py-3 rounded-xl border border-white/[0.15] text-sm font-semibold text-white hover:bg-white/[0.05] transition-colors"
-                >
-                  Pelajari Visi Kelas
-                </Link>
-              </div>
-            </div>
           </div>
         </section>
       </main>

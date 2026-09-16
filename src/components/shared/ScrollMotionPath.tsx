@@ -48,13 +48,12 @@ export function ScrollMotionPath() {
         { x: centerX + sideWeave, y: 1020 * scale },                 // Curves to the side around 360 Heading
         { x: centerX - cardWeave * 0.8, y: 1480 * scale },            // 360 Showcase & Flank Cards (behind cards)
         { x: centerX - sideWeave, y: 2020 * scale },                 // Curves to the side around Leadership Heading
-        { x: centerX + cardWeave * 0.9, y: 2480 * scale },            // Leadership Frosted Cards (behind cards)
-        { x: centerX + sideWeave, y: 2880 * scale },                 // Curves to the side around News Heading
-        { x: centerX - cardWeave * 0.7, y: 3260 * scale },            // News Carousel Cards (behind cards)
-        { x: centerX - sideWeave * 0.9, y: 3680 * scale },            // Curves to the side around Events Heading
-        { x: centerX + cardWeave * 0.8, y: 4050 * scale },            // Events Cards (behind cards)
-        { x: centerX - cardWeave * 0.4, y: 4500 * scale },            // Call To Action Banner (behind banner)
-        { x: centerX, y: docHeight - 120 },                          // Footer bottom
+        { x: centerX + cardWeave * 0.9, y: 2520 * scale },            // Leadership 6 Frosted Cards (behind cards)
+        { x: centerX + sideWeave, y: 3080 * scale },                 // Curves to the side around News Heading
+        { x: centerX - cardWeave * 0.7, y: 3480 * scale },            // News Carousel Cards (behind cards)
+        { x: centerX - sideWeave * 0.9, y: 3950 * scale },            // Curves to the side around Events Heading
+        { x: centerX + cardWeave * 0.8, y: 4320 * scale },            // Events Cards (behind cards)
+        { x: centerX, y: docHeight - 200 },                          // Footer bottom
       ];
 
       // Build smooth cubic Bezier SVG path data through the points
