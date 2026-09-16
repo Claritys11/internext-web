@@ -1,231 +1,961 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { siteConfig } from "@/config/site";
 import { mockGuestbook } from "@/lib/data/mock";
-import { GuestbookEntry } from "@/lib/types";
-import { formatDate } from "@/lib/utils";
-import { Mail, MapPin, MessageSquare, Send, CheckCircle2, User, Sparkles } from "lucide-react";
+import {
+  MessageSquare,
+  Send,
+  Hash,
+  Users,
+  Mail,
+  MapPin,
+  Sparkles,
+  Copy,
+  Check,
+  CornerDownRight,
+  Smile,
+  Search,
+  Menu,
+  X,
+  Bot,
+  Heart,
+  Flame,
+  Rocket,
+  Lightbulb,
+  ThumbsUp,
+  ShieldAlert,
+  ChevronRight,
+} from "lucide-react";
 
-export default function ContactPage() {
-  const [entries, setEntries] = useState<GuestbookEntry[]>(mockGuestbook);
-  const [form, setForm] = useState({
-    name: "",
-    role: "Umum" as "Siswa" | "Alumni" | "Guru" | "Umum",
-    message: "",
+type Role = "Siswa" | "Alumni" | "Guru" | "Umum" | "Admin";
+
+interface Reaction {
+  emoji: string;
+  count: number;
+  userReacted?: boolean;
+}
+
+interface ChatMessage {
+  id: string;
+  channelId: string;
+  name: string;
+  role: Role;
+  message: string;
+  timestamp: string;
+  isSelf?: boolean;
+  isBot?: boolean;
+  replyTo?: {
+    name: string;
+    message: string;
+  };
+  reactions: Reaction[];
+}
+
+interface Channel {
+  id: string;
+  name: string;
+  title: string;
+  topic: string;
+  icon: React.ElementType;
+  badge?: string;
+}
+
+const CHANNELS: Channel[] = [
+  {
+    id: "buku-tamu",
+    name: "buku-tamu-digital",
+    title: "Buku Tamu Publik",
+    topic: "Buku tamu resmi angkatan XII RPL 1. Tinggalkan ucapan, kesan, motivasi & salam hangat.",
+    icon: Hash,
+    badge: "Utama",
+  },
+  {
+    id: "tanya-pengurus",
+    name: "tanya-pengurus",
+    title: "Tanya & Kontak Pengurus",
+    topic: "Saluran komunikasi langsung dengan ketua kelas, wali kelas, dan jajaran pengurus Internext.",
+    icon: MessageSquare,
+  },
+  {
+    id: "kolaborasi",
+    name: "kolaborasi-proyek",
+    title: "Kolaborasi & Ide Tech",
+    topic: "Diskusi proyek perangkat lunak, hackathon, peluang kerja sama, atau sharing teknologi.",
+    icon: Sparkles,
+  },
+];
+
+const INITIAL_MESSAGES: ChatMessage[] = [
+  // Channel 1: Buku Tamu
+  {
+    id: "bot-welcome-1",
+    channelId: "buku-tamu",
+    name: "Internext Assistant",
+    role: "Admin",
+    message:
+      "Selamat datang di Live Digital Chatroom & Buku Tamu Internext! 👋 Silakan sapa kelas kami, bagikan ucapan kelulusan, atau kirimkan doa terbaik bagi 36 siswa XII RPL 1.",
+    timestamp: "Hari ini, 08:00",
+    isBot: true,
+    reactions: [
+      { emoji: "🚀", count: 14, userReacted: false },
+      { emoji: "❤️", count: 18, userReacted: false },
+    ],
+  },
+  {
+    id: "gb-1",
+    channelId: "buku-tamu",
+    name: "Drs. Hendra Kusuma, M.Kom",
+    role: "Guru",
+    message:
+      "Bangga melihat dedikasi dan kerja sama anak-anak XII RPL. Teruslah berkarya dan jadilah software engineer yang berintegritas tinggi serta bermanfaat untuk sesama!",
+    timestamp: "10 Feb 2026, 10:00",
+    reactions: [
+      { emoji: "❤️", count: 24, userReacted: false },
+      { emoji: "👏", count: 16, userReacted: false },
+    ],
+  },
+  {
+    id: "gb-2",
+    channelId: "buku-tamu",
+    name: "Kevin Pratama, S.Kom (Alumni 2023)",
+    role: "Alumni",
+    message:
+      "Website kelasnya luar biasa keren! UI dark mode-nya rapi banget serasa tech startup silicon valley. Pertahankan semangat kolaborasinya adik-adik penerus RPL!",
+    timestamp: "14 Feb 2026, 14:30",
+    reactions: [
+      { emoji: "🔥", count: 19, userReacted: false },
+      { emoji: "🚀", count: 11, userReacted: false },
+    ],
+  },
+  {
+    id: "gb-3",
+    channelId: "buku-tamu",
+    name: "Farhan Maulana",
+    role: "Siswa",
+    message:
+      "Semoga seluruh perjuangan kita sampai hari kelulusan nanti berbuah manis. Buat kawan-kawan Internext, mari selesaikan portofolio terbaik kita!",
+    timestamp: "20 Feb 2026, 19:15",
+    reactions: [
+      { emoji: "✨", count: 15, userReacted: false },
+      { emoji: "🔥", count: 8, userReacted: false },
+    ],
+  },
+
+  // Channel 2: Tanya Pengurus
+  {
+    id: "bot-welcome-2",
+    channelId: "tanya-pengurus",
+    name: "Internext Assistant",
+    role: "Admin",
+    message:
+      "Halo! Kanal ini didedikasikan untuk pertanyaan resmi seputar administrasi kelas, kontak wali kelas, kunjungan lab, dan jadwal agenda publik.",
+    timestamp: "Hari ini, 08:00",
+    isBot: true,
+    reactions: [{ emoji: "💡", count: 7, userReacted: false }],
+  },
+  {
+    id: "q-1",
+    channelId: "tanya-pengurus",
+    name: "Fakhri Ramadhan (Ketua Kelas)",
+    role: "Admin",
+    message:
+      "Bagi bapak/ibu guru atau rekan sekolah yang membutuhkan jadwal presentasi proyek akhir atau ingin berkunjung ke Lab RPL 3, jangan ragu untuk kontak langsung di sini atau email ke claritydev.id@gmail.com ya!",
+    timestamp: "Hari ini, 08:45",
+    reactions: [
+      { emoji: "👍", count: 12, userReacted: false },
+      { emoji: "📨", count: 5, userReacted: false },
+    ],
+  },
+
+  // Channel 3: Kolaborasi
+  {
+    id: "bot-welcome-3",
+    channelId: "kolaborasi",
+    name: "Internext Assistant",
+    role: "Admin",
+    message:
+      "Ruang terbuka untuk eksplorasi teknologi bersama! Ajukan ide riset, open-source project, atau kolaborasi antarjurusan dan instansi luar di sini.",
+    timestamp: "Hari ini, 08:00",
+    isBot: true,
+    reactions: [{ emoji: "⚡", count: 9, userReacted: false }],
+  },
+  {
+    id: "c-1",
+    channelId: "kolaborasi",
+    name: "Bima Satria (Divisi IT & Riset)",
+    role: "Admin",
+    message:
+      "Kami sedang mengembangkan fitur eksplorasi 3D Dome Gallery dan Masonry portfolio. Jika ada rekan yang tertarik membangun sistem API backend bersama, drop pesan di sini!",
+    timestamp: "Kemarin, 16:20",
+    reactions: [
+      { emoji: "🚀", count: 11, userReacted: false },
+      { emoji: "🔥", count: 14, userReacted: false },
+    ],
+  },
+];
+
+const QUICK_EMOJIS = ["🚀", "🔥", "✨", "❤️", "👏", "💡", "🎉", "💻"];
+
+const ROLE_STYLES: Record<Role, { badge: string; text: string; bg: string }> = {
+  Admin: {
+    badge: "bg-indigo-500/20 text-indigo-300 border-indigo-500/40",
+    text: "text-indigo-400",
+    bg: "from-indigo-600 to-cyan-600",
+  },
+  Guru: {
+    badge: "bg-emerald-500/20 text-emerald-300 border-emerald-500/40",
+    text: "text-emerald-400",
+    bg: "from-emerald-600 to-teal-600",
+  },
+  Alumni: {
+    badge: "bg-amber-500/20 text-amber-300 border-amber-500/40",
+    text: "text-amber-400",
+    bg: "from-amber-600 to-orange-600",
+  },
+  Siswa: {
+    badge: "bg-cyan-500/20 text-cyan-300 border-cyan-500/40",
+    text: "text-cyan-400",
+    bg: "from-cyan-600 to-blue-600",
+  },
+  Umum: {
+    badge: "bg-purple-500/20 text-purple-300 border-purple-500/40",
+    text: "text-purple-400",
+    bg: "from-purple-600 to-pink-600",
+  },
+};
+
+export default function ContactChatPage() {
+  const [activeChannelId, setActiveChannelId] = useState<string>("buku-tamu");
+  const [messages, setMessages] = useState<ChatMessage[]>(INITIAL_MESSAGES);
+  const [userName, setUserName] = useState<string>("Tamu Pengunjung");
+  const [userRole, setUserRole] = useState<Role>("Umum");
+  const [inputMessage, setInputMessage] = useState<string>("");
+  const [isTyping, setIsTyping] = useState<boolean>(false);
+  const [typingSender, setTypingSender] = useState<string>("");
+  const [replyingTo, setReplyingTo] = useState<ChatMessage | null>(null);
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
+  const [copiedEmail, setCopiedEmail] = useState<boolean>(false);
+
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  // Auto scroll when messages change or typing state toggles
+  const scrollToBottom = (behavior: ScrollBehavior = "smooth") => {
+    messagesEndRef.current?.scrollIntoView({ behavior });
+  };
+
+  useEffect(() => {
+    scrollToBottom("smooth");
+  }, [messages, isTyping, activeChannelId]);
+
+  const activeChannel =
+    CHANNELS.find((c) => c.id === activeChannelId) || CHANNELS[0];
+
+  const currentChannelMessages = messages.filter((m) => {
+    if (m.channelId !== activeChannelId) return false;
+    if (!searchQuery.trim()) return true;
+    const query = searchQuery.toLowerCase();
+    return (
+      m.name.toLowerCase().includes(query) ||
+      m.message.toLowerCase().includes(query) ||
+      m.role.toLowerCase().includes(query)
+    );
   });
-  const [submitted, setSubmitted] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!form.name.trim() || !form.message.trim()) return;
+  const handleSendMessage = (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    const trimmed = inputMessage.trim();
+    if (!trimmed) return;
 
-    const newEntry: GuestbookEntry = {
-      id: `gb-${Date.now()}`,
-      name: form.name.trim(),
-      role: form.role,
-      message: form.message.trim(),
-      createdAt: new Date().toISOString(),
-      approved: true,
+    const senderName = userName.trim() || "Pengunjung Anonim";
+
+    const newMessage: ChatMessage = {
+      id: `msg-${Date.now()}`,
+      channelId: activeChannelId,
+      name: senderName,
+      role: userRole,
+      message: trimmed,
+      timestamp: "Baru saja",
+      isSelf: true,
+      replyTo: replyingTo
+        ? {
+            name: replyingTo.name,
+            message: replyingTo.message.slice(0, 75) + (replyingTo.message.length > 75 ? "..." : ""),
+          }
+        : undefined,
+      reactions: [],
     };
 
-    setEntries([newEntry, ...entries]);
-    setForm({ name: "", role: "Umum", message: "" });
-    setSubmitted(true);
-    setTimeout(() => setSubmitted(false), 4000);
+    setMessages((prev) => [...prev, newMessage]);
+    setInputMessage("");
+    setReplyingTo(null);
+
+    // Simulate friendly automatic response from Internext Bot or Class President
+    triggerSimulatedBotReply(senderName, trimmed, activeChannelId);
+  };
+
+  const triggerSimulatedBotReply = (
+    name: string,
+    userText: string,
+    channelId: string
+  ) => {
+    const sender =
+      channelId === "tanya-pengurus"
+        ? "Fakhri Ramadhan (Ketua Kelas)"
+        : "Internext Assistant";
+
+    setIsTyping(true);
+    setTypingSender(sender);
+
+    setTimeout(() => {
+      let botResponse = "";
+
+      if (channelId === "buku-tamu") {
+        const greetings = [
+          `Halo ${name}! Terima kasih banyak atas ucapan hangat dan motivasinya untuk kelas Internext. Semoga kebaikan selalu menyertaimu! 🚀✨`,
+          `Wah, terima kasih ${name} sudah singgah di buku tamu kami! Doa dan dukunganmu menjadi pendorong semangat 36 anak XII RPL 1. 🙌💙`,
+          `Salam hangat, ${name}! Pesanmu kini abadi di arsip digital Internext. Salam sukses selalu dari kami semua! 🎓🎉`,
+        ];
+        botResponse = greetings[Math.floor(Math.random() * greetings.length)];
+      } else if (channelId === "tanya-pengurus") {
+        botResponse = `Terima kasih atas pertanyaannya, ${name}. Pesanmu telah masuk ke notifikasi pengurus kelas. Untuk keperluan mendesak, silakan hubungi juga email resmi kami di ${siteConfig.socials.email}. 📩`;
+      } else {
+        botResponse = `Halo ${name}! Ide kolaborasimu sangat menarik untuk didiskusikan di Lab RPL 3. Kami akan meneruskan catatan ini ke Divisi IT & Riset! 💻⚡`;
+      }
+
+      const botMessage: ChatMessage = {
+        id: `bot-reply-${Date.now()}`,
+        channelId: channelId,
+        name: sender,
+        role: "Admin",
+        message: botResponse,
+        timestamp: "Baru saja",
+        isBot: true,
+        reactions: [{ emoji: "❤️", count: 1, userReacted: false }],
+      };
+
+      setMessages((prev) => [...prev, botMessage]);
+      setIsTyping(false);
+      setTypingSender("");
+    }, 1200);
+  };
+
+  const handleToggleReaction = (msgId: string, emoji: string) => {
+    setMessages((prev) =>
+      prev.map((msg) => {
+        if (msg.id !== msgId) return msg;
+
+        const existingReaction = msg.reactions.find((r) => r.emoji === emoji);
+        if (existingReaction) {
+          const updatedReactions = msg.reactions
+            .map((r) => {
+              if (r.emoji === emoji) {
+                const nextUserReacted = !r.userReacted;
+                return {
+                  ...r,
+                  count: nextUserReacted ? r.count + 1 : Math.max(0, r.count - 1),
+                  userReacted: nextUserReacted,
+                };
+              }
+              return r;
+            })
+            .filter((r) => r.count > 0);
+
+          return { ...msg, reactions: updatedReactions };
+        } else {
+          return {
+            ...msg,
+            reactions: [
+              ...msg.reactions,
+              { emoji, count: 1, userReacted: true },
+            ],
+          };
+        }
+      })
+    );
+  };
+
+  const handleCopyEmail = () => {
+    navigator.clipboard.writeText(siteConfig.socials.email);
+    setCopiedEmail(true);
+    setTimeout(() => setCopiedEmail(false), 2500);
+  };
+
+  const handleInsertEmoji = (emoji: string) => {
+    setInputMessage((prev) => prev + emoji);
+    inputRef.current?.focus();
   };
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen bg-[#0A0F1E] text-slate-100 selection:bg-[#06B6D4]/30 selection:text-cyan-200">
       <Navbar />
 
-      <main className="flex-1 py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Header */}
-          <div className="text-center max-w-3xl mx-auto mb-16">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#4F46E5]/10 border border-[#4F46E5]/30 text-xs font-mono text-[#A5B4FC] mb-4">
-              <MessageSquare className="w-3.5 h-3.5 text-[#06B6D4]" />
-              <span>Komunikasi & Buku Tamu</span>
+      {/* Main Container */}
+      <main className="flex-1 pt-24 pb-16 px-3 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
+        {/* Page Top Title */}
+        <div className="mb-6 flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+          <div>
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#4F46E5]/15 border border-[#4F46E5]/30 text-xs font-mono text-[#A5B4FC] mb-3">
+              <span className="w-2 h-2 rounded-full bg-[#10B981] animate-ping" />
+              <span>Live Class Messenger & Buku Tamu</span>
             </div>
-            <h1 className="font-heading text-4xl sm:text-5xl font-extrabold text-white tracking-tight mb-4">
-              Kontak & <span className="text-gradient-cyan">Buku Tamu</span>
+            <h1 className="font-heading text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+              Kontak & <span className="text-gradient-cyan">Buku Tamu Interaktif</span>
             </h1>
-            <p className="text-base text-[#94A3B8] leading-relaxed">
-              Hubungi perwakilan kelas untuk kolaborasi, atau tinggalkan jejak pesan dan apresiasi di buku tamu kami.
+            <p className="text-sm text-[#94A3B8] mt-1">
+              Ruang obrolan langsung dan buku tamu digital kelas XII RPL 1. Tinggalkan jejak atau hubungi pengurus secara real-time.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
-            {/* Left Col: Contact Info (5 cols) */}
-            <div className="lg:col-span-5 space-y-6">
-              <div className="glass-card p-6 sm:p-8">
-                <h3 className="font-heading text-xl font-bold text-white mb-6">
-                  Pusat Komunikasi Resmi
-                </h3>
+          {/* Quick status pill */}
+          <div className="flex items-center gap-3 bg-white/[0.04] border border-white/[0.08] px-4 py-2.5 rounded-2xl self-start md:self-auto text-xs">
+            <div className="w-2.5 h-2.5 rounded-full bg-[#10B981] shadow-[0_0_8px_#10B981]" />
+            <div>
+              <p className="font-medium text-white">36 Anggota Kelas</p>
+              <p className="text-[11px] text-[#06B6D4]">Lab RPL 3 Aktif • Siap Berkolaborasi</p>
+            </div>
+          </div>
+        </div>
 
-                <div className="space-y-5 text-sm">
-                  <div className="flex items-start gap-3.5">
-                    <div className="w-9 h-9 rounded-lg bg-[#4F46E5]/20 flex items-center justify-center shrink-0 mt-0.5 text-[#A5B4FC]">
-                      <Mail className="w-4 h-4" />
+        {/* Chat Application Layout */}
+        <div className="glass-card border-white/[0.1] rounded-2xl overflow-hidden shadow-2xl flex flex-col lg:flex-row h-[720px] max-h-[82vh] relative">
+          {/* ============================================================ */}
+          {/* LEFT COLUMN: Channels & Direct Contacts (Sidebar)             */}
+          {/* ============================================================ */}
+          <aside
+            className={`
+              fixed lg:static inset-y-0 left-0 z-40
+              w-72 sm:w-80 lg:w-72 xl:w-80 shrink-0
+              bg-[#0E1528] lg:bg-transparent
+              border-r border-white/[0.08] flex flex-col
+              transition-transform duration-300 ease-in-out
+              ${sidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
+            `}
+          >
+            {/* Sidebar Header */}
+            <div className="p-4 border-b border-white/[0.08] flex items-center justify-between">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-[#4F46E5] to-[#06B6D4] flex items-center justify-center text-white shadow-md">
+                  <MessageSquare className="w-4 h-4" />
+                </div>
+                <div>
+                  <h3 className="font-heading font-bold text-sm text-white leading-tight">
+                    Internext Chat
+                  </h3>
+                  <span className="text-[10px] font-mono text-[#06B6D4] block">
+                    XII RPL 1 Official
+                  </span>
+                </div>
+              </div>
+
+              {/* Close button on mobile */}
+              <button
+                onClick={() => setSidebarOpen(false)}
+                className="lg:hidden p-1.5 rounded-lg text-[#94A3B8] hover:text-white hover:bg-white/[0.08]"
+                aria-label="Tutup sidebar"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Channels List */}
+            <div className="p-3 space-y-1">
+              <span className="px-3 text-[11px] font-mono uppercase tracking-wider text-[#64748B] block mb-2">
+                Kanal Obrolan
+              </span>
+              {CHANNELS.map((ch) => {
+                const IconComponent = ch.icon;
+                const isActive = ch.id === activeChannelId;
+                const count = messages.filter((m) => m.channelId === ch.id).length;
+
+                return (
+                  <button
+                    key={ch.id}
+                    onClick={() => {
+                      setActiveChannelId(ch.id);
+                      setSidebarOpen(false);
+                    }}
+                    className={`
+                      w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-left text-xs font-medium transition-all group
+                      ${
+                        isActive
+                          ? "bg-gradient-to-r from-[#4F46E5]/30 to-[#06B6D4]/15 text-white border border-[#06B6D4]/40 shadow-sm"
+                          : "text-[#94A3B8] hover:text-white hover:bg-white/[0.05]"
+                      }
+                    `}
+                  >
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      <IconComponent
+                        className={`w-4 h-4 shrink-0 transition-colors ${
+                          isActive ? "text-[#06B6D4]" : "text-[#64748B] group-hover:text-[#A5B4FC]"
+                        }`}
+                      />
+                      <span className="truncate font-mono">{ch.name}</span>
                     </div>
-                    <div>
-                      <span className="text-xs font-mono text-[#64748B] block">Email Resmi</span>
-                      <a
-                        href={`mailto:${siteConfig.socials.email}`}
-                        className="text-white hover:text-[#06B6D4] font-medium transition-colors"
+
+                    <div className="flex items-center gap-1.5 shrink-0">
+                      {ch.badge && (
+                        <span className="text-[9px] px-1.5 py-0.5 rounded-full bg-[#06B6D4]/20 text-[#06B6D4] font-mono">
+                          {ch.badge}
+                        </span>
+                      )}
+                      <span
+                        className={`text-[10px] font-mono px-1.5 py-0.5 rounded-md ${
+                          isActive
+                            ? "bg-white/[0.1] text-white"
+                            : "bg-white/[0.04] text-[#64748B]"
+                        }`}
                       >
-                        {siteConfig.socials.email}
-                      </a>
+                        {count}
+                      </span>
                     </div>
-                  </div>
+                  </button>
+                );
+              })}
+            </div>
 
-                  <div className="flex items-start gap-3.5">
-                    <div className="w-9 h-9 rounded-lg bg-[#06B6D4]/20 flex items-center justify-center shrink-0 mt-0.5 text-[#06B6D4]">
-                      <MapPin className="w-4 h-4" />
-                    </div>
-                    <div>
-                      <span className="text-xs font-mono text-[#64748B] block">Lokasi Kampus</span>
-                      <p className="text-white font-medium">
-                        {siteConfig.classInfo.school}
-                      </p>
-                      <p className="text-xs text-[#94A3B8] mt-0.5">
-                        Gedung Teknologi & Informatika, Ruang Lab RPL 3
-                      </p>
-                    </div>
-                  </div>
+            {/* Direct Official Contact Cards (Scrollable lower portion) */}
+            <div className="mt-auto p-4 border-t border-white/[0.08] space-y-3 bg-white/[0.02]">
+              <span className="text-[11px] font-mono uppercase tracking-wider text-[#64748B] block">
+                Kontak Resmi Tim
+              </span>
 
-                  <div className="flex items-start gap-3.5">
-                    <div className="w-9 h-9 rounded-lg bg-[#10B981]/20 flex items-center justify-center shrink-0 mt-0.5 text-[#10B981]">
-                      <User className="w-4 h-4" />
-                    </div>
-                    <div>
-                      <span className="text-xs font-mono text-[#64748B] block">Perwakilan Tim</span>
-                      <p className="text-white font-medium">
-                        {siteConfig.classInfo.classPresident} (Ketua Kelas)
-                      </p>
-                      <p className="text-xs text-[#94A3B8]">
-                        Wali Kelas: {siteConfig.classInfo.homeroomTeacher}
-                      </p>
-                    </div>
+              {/* Email Card with Copy Button */}
+              <div className="p-3 rounded-xl bg-[#0A0F1E]/60 border border-white/[0.06] flex items-center justify-between gap-2">
+                <div className="min-w-0">
+                  <span className="text-[10px] font-mono text-[#64748B] block">Email Kelas</span>
+                  <a
+                    href={`mailto:${siteConfig.socials.email}`}
+                    className="text-xs text-white hover:text-[#06B6D4] truncate font-mono block transition-colors"
+                  >
+                    {siteConfig.socials.email}
+                  </a>
+                </div>
+                <button
+                  onClick={handleCopyEmail}
+                  title="Salin alamat email"
+                  className="p-1.5 rounded-lg bg-white/[0.05] hover:bg-white/[0.1] text-[#94A3B8] hover:text-white transition-all shrink-0 relative"
+                >
+                  {copiedEmail ? (
+                    <Check className="w-3.5 h-3.5 text-[#10B981]" />
+                  ) : (
+                    <Copy className="w-3.5 h-3.5" />
+                  )}
+                  {copiedEmail && (
+                    <span className="absolute -top-7 right-0 text-[10px] bg-[#10B981] text-black font-semibold px-2 py-0.5 rounded shadow">
+                      Tersalin!
+                    </span>
+                  )}
+                </button>
+              </div>
+
+              {/* Campus Location Card */}
+              <div className="p-3 rounded-xl bg-[#0A0F1E]/60 border border-white/[0.06] flex items-start gap-2.5 text-xs">
+                <MapPin className="w-4 h-4 text-[#06B6D4] shrink-0 mt-0.5" />
+                <div>
+                  <span className="text-[10px] font-mono text-[#64748B] block">Lokasi Lab</span>
+                  <p className="text-white font-medium">{siteConfig.classInfo.school}</p>
+                  <p className="text-[11px] text-[#94A3B8]">Gedung TI, Lab RPL 3</p>
+                </div>
+              </div>
+
+              {/* Class Leadership Pill */}
+              <div className="p-3 rounded-xl bg-[#0A0F1E]/60 border border-white/[0.06] text-xs">
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] font-mono text-[#64748B]">Ketua Kelas</span>
+                  <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#10B981]/15 text-[#10B981] font-mono">
+                    Online
+                  </span>
+                </div>
+                <p className="text-white font-medium mt-0.5">
+                  {siteConfig.classInfo.classPresident}
+                </p>
+                <p className="text-[11px] text-[#64748B]">
+                  Wali Kelas: {siteConfig.classInfo.homeroomTeacher}
+                </p>
+              </div>
+            </div>
+          </aside>
+
+          {/* Backdrop for mobile drawer */}
+          {sidebarOpen && (
+            <div
+              onClick={() => setSidebarOpen(false)}
+              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-30 lg:hidden"
+            />
+          )}
+
+          {/* ============================================================ */}
+          {/* RIGHT COLUMN: Active Chat Stream & Message Input              */}
+          {/* ============================================================ */}
+          <div className="flex-1 flex flex-col h-full bg-[#0A0F1E]/90 min-w-0">
+            {/* Chat Top Header */}
+            <div className="h-16 px-4 sm:px-6 border-b border-white/[0.08] flex items-center justify-between gap-3 bg-white/[0.01]">
+              <div className="flex items-center gap-3 min-w-0">
+                {/* Mobile sidebar toggle button */}
+                <button
+                  onClick={() => setSidebarOpen(true)}
+                  className="lg:hidden p-2 rounded-xl bg-white/[0.05] hover:bg-white/[0.1] text-white shrink-0"
+                  aria-label="Buka saluran"
+                >
+                  <Menu className="w-4 h-4" />
+                </button>
+
+                <div className="flex items-center gap-2 min-w-0">
+                  <Hash className="w-5 h-5 text-[#06B6D4] shrink-0" />
+                  <div className="min-w-0">
+                    <h2 className="font-heading font-bold text-sm sm:text-base text-white truncate">
+                      {activeChannel.name}
+                    </h2>
+                    <p className="text-[11px] text-[#94A3B8] truncate hidden sm:block">
+                      {activeChannel.topic}
+                    </p>
                   </div>
                 </div>
+              </div>
+
+              {/* Search in channel */}
+              <div className="relative w-36 sm:w-56 shrink-0">
+                <Search className="w-3.5 h-3.5 text-[#64748B] absolute left-3 top-1/2 -translate-y-1/2" />
+                <input
+                  type="text"
+                  placeholder="Cari pesan..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full bg-white/[0.05] border border-white/[0.08] rounded-xl pl-8 pr-3 py-1.5 text-xs text-white placeholder-[#64748B] focus:outline-none focus:border-[#06B6D4] transition-colors"
+                />
+                {searchQuery && (
+                  <button
+                    onClick={() => setSearchQuery("")}
+                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[#64748B] hover:text-white"
+                  >
+                    <X className="w-3 h-3" />
+                  </button>
+                )}
               </div>
             </div>
 
-            {/* Right Col: Guestbook Form & Message Wall (7 cols) */}
-            <div className="lg:col-span-7 space-y-8">
-              {/* Form Card */}
-              <div className="glass-card p-6 sm:p-8">
-                <div className="flex items-center gap-2 mb-6">
-                  <Sparkles className="w-4 h-4 text-[#06B6D4]" />
-                  <h3 className="font-heading text-lg font-bold text-white">
-                    Tulis Ucapan di Buku Tamu
-                  </h3>
-                </div>
-
-                {submitted && (
-                  <div className="mb-6 p-4 rounded-xl bg-[#10B981]/15 border border-[#10B981]/30 flex items-center gap-3 text-sm text-[#10B981]">
-                    <CheckCircle2 className="w-5 h-5 shrink-0" />
-                    <span>Terima kasih! Pesan Anda telah berhasil ditampilkan di buku tamu.</span>
+            {/* Messages Scroll Area */}
+            <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4 scroll-smooth">
+              {/* Channel Welcome Banner Card */}
+              <div className="p-4 rounded-xl bg-gradient-to-r from-[#4F46E5]/10 via-[#06B6D4]/5 to-transparent border border-white/[0.06] mb-4">
+                <div className="flex items-start gap-3">
+                  <div className="w-9 h-9 rounded-xl bg-[#06B6D4]/15 text-[#06B6D4] flex items-center justify-center shrink-0">
+                    <activeChannel.icon className="w-5 h-5" />
                   </div>
-                )}
-
-                <form onSubmit={handleSubmit} className="space-y-4">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-xs font-mono text-[#CBD5E1] mb-1.5">
-                        Nama Lengkap *
-                      </label>
-                      <input
-                        type="text"
-                        required
-                        placeholder="Contoh: Budi Santoso"
-                        value={form.name}
-                        onChange={(e) => setForm({ ...form, name: e.target.value })}
-                        className="w-full bg-[#0A0F1E] border border-white/[0.1] rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-[#06B6D4] transition-colors"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-xs font-mono text-[#CBD5E1] mb-1.5">
-                        Status / Hubungan
-                      </label>
-                      <select
-                        value={form.role}
-                        onChange={(e) =>
-                          setForm({
-                            ...form,
-                            role: e.target.value as "Siswa" | "Alumni" | "Guru" | "Umum",
-                          })
-                        }
-                        className="w-full bg-[#0A0F1E] border border-white/[0.1] rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-[#06B6D4] transition-colors"
-                      >
-                        <option value="Siswa">Siswa</option>
-                        <option value="Alumni">Alumni</option>
-                        <option value="Guru">Guru / Staff</option>
-                        <option value="Umum">Tamu Umum</option>
-                      </select>
-                    </div>
-                  </div>
-
                   <div>
-                    <label className="block text-xs font-mono text-[#CBD5E1] mb-1.5">
-                      Pesan / Kesan / Motivasi *
-                    </label>
-                    <textarea
-                      required
-                      rows={3}
-                      placeholder="Tuliskan pesan terbaik Anda untuk kelas Internext..."
-                      value={form.message}
-                      onChange={(e) => setForm({ ...form, message: e.target.value })}
-                      className="w-full bg-[#0A0F1E] border border-white/[0.1] rounded-xl p-4 text-sm text-white focus:outline-none focus:border-[#06B6D4] transition-colors resize-none"
-                    />
+                    <h4 className="font-heading font-bold text-sm text-white">
+                      Selamat datang di #{activeChannel.name}
+                    </h4>
+                    <p className="text-xs text-[#94A3B8] mt-0.5">
+                      {activeChannel.topic}
+                    </p>
                   </div>
-
-                  <button
-                    type="submit"
-                    className="btn-gradient px-6 py-2.5 rounded-xl text-xs font-semibold flex items-center gap-2"
-                  >
-                    <Send className="w-3.5 h-3.5" />
-                    <span>Kirim ke Buku Tamu</span>
-                  </button>
-                </form>
+                </div>
               </div>
 
-              {/* Guestbook Wall */}
-              <div className="space-y-4">
-                <h4 className="font-heading text-sm font-semibold uppercase tracking-wider text-[#94A3B8]">
-                  Pesan Terbaru ({entries.length})
-                </h4>
+              {/* Filter Notice */}
+              {searchQuery && (
+                <div className="text-xs font-mono text-[#06B6D4] bg-[#06B6D4]/10 border border-[#06B6D4]/20 p-2 rounded-lg flex items-center justify-between">
+                  <span>Hasil pencarian untuk: &ldquo;{searchQuery}&rdquo; ({currentChannelMessages.length} ditemukan)</span>
+                  <button
+                    onClick={() => setSearchQuery("")}
+                    className="underline hover:text-white text-[11px]"
+                  >
+                    Reset
+                  </button>
+                </div>
+              )}
 
-                <div className="space-y-3">
-                  {entries.map((entry) => (
+              {/* Empty State */}
+              {currentChannelMessages.length === 0 && (
+                <div className="text-center py-12 text-[#64748B]">
+                  <MessageSquare className="w-8 h-8 mx-auto mb-2 opacity-40" />
+                  <p className="text-sm">Belum ada pesan yang cocok.</p>
+                  <p className="text-xs text-[#475569]">Jadilah yang pertama mengirim pesan di kanal ini!</p>
+                </div>
+              )}
+
+              {/* Message Items */}
+              {currentChannelMessages.map((msg) => {
+                const roleStyle = ROLE_STYLES[msg.role] || ROLE_STYLES.Umum;
+                const isUser = msg.isSelf;
+
+                return (
+                  <div
+                    key={msg.id}
+                    className={`group flex items-start gap-3 transition-colors rounded-xl p-2 sm:p-2.5 -mx-2 hover:bg-white/[0.02] ${
+                      isUser ? "flex-row-reverse" : ""
+                    }`}
+                  >
+                    {/* Avatar */}
                     <div
-                      key={entry.id}
-                      className="glass-card p-4 sm:p-5 border-white/[0.06] hover:border-white/[0.12] transition-colors"
+                      className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 font-bold text-xs text-white shadow-md bg-gradient-to-br ${
+                        msg.isBot
+                          ? "from-violet-600 to-fuchsia-600"
+                          : roleStyle.bg
+                      }`}
                     >
-                      <div className="flex items-center justify-between gap-2 mb-2">
-                        <div className="flex items-center gap-2">
-                          <span className="font-heading font-bold text-sm text-white">
-                            {entry.name}
+                      {msg.isBot ? (
+                        <Bot className="w-4 h-4" />
+                      ) : (
+                        msg.name.charAt(0).toUpperCase()
+                      )}
+                    </div>
+
+                    {/* Content Column */}
+                    <div
+                      className={`flex flex-col max-w-[85%] sm:max-w-[78%] ${
+                        isUser ? "items-end" : "items-start"
+                      }`}
+                    >
+                      {/* Meta header (Name, Role, Timestamp) */}
+                      <div
+                        className={`flex items-center gap-2 mb-1 text-xs ${
+                          isUser ? "flex-row-reverse" : ""
+                        }`}
+                      >
+                        <span className="font-heading font-bold text-white">
+                          {msg.name}
+                        </span>
+                        <span
+                          className={`text-[10px] font-mono px-2 py-0.5 rounded-full border ${roleStyle.badge}`}
+                        >
+                          {msg.role}
+                        </span>
+                        {isUser && (
+                          <span className="text-[10px] font-mono text-[#06B6D4] bg-[#06B6D4]/10 px-1.5 py-0.5 rounded">
+                            Anda
                           </span>
-                          <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-white/[0.06] text-[#06B6D4]">
-                            {entry.role}
-                          </span>
-                        </div>
+                        )}
                         <span className="text-[10px] font-mono text-[#64748B]">
-                          {formatDate(entry.createdAt)}
+                          {msg.timestamp}
                         </span>
                       </div>
-                      <p className="text-xs text-[#CBD5E1] leading-relaxed">
-                        {entry.message}
-                      </p>
+
+                      {/* Quoted reply if any */}
+                      {msg.replyTo && (
+                        <div
+                          className={`mb-1.5 px-3 py-1 rounded-lg bg-white/[0.04] border-l-2 border-[#06B6D4] text-[11px] text-[#94A3B8] flex items-center gap-1.5 ${
+                            isUser ? "text-right" : ""
+                          }`}
+                        >
+                          <CornerDownRight className="w-3 h-3 text-[#06B6D4] shrink-0" />
+                          <span>
+                            Membalas <strong className="text-white">{msg.replyTo.name}</strong>: &ldquo;{msg.replyTo.message}&rdquo;
+                          </span>
+                        </div>
+                      )}
+
+                      {/* Message Bubble */}
+                      <div
+                        className={`p-3.5 sm:p-4 rounded-2xl text-xs sm:text-sm leading-relaxed shadow-sm ${
+                          isUser
+                            ? "bg-gradient-to-r from-[#4F46E5]/90 to-[#06B6D4]/90 text-white rounded-tr-none border border-cyan-400/30"
+                            : msg.isBot
+                            ? "bg-[#161F38] text-[#E2E8F0] rounded-tl-none border border-violet-500/30 shadow-violet-500/5"
+                            : "bg-[#111827] text-[#CBD5E1] rounded-tl-none border border-white/[0.08]"
+                        }`}
+                      >
+                        <p className="whitespace-pre-line">{msg.message}</p>
+                      </div>
+
+                      {/* Action & Reaction Bar */}
+                      <div
+                        className={`flex flex-wrap items-center gap-1.5 mt-2 ${
+                          isUser ? "justify-end" : "justify-start"
+                        }`}
+                      >
+                        {/* Render Reactions */}
+                        {msg.reactions.map((r, idx) => (
+                          <button
+                            key={idx}
+                            onClick={() => handleToggleReaction(msg.id, r.emoji)}
+                            className={`
+                              inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-mono transition-all
+                              ${
+                                r.userReacted
+                                  ? "bg-[#06B6D4]/25 text-[#06B6D4] border border-[#06B6D4]/50 scale-105"
+                                  : "bg-white/[0.04] text-[#94A3B8] hover:bg-white/[0.08] border border-white/[0.05]"
+                              }
+                            `}
+                          >
+                            <span>{r.emoji}</span>
+                            <span className="text-[10px]">{r.count}</span>
+                          </button>
+                        ))}
+
+                        {/* Quick Reaction Shortcut Buttons (visible on hover) */}
+                        <div className="opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1">
+                          {["❤️", "🔥", "🚀"].map((emoji) => (
+                            <button
+                              key={emoji}
+                              onClick={() => handleToggleReaction(msg.id, emoji)}
+                              className="text-[11px] p-1 rounded hover:bg-white/[0.1] transition-transform hover:scale-125"
+                              title={`Beri reaksi ${emoji}`}
+                            >
+                              {emoji}
+                            </button>
+                          ))}
+
+                          {/* Reply Button */}
+                          <button
+                            onClick={() => {
+                              setReplyingTo(msg);
+                              inputRef.current?.focus();
+                            }}
+                            className="text-[10px] font-mono text-[#64748B] hover:text-[#06B6D4] px-1.5 py-0.5 rounded hover:bg-white/[0.06] flex items-center gap-1 ml-1"
+                          >
+                            <CornerDownRight className="w-3 h-3" />
+                            <span>Balas</span>
+                          </button>
+                        </div>
+                      </div>
                     </div>
-                  ))}
+                  </div>
+                );
+              })}
+
+              {/* Bot Typing Indicator */}
+              {isTyping && (
+                <div className="flex items-center gap-3 text-xs text-[#94A3B8] p-2">
+                  <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-violet-600 to-fuchsia-600 flex items-center justify-center text-white shrink-0">
+                    <Bot className="w-4 h-4 animate-pulse" />
+                  </div>
+                  <div className="bg-[#161F38] border border-violet-500/20 px-3.5 py-2 rounded-2xl rounded-tl-none flex items-center gap-2">
+                    <span className="font-semibold text-white text-[11px]">
+                      {typingSender}
+                    </span>
+                    <span className="text-[11px] text-[#94A3B8]">sedang mengetik</span>
+                    <span className="flex gap-1">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#06B6D4] animate-bounce" />
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#06B6D4] animate-bounce [animation-delay:0.2s]" />
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#06B6D4] animate-bounce [animation-delay:0.4s]" />
+                    </span>
+                  </div>
+                </div>
+              )}
+
+              <div ref={messagesEndRef} />
+            </div>
+
+            {/* ============================================================ */}
+            {/* BOTTOM INPUT BAR: Identity, Emojis, Input & Send Button      */}
+            {/* ============================================================ */}
+            <div className="p-3 sm:p-4 border-t border-white/[0.08] bg-[#0E1528]/80 backdrop-blur-md">
+              {/* Replying Banner */}
+              {replyingTo && (
+                <div className="mb-2 px-3 py-1.5 rounded-xl bg-[#4F46E5]/15 border border-[#4F46E5]/30 flex items-center justify-between text-xs">
+                  <div className="flex items-center gap-2 truncate text-[#A5B4FC]">
+                    <CornerDownRight className="w-3.5 h-3.5 shrink-0 text-[#06B6D4]" />
+                    <span className="truncate">
+                      Membalas <strong>{replyingTo.name}</strong>: &ldquo;{replyingTo.message}&rdquo;
+                    </span>
+                  </div>
+                  <button
+                    onClick={() => setReplyingTo(null)}
+                    className="p-1 text-[#94A3B8] hover:text-white"
+                  >
+                    <X className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              )}
+
+              {/* User Identity Selector Strip */}
+              <div className="flex flex-wrap items-center justify-between gap-2 mb-2.5 pb-2 border-b border-white/[0.05] text-xs">
+                <div className="flex items-center gap-2">
+                  <span className="text-[11px] font-mono text-[#64748B]">Kirim sebagai:</span>
+                  <input
+                    type="text"
+                    value={userName}
+                    onChange={(e) => setUserName(e.target.value)}
+                    placeholder="Nama Anda"
+                    className="bg-white/[0.05] border border-white/[0.08] rounded-lg px-2.5 py-1 text-xs text-white font-medium focus:outline-none focus:border-[#06B6D4] w-32 sm:w-40"
+                  />
+                </div>
+
+                <div className="flex items-center gap-1">
+                  <span className="text-[11px] font-mono text-[#64748B] hidden sm:inline">Peran:</span>
+                  {(["Siswa", "Alumni", "Guru", "Umum"] as Role[]).map((role) => {
+                    const isSelected = userRole === role;
+                    return (
+                      <button
+                        key={role}
+                        type="button"
+                        onClick={() => setUserRole(role)}
+                        className={`
+                          px-2 py-0.5 rounded-md text-[10px] font-mono transition-all
+                          ${
+                            isSelected
+                              ? "bg-[#06B6D4] text-black font-bold shadow-sm"
+                              : "bg-white/[0.04] text-[#94A3B8] hover:text-white hover:bg-white/[0.08]"
+                          }
+                        `}
+                      >
+                        {role}
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
+
+              {/* Message Input & Actions */}
+              <form onSubmit={handleSendMessage} className="space-y-2">
+                <div className="relative flex items-center">
+                  <input
+                    ref={inputRef}
+                    type="text"
+                    value={inputMessage}
+                    onChange={(e) => setInputMessage(e.target.value)}
+                    placeholder={`Kirim pesan ke #${activeChannel.name}...`}
+                    className="w-full bg-[#0A0F1E] border border-white/[0.1] rounded-xl pl-4 pr-24 py-3 text-sm text-white placeholder-[#64748B] focus:outline-none focus:border-[#06B6D4] transition-colors"
+                  />
+
+                  {/* Send Button */}
+                  <button
+                    type="submit"
+                    disabled={!inputMessage.trim()}
+                    className={`
+                      absolute right-1.5 px-4 py-2 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all
+                      ${
+                        inputMessage.trim()
+                          ? "btn-gradient shadow-md cursor-pointer"
+                          : "bg-white/[0.05] text-[#64748B] cursor-not-allowed"
+                      }
+                    `}
+                  >
+                    <span>Kirim</span>
+                    <Send className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+
+                {/* Quick Emoji Bar & Hint */}
+                <div className="flex items-center justify-between gap-2 text-xs">
+                  <div className="flex items-center gap-1 overflow-x-auto py-0.5 no-scrollbar">
+                    <span className="text-[10px] font-mono text-[#64748B] mr-1 hidden sm:inline">
+                      Cepat:
+                    </span>
+                    {QUICK_EMOJIS.map((emoji) => (
+                      <button
+                        key={emoji}
+                        type="button"
+                        onClick={() => handleInsertEmoji(emoji)}
+                        className="p-1 hover:bg-white/[0.1] rounded text-xs transition-transform hover:scale-125"
+                      >
+                        {emoji}
+                      </button>
+                    ))}
+                  </div>
+
+                  <span className="text-[10px] font-mono text-[#475569] hidden md:inline">
+                    Tekan <strong>Enter ↵</strong> untuk kirim
+                  </span>
+                </div>
+              </form>
             </div>
           </div>
         </div>
