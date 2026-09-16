@@ -4,12 +4,14 @@ import { useState, useMemo } from "react";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { ProjectCard } from "@/components/features/ProjectCard";
+import { Masonry, MasonryItem } from "@/components/ui/Masonry";
 import { mockProjects } from "@/lib/data/mock";
-import { Code2, Search, Sparkles } from "lucide-react";
+import { Code2, Search, Sparkles, LayoutGrid } from "lucide-react";
 
 export default function ProjectsPage() {
   const [search, setSearch] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
+  const [viewMode, setViewMode] = useState<"masonry" | "grid">("masonry");
 
   const categories = [
     { label: "Semua Kategori", value: "all" },
@@ -34,6 +36,22 @@ export default function ProjectsPage() {
     });
   }, [search, selectedCategory]);
 
+  // Dynamic varied heights for organic staggered masonry layout
+  const masonryItems = useMemo<MasonryItem[]>(() => {
+    const heights = [380, 480, 420, 520, 360, 460, 400, 500];
+    return filteredProjects.map((project, idx) => ({
+      id: project.id,
+      img: project.thumbnail,
+      url: `/projects/${project.slug}`,
+      height: heights[idx % heights.length],
+      title: project.title,
+      subtitle: project.tagline,
+      category: project.category,
+      badge: project.featured ? "★ Featured" : undefined,
+      tags: project.techStack,
+    }));
+  }, [filteredProjects]);
+
   return (
     <div className="flex flex-col min-h-screen">
       <Navbar />
@@ -54,8 +72,8 @@ export default function ProjectsPage() {
             </p>
           </div>
 
-          {/* Search & Category Filter */}
-          <div className="glass-card p-4 sm:p-5 mb-10 flex flex-col md:flex-row items-center justify-between gap-4">
+          {/* Search, Filter & View Mode Bar */}
+          <div className="glass-card p-4 sm:p-5 mb-10 flex flex-col md:flex-row items-center justify-between gap-4 border-white/[0.08]">
             <div className="relative w-full md:w-80">
               <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#64748B]" />
               <input
@@ -82,15 +100,57 @@ export default function ProjectsPage() {
                 </button>
               ))}
             </div>
+
+            {/* Layout Mode Switcher */}
+            <div className="flex items-center gap-1 bg-white/[0.04] p-1 rounded-xl border border-white/[0.08] shrink-0">
+              <button
+                onClick={() => setViewMode("masonry")}
+                title="Tampilan Masonry GSAP"
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono transition-all ${
+                  viewMode === "masonry"
+                    ? "bg-[#06B6D4]/20 text-[#06B6D4] font-semibold border border-[#06B6D4]/40"
+                    : "text-[#64748B] hover:text-white"
+                }`}
+              >
+                <Sparkles className="w-3.5 h-3.5" />
+                <span>Masonry</span>
+              </button>
+              <button
+                onClick={() => setViewMode("grid")}
+                title="Tampilan Kisi Standar"
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono transition-all ${
+                  viewMode === "grid"
+                    ? "bg-white/[0.1] text-white font-semibold border border-white/[0.15]"
+                    : "text-[#64748B] hover:text-white"
+                }`}
+              >
+                <LayoutGrid className="w-3.5 h-3.5" />
+                <span>Grid</span>
+              </button>
+            </div>
           </div>
 
-          {/* Projects Grid */}
+          {/* Projects Display */}
           {filteredProjects.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredProjects.map((project) => (
-                <ProjectCard key={project.id} project={project} />
-              ))}
-            </div>
+            viewMode === "masonry" ? (
+              <Masonry
+                items={masonryItems}
+                ease="power3.out"
+                duration={0.6}
+                stagger={0.05}
+                animateFrom="bottom"
+                scaleOnHover={true}
+                hoverScale={0.98}
+                blurToFocus={true}
+                colorShiftOnHover={true}
+              />
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {filteredProjects.map((project) => (
+                  <ProjectCard key={project.id} project={project} />
+                ))}
+              </div>
+            )
           ) : (
             <div className="glass-card p-12 text-center max-w-md mx-auto">
               <Code2 className="w-10 h-10 text-[#64748B] mx-auto mb-3" />

@@ -1,6 +1,6 @@
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
-import { ArticleCard } from "@/components/features/ArticleCard";
+import { NewsExplorer } from "@/components/features/NewsExplorer";
 import { getArticles } from "@/lib/api/services";
 import { Newspaper } from "lucide-react";
 
@@ -26,11 +26,7 @@ export default async function NewsPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {articles.map((article) => (
-              <ArticleCard key={article.id} article={article} />
-            ))}
-          </div>
+          <NewsExplorer articles={articles} />
         </div>
       </main>
 
