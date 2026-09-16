@@ -7,8 +7,9 @@ services:
       dockerfile: Dockerfile
     restart: always
     ports:
-      - "${PORT:-3000}:3000"
+      - "${PORT:-3500}:3500"
     environment:
+      - PORT=3500
       - DATABASE_URL=${DATABASE_URL:-postgresql://postgres:postgres@postgres:5432/internext?schema=public}
       - NODE_ENV=production
     depends_on:

@@ -125,10 +125,11 @@ Proyek ini telah dikonfigurasi siap pakai untuk dideploy pada platform **Coolify
 
 1. Buat resource baru di Coolify bertipe **Docker Compose**.
 2. Masukkan file `docker-compose.yml` yang tersedia di root proyek:
-   - Service `app`: Menjalankan Next.js standalone container pada port `3000`.
-   - Service `postgres`: Menyediakan instance database PostgreSQL dengan volume data persisten.
+    - Service `web`: Menjalankan Next.js standalone container pada port `3500` (`http://localhost:3500`).
+    - Service `postgres`: Menyediakan instance database PostgreSQL dengan volume data persisten.
 3. Atur environment variables di dashboard Coolify:
-   - `DATABASE_URL`: URL koneksi PostgreSQL ke container `postgres`.
+    - `PORT`: `3500`
+    - `DATABASE_URL`: URL koneksi PostgreSQL ke container `postgres`.
    - `NODE_ENV`: `production`.
 4. Klik **Deploy** — Coolify akan otomatis melakukan *build* multi-stage dan menjalankan platform.
 

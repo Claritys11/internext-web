@@ -16,7 +16,7 @@
   - `DELETE /api/v1/articles/:id` (admin)
   - `POST /api/v1/projects` (admin/editor)
   - `PATCH /api/v1/guestbook/:id/status` (admin)
-- **CORS**: Must permit `https://internext.web.id` and `http://localhost:3000`.
+- **CORS**: Must permit `https://internext.web.id`, `http://localhost:3500`, and `http://localhost:3000`.
 
 ---
 
