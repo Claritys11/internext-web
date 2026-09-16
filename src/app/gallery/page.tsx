@@ -47,8 +47,21 @@ export default function GalleryPage() {
     return item.type === activeTab;
   });
 
-  // Rich photographic pool for the 3D Dome Gallery
+  // Dynamic pool for the 3D Dome Gallery, configurable from /admin (album: "Kubah 3D")
   const domeImages = useMemo(() => {
+    const customDome = galleryList.filter((item) => item.album === "Kubah 3D");
+    if (customDome.length > 0) {
+      return customDome.map((item) => ({
+        src: item.url,
+        alt: item.title,
+      }));
+    }
+    if (galleryList.length > 0) {
+      return galleryList.map((item) => ({
+        src: item.url,
+        alt: item.title,
+      }));
+    }
     return [
       {
         src: "https://images.unsplash.com/photo-1531482615713-2afd69097998?w=800&h=800&fit=crop",
@@ -115,7 +128,7 @@ export default function GalleryPage() {
         alt: "Studio Musik & Sound Engineering",
       },
     ];
-  }, []);
+  }, [galleryList]);
 
   return (
     <div className="flex flex-col min-h-screen bg-[#02040A]">

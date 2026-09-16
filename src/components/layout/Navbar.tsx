@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
@@ -43,19 +43,45 @@ const navItems: NavItemConfig[] = [
 export function Navbar() {
   const pathname = usePathname();
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isHiddenAtBottom, setIsHiddenAtBottom] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [hoveredTab, setHoveredTab] = useState<string | null>(null);
+  const lastScrollY = useRef(0);
 
   useEffect(() => {
     const handleScroll = () => {
-      // Smooth threshold with a small buffer
-      setIsScrolled(window.scrollY > 25);
+      const currentY = window.scrollY;
+      setIsScrolled(currentY > 25);
+
+      // On homepage: hide navbar momentarily when reaching the bottom footer
+      if (pathname === "/") {
+        const scrollHeight = document.documentElement.scrollHeight;
+        const windowHeight = window.innerHeight;
+        const distanceFromBottom = scrollHeight - (currentY + windowHeight);
+
+        // When near the bottom footer
+        if (distanceFromBottom < 400) {
+          if (currentY < lastScrollY.current - 1) {
+            // Scrolling back up: show immediately!
+            setIsHiddenAtBottom(false);
+          } else if (currentY > lastScrollY.current + 1 || distanceFromBottom < 120) {
+            // Scrolling down into footer or reached bottom: hide momentarily
+            setIsHiddenAtBottom(true);
+          }
+        } else {
+          setIsHiddenAtBottom(false);
+        }
+      } else {
+        setIsHiddenAtBottom(false);
+      }
+
+      lastScrollY.current = currentY;
     };
 
     handleScroll();
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [pathname]);
 
   // Close mobile drawer on route change
   useEffect(() => {
@@ -68,7 +94,12 @@ export function Navbar() {
         Always Fixed Header Container (z-50)
         Never changes layout flow height, eliminating double-scrollbars and jumping.
       */}
-      <header className="fixed top-0 inset-x-0 z-50 pointer-events-none flex justify-center px-3 sm:px-6 pt-4 sm:pt-5 transition-all duration-300">
+      <header
+        className={cn(
+          "fixed top-0 inset-x-0 z-50 pointer-events-none flex justify-center px-3 sm:px-6 pt-4 sm:pt-5 transition-all duration-500 ease-in-out",
+          isHiddenAtBottom ? "-translate-y-24 opacity-0" : "translate-y-0 opacity-100"
+        )}
+      >
         <motion.div
           layout
           transition={{

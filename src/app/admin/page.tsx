@@ -1608,59 +1608,153 @@ export default function AdminDashboardPage() {
 
         {/* TAB 7: GALLERY (DOKUMENTASI FOTO) */}
         {activeTab === "gallery" && (
-          <div className="space-y-6 animate-in fade-in duration-300">
-            <div className="flex items-center justify-between">
-              <div>
-                <h3 className="font-heading font-bold text-lg text-white">
-                  Galeri & Dokumentasi Visual
-                </h3>
-                <p className="text-xs text-[#94A3B8]">
-                  Semua foto ini tampil di 3D Dome Gallery dan Grid Dokumentasi /gallery.
-                </p>
+          <div className="space-y-8 animate-in fade-in duration-300">
+            {/* SEKSI 1: KUBAH GALERI 3D INTERNEXT */}
+            <div className="glass-card p-6 border-[#F59E0B]/30 bg-gradient-to-br from-[#F59E0B]/10 via-[#02040A] to-[#02040A] rounded-2xl relative overflow-hidden space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-white/[0.08]">
+                <div>
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#F59E0B]/20 border border-[#F59E0B]/40 text-xs font-mono text-[#F59E0B] mb-2">
+                    <Sparkles className="w-3.5 h-3.5 text-[#EA580C]" />
+                    <span>Kubah 3D Interaktif (360° Dome Gallery)</span>
+                  </div>
+                  <h3 className="font-heading font-bold text-lg text-white flex items-center gap-2">
+                    <span>Pengaturan Kubah Galeri 3D</span>
+                    <span className="text-xs px-2.5 py-0.5 rounded-full bg-[#F59E0B]/20 text-[#F59E0B] font-mono">
+                      {gallery.filter((i) => i.album === "Kubah 3D").length} Foto Aktif
+                    </span>
+                  </h3>
+                  <p className="text-xs text-[#94A3B8] max-w-2xl mt-1">
+                    Foto-foto di bawah ini adalah foto yang tampil dan berputar di dalam Kubah 3D Interaktif pada halaman{" "}
+                    <Link href="/gallery" target="_blank" className="text-[#F59E0B] underline hover:text-[#EA580C]">
+                      /gallery
+                    </Link>
+                    . Anda dapat menambah atau mengganti foto kubah 3D langsung dengan memilih album &ldquo;Kubah 3D&rdquo; atau mengunggah gambar.
+                  </p>
+                </div>
+
+                <button
+                  onClick={() => {
+                    setNewGalleryForm({
+                      title: "",
+                      album: "Kubah 3D",
+                      url: "",
+                      caption: "Momen dokumentasi Kubah 3D XI Internasional.",
+                    });
+                    setIsGalleryModalOpen(true);
+                  }}
+                  className="btn-gradient px-4 py-2.5 rounded-xl text-xs font-semibold flex items-center gap-2 shrink-0 shadow-lg"
+                >
+                  <Plus className="w-4 h-4" />
+                  <span>Tambah Foto ke Kubah 3D</span>
+                </button>
               </div>
 
-              <button
-                onClick={() => setIsGalleryModalOpen(true)}
-                className="btn-gradient px-4 py-2.5 rounded-xl text-xs font-semibold flex items-center gap-2"
-              >
-                <Plus className="w-4 h-4" />
-                <span>Tambah Foto Galeri</span>
-              </button>
+              {/* Grid Foto Kubah 3D */}
+              {gallery.filter((i) => i.album === "Kubah 3D").length === 0 ? (
+                <div className="p-8 text-center border border-dashed border-white/10 rounded-xl">
+                  <p className="text-xs text-[#94A3B8]">Belum ada foto khusus Kubah 3D. Klik tombol di atas untuk menambahkan foto ke kubah 3D!</p>
+                </div>
+              ) : (
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
+                  {gallery
+                    .filter((item) => item.album === "Kubah 3D")
+                    .map((item) => (
+                      <div
+                        key={item.id}
+                        className="glass-card overflow-hidden border-white/[0.1] hover:border-[#F59E0B]/40 group relative transition-all rounded-xl"
+                      >
+                        <div className="relative h-28 w-full bg-[#02040A]">
+                          <Image
+                            src={item.url}
+                            alt={item.title}
+                            fill
+                            className="object-cover group-hover:scale-105 transition-transform duration-300"
+                            unoptimized
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-[#02040A] via-transparent to-transparent opacity-80" />
+                          <button
+                            onClick={() => handleDeleteGallery(item.id, item.title)}
+                            className="absolute top-1.5 right-1.5 p-1 rounded-lg bg-red-500/80 hover:bg-red-600 text-white opacity-0 group-hover:opacity-100 transition-opacity"
+                            title="Hapus dari Kubah 3D"
+                          >
+                            <Trash2 className="w-3 h-3" />
+                          </button>
+                        </div>
+                        <div className="p-2">
+                          <h6 className="text-[11px] font-semibold text-white truncate" title={item.title}>
+                            {item.title}
+                          </h6>
+                          <span className="text-[9px] font-mono text-[#F59E0B]">Kubah 3D</span>
+                        </div>
+                      </div>
+                    ))}
+                </div>
+              )}
             </div>
 
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-              {gallery.map((item) => (
-                <div
-                  key={item.id}
-                  className="glass-card overflow-hidden border-white/[0.08] group relative"
-                >
-                  <div className="relative h-44 w-full bg-[#02040A]">
-                    <Image
-                      src={item.url}
-                      alt={item.title}
-                      fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-300"
-                      unoptimized
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#02040A] via-transparent to-transparent opacity-80" />
-                    <button
-                      onClick={() => handleDeleteGallery(item.id, item.title)}
-                      className="absolute top-2 right-2 p-1.5 rounded-lg bg-red-500/80 text-white opacity-0 group-hover:opacity-100 transition-opacity"
-                      title="Hapus Foto"
-                    >
-                      <Trash2 className="w-3.5 h-3.5" />
-                    </button>
-                  </div>
-                  <div className="p-3">
-                    <span className="text-[10px] font-mono text-[#F59E0B] block mb-0.5">
-                      {item.album}
-                    </span>
-                    <h5 className="text-xs font-semibold text-white truncate">
-                      {item.title}
-                    </h5>
-                  </div>
+            {/* SEKSI 2: SEMUA DOKUMENTASI & GALERI LAINNYA */}
+            <div className="space-y-4 pt-2">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h4 className="font-heading font-bold text-base text-white">
+                    Semua Foto Dokumentasi & Album Kegiatan
+                  </h4>
+                  <p className="text-xs text-[#94A3B8]">
+                    Daftar lengkap seluruh foto kegiatan, perlombaan, dan arsip visual kelas.
+                  </p>
                 </div>
-              ))}
+
+                <button
+                  onClick={() => {
+                    setNewGalleryForm({
+                      title: "",
+                      album: "Kegiatan",
+                      url: "",
+                      caption: "Dokumentasi kegiatan siswa XI Internasional.",
+                    });
+                    setIsGalleryModalOpen(true);
+                  }}
+                  className="px-3.5 py-2 rounded-xl text-xs font-semibold bg-white/[0.06] hover:bg-white/[0.12] border border-white/10 text-white flex items-center gap-2 transition-colors"
+                >
+                  <Plus className="w-4 h-4 text-[#F59E0B]" />
+                  <span>Tambah Foto Lainnya</span>
+                </button>
+              </div>
+
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                {gallery.map((item) => (
+                  <div
+                    key={item.id}
+                    className="glass-card overflow-hidden border-white/[0.08] group relative"
+                  >
+                    <div className="relative h-44 w-full bg-[#02040A]">
+                      <Image
+                        src={item.url}
+                        alt={item.title}
+                        fill
+                        className="object-cover group-hover:scale-105 transition-transform duration-300"
+                        unoptimized
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#02040A] via-transparent to-transparent opacity-80" />
+                      <button
+                        onClick={() => handleDeleteGallery(item.id, item.title)}
+                        className="absolute top-2 right-2 p-1.5 rounded-lg bg-red-500/80 text-white opacity-0 group-hover:opacity-100 transition-opacity"
+                        title="Hapus Foto"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                    <div className="p-3">
+                      <span className="text-[10px] font-mono text-[#F59E0B] block mb-0.5">
+                        {item.album}
+                      </span>
+                      <h5 className="text-xs font-semibold text-white truncate">
+                        {item.title}
+                      </h5>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         )}
@@ -2465,10 +2559,12 @@ export default function AdminDashboardPage() {
                   }
                   className="w-full bg-[#02040A] border border-white/10 rounded-xl px-3 py-2 text-white"
                 >
+                  <option value="Kubah 3D">Kubah 3D (360° Dome Gallery)</option>
                   <option value="Kegiatan">Kegiatan</option>
                   <option value="Prestasi">Prestasi</option>
                   <option value="Akademik">Akademik</option>
                   <option value="Sosial">Sosial</option>
+                  <option value="Workshop">Workshop</option>
                 </select>
               </div>
 
