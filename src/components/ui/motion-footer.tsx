@@ -1,11 +1,12 @@
 "use client";
 
 import * as React from "react";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { cn } from "@/lib/utils";
+import { ClassProfile } from "@/lib/types";
 import {
   MessageSquare,
   Users,
@@ -225,21 +226,37 @@ MagneticButton.displayName = "MagneticButton";
 // -------------------------------------------------------------------------
 // 3. MAIN COMPONENT
 // -------------------------------------------------------------------------
-const MarqueeItem = () => (
+const MarqueeItem = ({ profile }: { profile?: ClassProfile | null }) => (
   <div className="flex items-center space-x-12 px-6 select-none">
-    <span>CONNECTED. FORWARD. TOGETHER.</span> <span className="text-[#EA580C]">✦</span>
-    <span>SMK TELKOM MALANG • XI INTERNASIONAL</span> <span className="text-[#F59E0B]">✦</span>
+    <span>{profile?.tagline?.toUpperCase() || "CONNECTED. FORWARD. TOGETHER."}</span> <span className="text-[#EA580C]">✦</span>
+    <span>{profile?.school ? profile.school.toUpperCase() : "SMK TELKOM MALANG"} • {profile?.name ? profile.name.toUpperCase() : "XI INTERNASIONAL"}</span> <span className="text-[#F59E0B]">✦</span>
     <span>DIGITAL IDENTITY & INNOVATION</span> <span className="text-[#EA580C]">✦</span>
-    <span>25 TALENTED STUDENT CREATORS</span> <span className="text-[#F59E0B]">✦</span>
+    <span>{profile?.memberCount || 25} TALENTED STUDENT CREATORS</span> <span className="text-[#F59E0B]">✦</span>
     <span>CRAFTED WITH PRIDE & EXCELLENCE</span> <span className="text-[#EA580C]">✦</span>
   </div>
 );
 
-export function CinematicFooter() {
+export function CinematicFooter({ initialProfile }: { initialProfile?: ClassProfile }) {
+  const [profile, setProfile] = useState<ClassProfile | null>(initialProfile || null);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const giantTextRef = useRef<HTMLDivElement>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
   const linksRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    async function fetchProfile() {
+      try {
+        const res = await fetch("/api/profile");
+        if (res.ok) {
+          const data = await res.json();
+          setProfile(data);
+        }
+      } catch (err) {
+        // Fallback to initial or default
+      }
+    }
+    fetchProfile();
+  }, []);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -326,8 +343,8 @@ export function CinematicFooter() {
           {/* 1. Diagonal Sleek Infinite Marquee Ticker (pinned near top of footer) */}
           <div className="absolute top-6 sm:top-10 left-0 w-full overflow-hidden border-y border-white/[0.08] bg-[#02040A]/80 backdrop-blur-md py-3 sm:py-3.5 z-10 -rotate-1 scale-105 shadow-2xl">
             <div className="flex w-max animate-footer-scroll-marquee text-xs md:text-sm font-bold tracking-[0.25em] text-[#94A3B8] uppercase">
-              <MarqueeItem />
-              <MarqueeItem />
+              <MarqueeItem profile={profile} />
+              <MarqueeItem profile={profile} />
             </div>
           </div>
 
@@ -335,7 +352,7 @@ export function CinematicFooter() {
           <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-4 sm:px-6 pt-16 sm:pt-20 w-full max-w-5xl mx-auto text-center">
             <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/[0.05] border border-[#F59E0B]/30 text-xs font-mono text-[#F59E0B] mb-4 sm:mb-6 backdrop-blur-md shadow-sm">
               <Sparkles className="w-3.5 h-3.5 text-[#EA580C]" />
-              <span>Official Digital Platform • Class XII RPL</span>
+              <span>Official Digital Platform • {profile?.school || "SMK Telkom Malang"} • {profile?.name || "XI Internasional"}</span>
             </div>
 
             <h2
@@ -365,7 +382,7 @@ export function CinematicFooter() {
                   className="footer-glass-pill px-6 sm:px-9 py-3 sm:py-4 rounded-full text-white font-bold text-sm sm:text-base flex items-center gap-2.5 sm:gap-3 group shadow-lg"
                 >
                   <Users className="w-4 sm:w-5 h-4 sm:h-5 text-[#EA580C] group-hover:scale-110 transition-transform" />
-                  <span>Direktori 25 Anggota</span>
+                  <span>Direktori {profile?.memberCount || 25} Anggota</span>
                 </MagneticButton>
 
                 <MagneticButton
@@ -408,7 +425,7 @@ export function CinematicFooter() {
 
                 <MagneticButton
                   as="a"
-                  href="https://instagram.com"
+                  href={profile?.instagram || "https://instagram.com/internext.class"}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="footer-glass-pill px-3.5 sm:px-5 py-1.5 sm:py-2 rounded-full text-[#CBD5E1] font-medium text-xs sm:text-sm hover:text-white flex items-center gap-1.5"
@@ -434,7 +451,7 @@ export function CinematicFooter() {
           <div className="relative z-20 w-full pb-6 sm:pb-8 px-6 md:px-12 flex flex-col md:flex-row items-center justify-between gap-4 border-t border-white/[0.06]">
             {/* Copyright & School Info */}
             <div className="text-[#64748B] text-[11px] sm:text-xs font-semibold tracking-wider uppercase order-2 md:order-1 font-mono text-center md:text-left">
-              © 2026 INTERNEXT • CLASS XII RPL. ALL RIGHTS RESERVED.
+              © {new Date().getFullYear()} INTERNEXT • {profile?.school ? profile.school.toUpperCase() : "SMK TELKOM MALANG"} • {profile?.name ? profile.name.toUpperCase() : "XI INTERNASIONAL"}. ALL RIGHTS RESERVED.
             </div>
 
             {/* "Crafted with Love" Badge */}

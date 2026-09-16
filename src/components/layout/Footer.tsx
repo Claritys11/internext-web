@@ -1,8 +1,27 @@
 import Link from "next/link";
 import { siteConfig } from "@/config/site";
-import { Terminal, Heart, ExternalLink } from "lucide-react";
+import { Terminal, Heart, ExternalLink, Sparkles } from "lucide-react";
+import { InstagramIcon } from "@/components/ui/Icons";
+import { getClassProfile } from "@/lib/api/services";
+import { ClassProfile } from "@/lib/types";
 
-export function Footer() {
+export async function Footer({ profile: customProfile }: { profile?: ClassProfile }) {
+  let profile = customProfile;
+  if (!profile) {
+    try {
+      profile = await getClassProfile();
+    } catch {
+      // Fallback
+    }
+  }
+
+  const school = profile?.school || siteConfig.classInfo.school;
+  const name = profile?.name || siteConfig.classInfo.name;
+  const generation = profile?.generation || siteConfig.classInfo.generation;
+  const memberCount = profile?.memberCount || siteConfig.classInfo.memberCount;
+  const description = profile?.description || siteConfig.description;
+  const instagram = profile?.instagram || siteConfig.socials.instagram;
+
   return (
     <footer className="border-t border-white/[0.08] bg-[#02040A] relative overflow-hidden">
       {/* Subtle top glow */}
@@ -21,14 +40,19 @@ export function Footer() {
               <span className="font-heading font-extrabold text-xl tracking-tight text-white">
                 INTERNEXT
               </span>
+              <span className="text-xs px-2 py-0.5 rounded-full bg-[#F59E0B]/10 border border-[#F59E0B]/30 text-[#F59E0B] font-mono">
+                {name}
+              </span>
             </div>
             <p className="text-sm text-[#94A3B8] max-w-md leading-relaxed">
-              {siteConfig.description}
+              {description}
             </p>
-            <div className="pt-2 flex items-center gap-4 text-xs font-mono text-[#64748B]">
-              <span>📍 {siteConfig.classInfo.school}</span>
+            <div className="pt-2 flex flex-wrap items-center gap-3 text-xs font-mono text-[#64748B]">
+              <span>📍 {school}</span>
               <span>•</span>
-              <span>🎓 {siteConfig.classInfo.generation}</span>
+              <span>🎓 {generation}</span>
+              <span>•</span>
+              <span>👥 {memberCount} Siswa</span>
             </div>
           </div>
 
@@ -56,7 +80,7 @@ export function Footer() {
             <h4 className="font-heading text-sm font-semibold uppercase tracking-wider text-[#F8FAFC]">
               Keluarga Besar
             </h4>
-            <ul className="space-y-2 text-sm text-[#94A3B8]">
+            <ul className="space-y-2.5 text-sm text-[#94A3B8]">
               <li>
                 <Link href="/about" className="hover:text-[#F59E0B] transition-colors">
                   Visi & Misi Kelas
@@ -64,28 +88,29 @@ export function Footer() {
               </li>
               <li>
                 <Link href="/members" className="hover:text-[#F59E0B] transition-colors">
-                  Direktori {siteConfig.classInfo.memberCount} Anggota
+                  Direktori {memberCount} Anggota
                 </Link>
               </li>
               <li>
-                <Link href="/gallery" className="hover:text-[#F59E0B] transition-colors">
-                  Dokumentasi & Galeri
+                <Link href="/events" className="hover:text-[#F59E0B] transition-colors">
+                  Agenda Kegiatan Kelas
                 </Link>
               </li>
               <li>
                 <Link href="/contact" className="hover:text-[#F59E0B] transition-colors">
-                  Buku Tamu & Pesan
+                  Buku Tamu & Live Chat
                 </Link>
               </li>
               <li>
                 <a
-                  href={siteConfig.socials.instagram}
+                  href={instagram}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 text-[#F59E0B] hover:underline"
+                  className="inline-flex items-center gap-1.5 text-[#F59E0B] hover:text-[#EA580C] transition-colors font-medium"
                 >
-                  Instagram Resmi
-                  <ExternalLink className="w-3 h-3" />
+                  <InstagramIcon className="w-3.5 h-3.5 text-[#EA580C]" />
+                  <span>Instagram Resmi</span>
+                  <ExternalLink className="w-3 h-3 text-[#64748B]" />
                 </a>
               </li>
             </ul>
@@ -94,7 +119,7 @@ export function Footer() {
 
         {/* Bottom Bar */}
         <div className="mt-12 pt-6 border-t border-white/[0.06] flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#64748B]">
-          <p>© {new Date().getFullYear()} Internext. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} {school} • {name}. All rights reserved.</p>
           <div className="flex items-center gap-1">
             <span>Dibuat dengan dedikasi oleh tim siswa</span>
             <Heart className="w-3.5 h-3.5 text-[#EF4444] fill-[#EF4444] inline" />

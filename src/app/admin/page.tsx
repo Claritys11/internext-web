@@ -27,6 +27,7 @@ import {
   ArrowLeft,
   X,
   Sliders,
+  Sparkles,
 } from "lucide-react";
 import {
   ClassProfile,
@@ -1116,17 +1117,26 @@ export default function AdminDashboardPage() {
                 </div>
               </div>
 
-              {/* Contact & Socials */}
+              {/* Contact & Socials (Tersinkronisasi dengan Footer) */}
               <div className="glass-card p-6 sm:p-8 border-white/[0.08] space-y-6">
-                <h3 className="text-lg font-heading font-bold text-white flex items-center gap-2">
-                  <Sliders className="w-5 h-5 text-[#10B981]" />
-                  <span>Kontak & Media Sosial Resmi</span>
-                </h3>
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                  <h3 className="text-lg font-heading font-bold text-white flex items-center gap-2">
+                    <Sliders className="w-5 h-5 text-[#F59E0B]" />
+                    <span>Kontak & Media Sosial Resmi</span>
+                  </h3>
+                  <span className="text-[11px] font-mono px-3 py-1 rounded-full bg-[#F59E0B]/10 text-[#F59E0B] border border-[#F59E0B]/30 self-start sm:self-auto flex items-center gap-1.5">
+                    <Sparkles className="w-3 h-3 text-[#EA580C]" />
+                    <span>Tersinkron Otomatis ke Seluruh Footer Website</span>
+                  </span>
+                </div>
+                <p className="text-xs text-[#94A3B8] leading-relaxed">
+                  Tautan akun media sosial resmi (khususnya Instagram) serta identitas sekolah dan kelas di bawah ini langsung mengatur tampilan tombol, tautan, dan marquee teks pada Footer di Beranda dan seluruh halaman website.
+                </p>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-xs font-mono text-[#94A3B8] mb-1.5">
-                      Email Resmi
+                      Email Resmi Kelas
                     </label>
                     <input
                       type="email"
@@ -1134,13 +1144,15 @@ export default function AdminDashboardPage() {
                       onChange={(e) =>
                         setProfileForm({ ...profileForm, email: e.target.value })
                       }
+                      placeholder="contact@internext.web.id"
                       className="w-full bg-[#02040A] border border-white/[0.1] rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-[#F59E0B]"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-xs font-mono text-[#94A3B8] mb-1.5">
-                      Instagram URL
+                    <label className="block text-xs font-mono text-[#94A3B8] mb-1.5 flex items-center justify-between">
+                      <span>Instagram URL Resmi (Footer Button)</span>
+                      <span className="text-[10px] text-[#F59E0B]">Tombol Footer</span>
                     </label>
                     <input
                       type="text"
@@ -1148,6 +1160,7 @@ export default function AdminDashboardPage() {
                       onChange={(e) =>
                         setProfileForm({ ...profileForm, instagram: e.target.value })
                       }
+                      placeholder="https://instagram.com/internext.class"
                       className="w-full bg-[#02040A] border border-white/[0.1] rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-[#F59E0B]"
                     />
                   </div>

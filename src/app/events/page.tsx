@@ -1,40 +1,24 @@
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
-import { EventCard } from "@/components/features/EventCard";
-import { getEvents } from "@/lib/api/services";
-import { Calendar, Clock, MapPin, Sparkles } from "lucide-react";
+import { EventsTimelineSection } from "@/components/sections/EventsTimelineSection";
+import { getEvents, getClassProfile } from "@/lib/api/services";
 
 export default async function EventsPage() {
-  const events = await getEvents();
+  const [events, profile] = await Promise.all([
+    getEvents(),
+    getClassProfile(),
+  ]);
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen bg-[#02040A] text-[#F8FAFC]">
       <Navbar />
 
-      <main className="flex-1 py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto mb-12">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#10B981]/10 border border-[#10B981]/30 text-xs font-mono text-[#10B981] mb-4">
-              <Calendar className="w-3.5 h-3.5" />
-              <span>Jadwal & Agenda Angkatan</span>
-            </div>
-            <h1 className="font-heading text-4xl sm:text-5xl font-extrabold text-white tracking-tight mb-4">
-              Agenda & <span className="text-gradient-cyan">Timeline Kegiatan</span>
-            </h1>
-            <p className="text-base text-[#94A3B8] leading-relaxed">
-              Daftar kegiatan mendatang, jadwal ujian sertifikasi, pameran karya teknologi, dan agenda penting kelas lainnya.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {events.map((event) => (
-              <EventCard key={event.id} event={event} />
-            ))}
-          </div>
-        </div>
+      <main className="flex-1 py-12 md:py-16">
+        {/* Full Interactive Aceternity Timeline for all events */}
+        <EventsTimelineSection events={events} isHome={false} />
       </main>
 
-      <Footer />
+      <Footer profile={profile} />
     </div>
   );
 }
