@@ -10,60 +10,137 @@ interface LeadershipShowcaseProps {
 }
 
 export function LeadershipShowcase({ members }: LeadershipShowcaseProps) {
-  // Take 6 core management leaders
-  const leaders = members.slice(0, 6);
+  // Find each management leader with robust matching
+  const ketua =
+    members.find(
+      (m) =>
+        m.role.toLowerCase().includes("ketua kelas") &&
+        !m.role.toLowerCase().includes("wakil")
+    ) ||
+    members.find(
+      (m) =>
+        m.name.toLowerCase().includes("radisty") ||
+        m.name.toLowerCase().includes("dhisa")
+    );
 
-  // Non-parallel playful tilt angles and staggered offsets inspired by the reference image
-  const cardStyles = [
+  const wakilKetua =
+    members.find((m) => m.role.toLowerCase().includes("wakil")) ||
+    members.find((m) => m.name.toLowerCase().includes("elang"));
+
+  const bendahara1 =
+    members.find((m) => m.role.toLowerCase().includes("bendahara 1")) ||
+    members.find((m) => m.name.toLowerCase().includes("berlian"));
+
+  const bendahara2 =
+    members.find((m) => m.role.toLowerCase().includes("bendahara 2")) ||
+    members.find(
+      (m) =>
+        m.name.toLowerCase().includes("wiryateja") ||
+        m.name.toLowerCase().includes("teja")
+    );
+
+  const sekretaris1 =
+    members.find((m) => m.role.toLowerCase().includes("sekretaris 1")) ||
+    members.find((m) => m.name.toLowerCase().includes("zahira"));
+
+  const sekretaris2 =
+    members.find((m) => m.role.toLowerCase().includes("sekretaris 2")) ||
+    members.find((m) => m.name.toLowerCase().includes("fatih"));
+
+  // Ordered layout requested:
+  // Row 1 (atas): [Col 1: Wakil Ketua] [Col 2: Bendahara 1] [Col 3: Ketua (Pojok Kanan Atas)]
+  // Row 2 (bawah): [Col 1: Sekretaris 1 (Pojok Kiri Bawah)] [Col 2: Bendahara 2] [Col 3: Sekretaris 2]
+  const orderedLeaders = [
     {
-      rotate: "rotate-[-6deg] hover:rotate-0",
-      offset: "sm:-translate-y-4 sm:-translate-x-1",
-      badgeColor: "from-[#F59E0B] to-[#EA580C]",
-      glowHalo: "bg-[#F59E0B]/30",
-      handle: "fakhri.eth",
-      points: "98 420 points",
+      member: wakilKetua,
+      desktopClass: "lg:col-start-1 lg:row-start-1",
+      style: {
+        rotate: "rotate-[-6deg] hover:rotate-0",
+        offset: "sm:-translate-y-4 sm:-translate-x-1",
+        badgeColor: "from-[#EA580C] to-[#F59E0B]",
+        glowHalo: "bg-[#EA580C]/30",
+      },
     },
     {
-      rotate: "rotate-[7deg] hover:rotate-0",
-      offset: "sm:translate-y-5 sm:translate-x-2",
-      badgeColor: "from-[#EA580C] to-[#D97706]",
-      glowHalo: "bg-[#EA580C]/30",
-      handle: "alya.design",
-      points: "84 150 points",
+      member: bendahara1,
+      desktopClass: "lg:col-start-2 lg:row-start-1",
+      style: {
+        rotate: "rotate-[5deg] hover:rotate-0",
+        offset: "sm:translate-y-3 sm:translate-x-1",
+        badgeColor: "from-[#F59E0B] to-[#D97706]",
+        glowHalo: "bg-[#F59E0B]/30",
+      },
     },
     {
-      rotate: "rotate-[-4deg] hover:rotate-0",
-      offset: "sm:-translate-y-2 sm:-translate-x-2",
-      badgeColor: "from-[#F59E0B] to-[#B45309]",
-      glowHalo: "bg-[#F59E0B]/30",
-      handle: "rafi.dev",
-      points: "76 300 points",
+      member: ketua,
+      desktopClass: "lg:col-start-3 lg:row-start-1",
+      style: {
+        rotate: "rotate-[-4deg] hover:rotate-0",
+        offset: "sm:-translate-y-3 sm:translate-x-2",
+        badgeColor: "from-[#F59E0B] to-[#EA580C]",
+        glowHalo: "bg-[#F59E0B]/40",
+      },
     },
     {
-      rotate: "rotate-[8deg] hover:rotate-0",
-      offset: "sm:translate-y-4 sm:translate-x-1",
-      badgeColor: "from-[#EA580C] to-[#F59E0B]",
-      glowHalo: "bg-[#EA580C]/30",
-      handle: "zahra.finance",
-      points: "92 880 points",
+      member: sekretaris1,
+      desktopClass: "lg:col-start-1 lg:row-start-2",
+      style: {
+        rotate: "rotate-[7deg] hover:rotate-0",
+        offset: "sm:translate-y-3 sm:-translate-x-1",
+        badgeColor: "from-[#EA580C] to-[#D97706]",
+        glowHalo: "bg-[#EA580C]/30",
+      },
     },
     {
-      rotate: "rotate-[-5deg] hover:rotate-0",
-      offset: "sm:-translate-y-3 sm:-translate-x-2",
-      badgeColor: "from-[#F59E0B] to-[#EA580C]",
-      glowHalo: "bg-[#F59E0B]/30",
-      handle: "bima.build",
-      points: "88 910 points",
+      member: bendahara2,
+      desktopClass: "lg:col-start-2 lg:row-start-2",
+      style: {
+        rotate: "rotate-[-5deg] hover:rotate-0",
+        offset: "sm:-translate-y-2 sm:translate-x-1",
+        badgeColor: "from-[#F59E0B] to-[#B45309]",
+        glowHalo: "bg-[#F59E0B]/30",
+      },
     },
     {
-      rotate: "rotate-[6deg] hover:rotate-0",
-      offset: "sm:translate-y-4 sm:translate-x-2",
-      badgeColor: "from-[#EA580C] to-[#D97706]",
-      glowHalo: "bg-[#EA580C]/30",
-      handle: "nayla.media",
-      points: "95 100 points",
+      member: sekretaris2,
+      desktopClass: "lg:col-start-3 lg:row-start-2",
+      style: {
+        rotate: "rotate-[6deg] hover:rotate-0",
+        offset: "sm:translate-y-4 sm:translate-x-2",
+        badgeColor: "from-[#EA580C] to-[#F59E0B]",
+        glowHalo: "bg-[#EA580C]/30",
+      },
     },
-  ];
+  ].filter(
+    (
+      item
+    ): item is {
+      member: Member;
+      desktopClass: string;
+      style: {
+        rotate: string;
+        offset: string;
+        badgeColor: string;
+        glowHalo: string;
+      };
+    } => Boolean(item.member)
+  );
+
+  // Fallback to first 6 if filtering didn't resolve all 6
+  const finalLeaders =
+    orderedLeaders.length === 6
+      ? orderedLeaders
+      : members.slice(0, 6).map((m, idx) => ({
+          member: m,
+          desktopClass: "",
+          style: {
+            rotate: idx % 2 === 0 ? "rotate-[-5deg]" : "rotate-[5deg]",
+            offset: "",
+            badgeColor: "from-[#F59E0B] to-[#EA580C]",
+            glowHalo: "bg-[#F59E0B]/30",
+          },
+        }));
+
 
   return (
     <section className="relative py-28 overflow-hidden bg-transparent">
@@ -143,13 +220,13 @@ export function LeadershipShowcase({ members }: LeadershipShowcaseProps) {
 
         {/* Cards Grid with Non-Parallel Playful Angles */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10 pt-4 pb-12">
-          {leaders.map((member, idx) => {
-            const style = cardStyles[idx % cardStyles.length];
+          {finalLeaders.map((item) => {
+            const { member, style, desktopClass } = item;
 
             return (
               <div
                 key={member.id}
-                className={`relative transition-all duration-500 transform ${style.rotate} ${style.offset}`}
+                className={`relative transition-all duration-500 transform ${style.rotate} ${style.offset} ${desktopClass}`}
               >
                 {/* Glow Halo behind card */}
                 <div
