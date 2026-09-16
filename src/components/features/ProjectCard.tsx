@@ -1,0 +1,99 @@
+import Image from "next/image";
+import Link from "next/link";
+import { Project } from "@/lib/types";
+import { ExternalLink, Heart, Users } from "lucide-react";
+import { GithubIcon } from "@/components/ui/Icons";
+
+export function ProjectCard({ project }: { project: Project }) {
+  return (
+    <div
+      id={project.slug}
+      className="glass-card overflow-hidden transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-between group"
+    >
+      <div>
+        {/* Project Thumbnail Image */}
+        <div className="relative w-full h-48 sm:h-52 overflow-hidden bg-[#0A0F1E]">
+          <Image
+            src={project.thumbnail}
+            alt={project.title}
+            fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            className="object-cover group-hover:scale-105 transition-transform duration-300"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#111827] via-transparent to-transparent" />
+
+          {/* Category Pill */}
+          <div className="absolute top-3 left-3">
+            <span className="text-xs font-mono font-semibold px-2.5 py-1 rounded-full bg-[#0A0F1E]/80 text-[#06B6D4] border border-[#06B6D4]/30 backdrop-blur-md">
+              {project.category}
+            </span>
+          </div>
+
+          {/* Likes counter */}
+          <div className="absolute top-3 right-3 flex items-center gap-1.5 px-2 py-1 rounded-full bg-black/60 text-white text-xs font-mono backdrop-blur-md">
+            <Heart className="w-3.5 h-3.5 text-[#EF4444] fill-[#EF4444]" />
+            <span>{project.likes}</span>
+          </div>
+        </div>
+
+        {/* Project Info */}
+        <div className="p-5">
+          <h3 className="font-heading text-lg font-bold text-white group-hover:text-[#06B6D4] transition-colors mb-1.5 leading-snug">
+            {project.title}
+          </h3>
+
+          <p className="text-xs text-[#94A3B8] leading-relaxed mb-4 line-clamp-3">
+            {project.description}
+          </p>
+
+          {/* Team Contributors */}
+          <div className="flex items-center gap-1.5 mb-4 text-xs text-[#64748B]">
+            <Users className="w-3.5 h-3.5 text-[#A5B4FC]" />
+            <span className="truncate">{project.team.join(", ")}</span>
+          </div>
+
+          {/* Tech Stack Tags */}
+          <div className="flex flex-wrap gap-1.5">
+            {project.techStack.map((tech) => (
+              <span
+                key={tech}
+                className="text-[10px] font-mono bg-white/[0.04] text-[#CBD5E1] border border-white/[0.06] px-2 py-0.5 rounded-md"
+              >
+                {tech}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Action Footer */}
+      <div className="px-5 py-3.5 border-t border-white/[0.06] bg-black/20 flex items-center justify-between">
+        {project.githubUrl ? (
+          <a
+            href={project.githubUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-xs font-mono text-[#94A3B8] hover:text-white flex items-center gap-1.5 transition-colors"
+          >
+            <GithubIcon className="w-3.5 h-3.5" />
+            <span>Source Code</span>
+          </a>
+        ) : (
+          <span className="text-xs font-mono text-[#64748B]">Internal Project</span>
+        )}
+
+        {project.demoUrl && (
+          <a
+            href={project.demoUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-gradient px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5"
+          >
+            <span>Live Demo</span>
+            <ExternalLink className="w-3 h-3" />
+          </a>
+        )}
+      </div>
+    </div>
+  );
+}

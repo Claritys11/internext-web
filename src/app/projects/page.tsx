@@ -1,0 +1,111 @@
+"use client";
+
+import { useState, useMemo } from "react";
+import { Navbar } from "@/components/layout/Navbar";
+import { Footer } from "@/components/layout/Footer";
+import { ProjectCard } from "@/components/features/ProjectCard";
+import { mockProjects } from "@/lib/data/mock";
+import { Code2, Search, Sparkles } from "lucide-react";
+
+export default function ProjectsPage() {
+  const [search, setSearch] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState<string>("all");
+
+  const categories = [
+    { label: "Semua Kategori", value: "all" },
+    { label: "Web App", value: "Web App" },
+    { label: "IoT / Hardware", value: "IoT / Hardware" },
+    { label: "Game / AI", value: "Game / AI" },
+    { label: "UI/UX", value: "UI/UX" },
+  ];
+
+  const filteredProjects = useMemo(() => {
+    return mockProjects.filter((project) => {
+      const matchesCategory =
+        selectedCategory === "all" || project.category === selectedCategory;
+
+      const matchesSearch =
+        project.title.toLowerCase().includes(search.toLowerCase()) ||
+        project.description.toLowerCase().includes(search.toLowerCase()) ||
+        project.techStack.some((t) => t.toLowerCase().includes(search.toLowerCase())) ||
+        project.team.some((m) => m.toLowerCase().includes(search.toLowerCase()));
+
+      return matchesCategory && matchesSearch;
+    });
+  }, [search, selectedCategory]);
+
+  return (
+    <div className="flex flex-col min-h-screen">
+      <Navbar />
+
+      <main className="flex-1 py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Header Banner */}
+          <div className="text-center max-w-3xl mx-auto mb-12">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#06B6D4]/10 border border-[#06B6D4]/30 text-xs font-mono text-[#06B6D4] mb-4">
+              <Code2 className="w-3.5 h-3.5" />
+              <span>Portofolio & Showcase Digital</span>
+            </div>
+            <h1 className="font-heading text-4xl sm:text-5xl font-extrabold text-white tracking-tight mb-4">
+              Karya & Proyek <span className="text-gradient-cyan">Siswa</span>
+            </h1>
+            <p className="text-base text-[#94A3B8] leading-relaxed">
+              Kumpulan inovasi aplikasi web, mobile, Internet of Things, dan kecerdasan buatan yang dirancang dan dibangun oleh siswa Internext.
+            </p>
+          </div>
+
+          {/* Search & Category Filter */}
+          <div className="glass-card p-4 sm:p-5 mb-10 flex flex-col md:flex-row items-center justify-between gap-4">
+            <div className="relative w-full md:w-80">
+              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#64748B]" />
+              <input
+                type="text"
+                placeholder="Cari karya, teknologi, tim..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="w-full bg-[#0A0F1E] border border-white/[0.1] rounded-xl pl-10 pr-4 py-2 text-sm text-white placeholder:text-[#64748B] focus:outline-none focus:border-[#06B6D4] transition-colors"
+              />
+            </div>
+
+            <div className="flex items-center gap-1.5 w-full md:w-auto overflow-x-auto pb-1 md:pb-0">
+              {categories.map((cat) => (
+                <button
+                  key={cat.value}
+                  onClick={() => setSelectedCategory(cat.value)}
+                  className={`px-3.5 py-1.5 rounded-xl text-xs font-mono whitespace-nowrap transition-all ${
+                    selectedCategory === cat.value
+                      ? "bg-[#06B6D4] text-[#0A0F1E] font-bold shadow-md shadow-[#06B6D4]/20"
+                      : "bg-white/[0.04] text-[#94A3B8] hover:text-white hover:bg-white/[0.08]"
+                  }`}
+                >
+                  {cat.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Projects Grid */}
+          {filteredProjects.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filteredProjects.map((project) => (
+                <ProjectCard key={project.id} project={project} />
+              ))}
+            </div>
+          ) : (
+            <div className="glass-card p-12 text-center max-w-md mx-auto">
+              <Code2 className="w-10 h-10 text-[#64748B] mx-auto mb-3" />
+              <h3 className="font-heading text-lg font-bold text-white mb-1">
+                Tidak ada karya yang sesuai
+              </h3>
+              <p className="text-xs text-[#94A3B8]">
+                Coba sesuaikan kata kunci pencarian atau pilih kategori lain.
+              </p>
+            </div>
+          )}
+        </div>
+      </main>
+
+      <Footer />
+    </div>
+  );
+}
