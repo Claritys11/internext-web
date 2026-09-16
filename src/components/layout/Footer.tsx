@@ -1,19 +1,25 @@
+"use client";
+
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { siteConfig } from "@/config/site";
-import { Terminal, Heart, ExternalLink, Sparkles } from "lucide-react";
+import { Terminal, Heart, ExternalLink } from "lucide-react";
 import { InstagramIcon } from "@/components/ui/Icons";
-import { getClassProfile } from "@/lib/api/services";
 import { ClassProfile } from "@/lib/types";
 
-export async function Footer({ profile: customProfile }: { profile?: ClassProfile }) {
-  let profile = customProfile;
-  if (!profile) {
-    try {
-      profile = await getClassProfile();
-    } catch {
-      // Fallback
+export function Footer({ profile: customProfile }: { profile?: ClassProfile }) {
+  const [profile, setProfile] = useState<ClassProfile | null>(customProfile || null);
+
+  useEffect(() => {
+    if (!customProfile) {
+      fetch("/api/profile")
+        .then((res) => (res.ok ? res.json() : null))
+        .then((data) => {
+          if (data) setProfile(data);
+        })
+        .catch(() => {});
     }
-  }
+  }, [customProfile]);
 
   const school = profile?.school || siteConfig.classInfo.school;
   const name = profile?.name || siteConfig.classInfo.name;

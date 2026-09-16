@@ -39,6 +39,7 @@ import {
   ChatMessage,
   ChatChannel,
 } from "@/lib/types";
+import { ImageUploadInput } from "@/components/ui/ImageUploadInput";
 
 type AdminTab =
   | "overview"
@@ -1858,17 +1859,15 @@ export default function AdminDashboardPage() {
                 </div>
               </div>
 
-              <div>
-                <label className="block font-mono text-[#94A3B8] mb-1">Avatar Image URL</label>
-                <input
-                  type="text"
-                  value={editingMember.avatar}
-                  onChange={(e) =>
-                    setEditingMember({ ...editingMember, avatar: e.target.value })
-                  }
-                  className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-3 py-2 text-white"
-                />
-              </div>
+              <ImageUploadInput
+                label="Foto Avatar Siswa (URL atau Unggah File)"
+                value={editingMember.avatar}
+                onChange={(url) =>
+                  setEditingMember({ ...editingMember, avatar: url })
+                }
+                aspectRatio="square"
+                helperText="Foto profil siswa (format persegi)"
+              />
 
               <div>
                 <label className="block font-mono text-[#94A3B8] mb-1">Personal Quote</label>
@@ -2000,16 +1999,112 @@ export default function AdminDashboardPage() {
                 </div>
               </div>
 
+              <ImageUploadInput
+                label="Thumbnail Proyek (URL atau Unggah File)"
+                value={editingProject.thumbnail}
+                onChange={(url) =>
+                  setEditingProject({ ...editingProject, thumbnail: url })
+                }
+                aspectRatio="video"
+                helperText="Thumbnail proyek untuk showcase karya"
+              />
+
+              {/* Pemilihan Siswa Kontributor / Nahkoda yang Berperan */}
               <div>
-                <label className="block font-mono text-[#94A3B8] mb-1">Thumbnail Image URL</label>
-                <input
-                  type="text"
-                  value={editingProject.thumbnail}
-                  onChange={(e) =>
-                    setEditingProject({ ...editingProject, thumbnail: e.target.value })
-                  }
-                  className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-3 py-2 text-white"
-                />
+                <label className="block font-mono text-[#94A3B8] mb-1.5 flex items-center justify-between">
+                  <span>Siswa Kontributor / Nahkoda yang Berperan</span>
+                  <span className="text-[10px] font-mono text-[#F59E0B]">
+                    {editingProject.team.length} siswa terpilih
+                  </span>
+                </label>
+                <p className="text-[11px] text-[#64748B] mb-2 leading-tight">
+                  Pilih siswa kelas XI Internasional yang berkontribusi dalam karya ini. Proyek ini akan otomatis tampil di portofolio profil LinkedIn masing-masing siswa.
+                </p>
+
+                {/* Selected chips with avatar */}
+                {editingProject.team.length > 0 && (
+                  <div className="flex flex-wrap gap-1.5 mb-2.5 p-2 bg-black/40 rounded-xl border border-white/10">
+                    {editingProject.team.map((memberName) => {
+                      const found = members.find(
+                        (m) =>
+                          m.name.toLowerCase() === memberName.toLowerCase() ||
+                          m.nickname.toLowerCase() === memberName.toLowerCase()
+                      );
+                      return (
+                        <span
+                          key={memberName}
+                          className="inline-flex items-center gap-1.5 pl-1.5 pr-2 py-0.5 rounded-full bg-[#F59E0B]/15 border border-[#F59E0B]/30 text-xs text-[#F59E0B] font-mono"
+                        >
+                          {found?.avatar && (
+                            <span className="w-4 h-4 rounded-full overflow-hidden relative inline-block">
+                              <Image src={found.avatar} alt={memberName} fill className="object-cover" />
+                            </span>
+                          )}
+                          <span>{memberName}</span>
+                          <button
+                            type="button"
+                            onClick={() =>
+                              setEditingProject({
+                                ...editingProject,
+                                team: editingProject.team.filter((t) => t !== memberName),
+                              })
+                            }
+                            className="hover:text-white ml-0.5"
+                          >
+                            <X className="w-3 h-3" />
+                          </button>
+                        </span>
+                      );
+                    })}
+                  </div>
+                )}
+
+                {/* Member selector grid */}
+                <div className="max-h-36 overflow-y-auto p-2 bg-white/[0.02] rounded-xl border border-white/10 space-y-1">
+                  <div className="grid grid-cols-2 gap-1.5">
+                    {members.map((m) => {
+                      const isSelected = editingProject.team.some(
+                        (t) =>
+                          t.toLowerCase() === m.name.toLowerCase() ||
+                          t.toLowerCase() === m.nickname.toLowerCase()
+                      );
+                      return (
+                        <button
+                          key={m.id}
+                          type="button"
+                          onClick={() => {
+                            if (isSelected) {
+                              setEditingProject({
+                                ...editingProject,
+                                team: editingProject.team.filter(
+                                  (t) =>
+                                    t.toLowerCase() !== m.name.toLowerCase() &&
+                                    t.toLowerCase() !== m.nickname.toLowerCase()
+                                ),
+                              });
+                            } else {
+                              setEditingProject({
+                                ...editingProject,
+                                team: [...editingProject.team, m.nickname || m.name],
+                              });
+                            }
+                          }}
+                          className={`flex items-center gap-2 p-1.5 rounded-lg text-left transition-colors border ${
+                            isSelected
+                              ? "bg-[#F59E0B]/20 border-[#F59E0B]/50 text-white"
+                              : "bg-white/[0.03] border-white/5 text-[#94A3B8] hover:bg-white/[0.08]"
+                          }`}
+                        >
+                          <div className="w-5 h-5 rounded-full overflow-hidden relative shrink-0">
+                            <Image src={m.avatar} alt={m.name} fill className="object-cover" />
+                          </div>
+                          <span className="truncate text-[11px] font-medium">{m.nickname || m.name}</span>
+                          {isSelected && <Check className="w-3 h-3 text-[#F59E0B] ml-auto shrink-0" />}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
               </div>
 
               <div>
@@ -2142,17 +2237,15 @@ export default function AdminDashboardPage() {
                 </div>
               </div>
 
-              <div>
-                <label className="block font-mono text-[#94A3B8] mb-1">Cover Image URL</label>
-                <input
-                  type="text"
-                  value={editingArticle.coverImage}
-                  onChange={(e) =>
-                    setEditingArticle({ ...editingArticle, coverImage: e.target.value })
-                  }
-                  className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-3 py-2 text-white"
-                />
-              </div>
+              <ImageUploadInput
+                label="Gambar Sampul Warta (URL atau Unggah File)"
+                value={editingArticle.coverImage}
+                onChange={(url) =>
+                  setEditingArticle({ ...editingArticle, coverImage: url })
+                }
+                aspectRatio="video"
+                helperText="Sampul artikel warta & pengumuman"
+              />
 
               <div>
                 <label className="block font-mono text-[#94A3B8] mb-1">Ringkasan (Summary)</label>
@@ -2288,6 +2381,16 @@ export default function AdminDashboardPage() {
                 />
               </div>
 
+              <ImageUploadInput
+                label="Banner / Cover Agenda (URL atau Unggah File)"
+                value={editingEvent.coverImage}
+                onChange={(url) =>
+                  setEditingEvent({ ...editingEvent, coverImage: url })
+                }
+                aspectRatio="video"
+                helperText="Banner visual kegiatan kelas"
+              />
+
               <div>
                 <label className="block font-mono text-[#94A3B8] mb-1">Deskripsi Singkat</label>
                 <textarea
@@ -2369,19 +2472,15 @@ export default function AdminDashboardPage() {
                 </select>
               </div>
 
-              <div>
-                <label className="block font-mono text-[#94A3B8] mb-1">URL Gambar (Image URL)</label>
-                <input
-                  type="text"
-                  placeholder="https://images.unsplash.com/..."
-                  value={newGalleryForm.url}
-                  onChange={(e) =>
-                    setNewGalleryForm({ ...newGalleryForm, url: e.target.value })
-                  }
-                  required
-                  className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-3 py-2 text-white"
-                />
-              </div>
+              <ImageUploadInput
+                label="Foto Galeri (URL atau Unggah File)"
+                value={newGalleryForm.url}
+                onChange={(url) =>
+                  setNewGalleryForm({ ...newGalleryForm, url })
+                }
+                aspectRatio="video"
+                helperText="Foto dokumentasi angkatan"
+              />
 
               <div className="flex justify-end gap-2 pt-3 border-t border-white/10">
                 <button

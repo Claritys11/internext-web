@@ -1,6 +1,7 @@
 import Image from "next/image";
+import Link from "next/link";
 import { Member } from "@/lib/types";
-import { Sparkles, ExternalLink } from "lucide-react";
+import { Sparkles, ExternalLink, ChevronRight } from "lucide-react";
 import { GithubIcon, LinkedinIcon, InstagramIcon } from "@/components/ui/Icons";
 
 export function MemberCard({ member }: { member: Member }) {
@@ -9,7 +10,10 @@ export function MemberCard({ member }: { member: Member }) {
       <div>
         {/* Top Avatar & Role Header */}
         <div className="relative p-5 pb-0 flex items-start justify-between gap-4">
-          <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-2xl overflow-hidden border-2 border-white/[0.1] group-hover:border-[#F59E0B]/50 transition-colors shadow-md">
+          <Link
+            href={`/members/${member.id}`}
+            className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-2xl overflow-hidden border-2 border-white/[0.1] group-hover:border-[#F59E0B]/50 transition-colors shadow-md block"
+          >
             <Image
               src={member.avatar}
               alt={member.name}
@@ -17,7 +21,7 @@ export function MemberCard({ member }: { member: Member }) {
               sizes="(max-width: 640px) 64px, 80px"
               className="object-cover group-hover:scale-105 transition-transform duration-300"
             />
-          </div>
+          </Link>
 
           <div className="flex flex-col items-end gap-1">
             <span
@@ -39,9 +43,11 @@ export function MemberCard({ member }: { member: Member }) {
 
         {/* Member Details */}
         <div className="p-5">
-          <h3 className="font-heading text-lg font-bold text-white group-hover:text-[#F59E0B] transition-colors leading-tight mb-1">
-            {member.name}
-          </h3>
+          <Link href={`/members/${member.id}`}>
+            <h3 className="font-heading text-lg font-bold text-white group-hover:text-[#F59E0B] transition-colors leading-tight mb-1">
+              {member.name}
+            </h3>
+          </Link>
           <p className="text-xs text-[#EA580C] font-mono mb-3">
             @{member.nickname.toLowerCase()}
           </p>
@@ -64,7 +70,7 @@ export function MemberCard({ member }: { member: Member }) {
         </div>
       </div>
 
-      {/* Footer Socials */}
+      {/* Footer Socials & View Profile */}
       <div className="px-5 py-3.5 border-t border-white/[0.06] bg-black/20 flex items-center justify-between">
         <div className="flex items-center gap-2">
           {member.githubUrl && (
@@ -102,17 +108,13 @@ export function MemberCard({ member }: { member: Member }) {
           )}
         </div>
 
-        {member.portfolioUrl && (
-          <a
-            href={member.portfolioUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-[11px] font-mono text-[#F59E0B] hover:underline flex items-center gap-1"
-          >
-            <span>Portofolio</span>
-            <ExternalLink className="w-3 h-3" />
-          </a>
-        )}
+        <Link
+          href={`/members/${member.id}`}
+          className="text-[11px] font-mono text-[#F59E0B] hover:text-[#EA580C] hover:underline flex items-center gap-1 font-semibold"
+        >
+          <span>Profil & Karya</span>
+          <ChevronRight className="w-3.5 h-3.5" />
+        </Link>
       </div>
     </div>
   );
