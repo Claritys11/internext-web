@@ -1,24 +1,30 @@
 @import "tailwindcss";
 
 @theme {
-  --color-midnight: #0A0F1E;
-  --color-surface: #111827;
+  --color-midnight: #02040A;
+  --color-surface: #0F172A;
   --color-surface-raised: #1E293B;
-  --color-indigo-brand: #4F46E5;
-  --color-cyan-brand: #06B6D4;
-  --color-slate-brand: #64748B;
+  --color-primary: #F59E0B;
+  --color-accent: #EA580C;
+  --color-secondary: #0F172A;
+  --color-indigo-brand: #F59E0B;
+  --color-cyan-brand: #EA580C;
+  --color-slate-brand: #94A3B8;
   --font-sans: var(--font-inter), system-ui, -apple-system, sans-serif;
   --font-heading: var(--font-space-grotesk), sans-serif;
   --font-mono: var(--font-jetbrains-mono), monospace;
 }
 
 :root {
-  --background: #0A0F1E;
+  --background: #02040A;
   --foreground: #F8FAFC;
+  --primary: #F59E0B;
+  --secondary: #0F172A;
+  --accent: #EA580C;
 }
 
 body {
-  background-color: #0A0F1E;
+  background-color: #02040A;
   color: #F8FAFC;
   font-family: var(--font-inter), system-ui, sans-serif;
 }
@@ -30,14 +36,14 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Custom Utilities */
 .glass-nav {
-  background: rgba(10, 15, 30, 0.85);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(2, 4, 10, 0.85);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(245, 158, 11, 0.12);
 }
 
 .glass-card {
-  background: rgba(17, 24, 39, 0.62);
+  background: rgba(15, 23, 42, 0.65);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -46,45 +52,46 @@ h1, h2, h3, h4, h5, h6 {
 
 .glass-card:hover {
   background: rgba(30, 41, 59, 0.75);
-  border-color: rgba(79, 70, 229, 0.4);
-  box-shadow: 0 10px 30px -10px rgba(79, 70, 229, 0.15), 0 0 20px -5px rgba(6, 182, 212, 0.1);
+  border-color: rgba(245, 158, 11, 0.4);
+  box-shadow: 0 10px 30px -10px rgba(234, 88, 12, 0.2), 0 0 25px -5px rgba(245, 158, 11, 0.15);
 }
 
 .text-gradient {
-  background: linear-gradient(135deg, #F8FAFC 20%, #A5B4FC 60%, #06B6D4 100%);
+  background: linear-gradient(135deg, #F8FAFC 20%, #FDE68A 60%, #F59E0B 85%, #EA580C 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
 .text-gradient-cyan {
-  background: linear-gradient(135deg, #818CF8 0%, #06B6D4 100%);
+  background: linear-gradient(135deg, #F59E0B 0%, #EA580C 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
 .btn-gradient {
-  background: linear-gradient(135deg, #4F46E5 0%, #06B6D4 100%);
-  color: #F8FAFC;
-  font-weight: 600;
+  background: linear-gradient(135deg, #F59E0B 0%, #EA580C 100%);
+  color: #02040A;
+  font-weight: 700;
   transition: all 0.25s ease;
-  box-shadow: 0 4px 20px rgba(79, 70, 229, 0.35);
+  box-shadow: 0 4px 20px rgba(245, 158, 11, 0.35);
 }
 
 .btn-gradient:hover {
   transform: translateY(-2px) scale(1.02);
-  box-shadow: 0 8px 25px rgba(6, 182, 212, 0.45);
+  box-shadow: 0 8px 25px rgba(234, 88, 12, 0.45);
+  color: #000000;
 }
 
 .btn-outline-indigo {
-  border: 1px solid rgba(79, 70, 229, 0.6);
-  background: rgba(79, 70, 229, 0.08);
-  color: #E0E7FF;
+  border: 1px solid rgba(245, 158, 11, 0.5);
+  background: rgba(245, 158, 11, 0.08);
+  color: #FEF3C7;
   transition: all 0.2s ease;
 }
 
 .btn-outline-indigo:hover {
-  background: rgba(79, 70, 229, 0.2);
-  border-color: #06B6D4;
+  background: rgba(245, 158, 11, 0.2);
+  border-color: #EA580C;
   color: #FFFFFF;
   transform: translateY(-1px);
 }
@@ -93,12 +100,12 @@ h1, h2, h3, h4, h5, h6 {
 .bg-grid-pattern {
   background-size: 40px 40px;
   background-image: 
-    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    linear-gradient(to right, rgba(245, 158, 11, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(245, 158, 11, 0.04) 1px, transparent 1px);
 }
 
 .bg-radial-glow {
-  background: radial-gradient(circle at 50% 0%, rgba(79, 70, 229, 0.2) 0%, rgba(6, 182, 212, 0.08) 40%, transparent 70%);
+  background: radial-gradient(circle at 50% 0%, rgba(245, 158, 11, 0.18) 0%, rgba(234, 88, 12, 0.08) 40%, transparent 70%);
 }
 
 @keyframes shine {

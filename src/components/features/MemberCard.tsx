@@ -9,7 +9,7 @@ export function MemberCard({ member }: { member: Member }) {
       <div>
         {/* Top Avatar & Role Header */}
         <div className="relative p-5 pb-0 flex items-start justify-between gap-4">
-          <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-2xl overflow-hidden border-2 border-white/[0.1] group-hover:border-[#06B6D4]/50 transition-colors shadow-md">
+          <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-2xl overflow-hidden border-2 border-white/[0.1] group-hover:border-[#F59E0B]/50 transition-colors shadow-md">
             <Image
               src={member.avatar}
               alt={member.name}
@@ -23,7 +23,7 @@ export function MemberCard({ member }: { member: Member }) {
             <span
               className={`text-[10px] font-mono font-semibold px-2.5 py-1 rounded-full border ${
                 member.isManagement
-                  ? "bg-[#4F46E5]/20 text-[#A5B4FC] border-[#4F46E5]/40"
+                  ? "bg-[#F59E0B]/20 text-[#F59E0B] border-[#F59E0B]/40"
                   : "bg-white/[0.05] text-[#94A3B8] border-white/[0.08]"
               }`}
             >
@@ -39,10 +39,10 @@ export function MemberCard({ member }: { member: Member }) {
 
         {/* Member Details */}
         <div className="p-5">
-          <h3 className="font-heading text-lg font-bold text-white group-hover:text-[#06B6D4] transition-colors leading-tight mb-1">
+          <h3 className="font-heading text-lg font-bold text-white group-hover:text-[#F59E0B] transition-colors leading-tight mb-1">
             {member.name}
           </h3>
-          <p className="text-xs text-[#06B6D4] font-mono mb-3">
+          <p className="text-xs text-[#EA580C] font-mono mb-3">
             @{member.nickname.toLowerCase()}
           </p>
 
@@ -107,7 +107,7 @@ export function MemberCard({ member }: { member: Member }) {
             href={member.portfolioUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-[11px] font-mono text-[#06B6D4] hover:underline flex items-center gap-1"
+            className="text-[11px] font-mono text-[#F59E0B] hover:underline flex items-center gap-1"
           >
             <span>Portofolio</span>
             <ExternalLink className="w-3 h-3" />

@@ -4,18 +4,18 @@ import { Terminal, Heart, ExternalLink } from "lucide-react";
 
 export function Footer() {
   return (
-    <footer className="border-t border-white/[0.08] bg-[#0A0F1E] relative overflow-hidden">
+    <footer className="border-t border-white/[0.08] bg-[#02040A] relative overflow-hidden">
       {/* Subtle top glow */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-[1px] bg-gradient-to-r from-transparent via-[#4F46E5]/40 to-transparent" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-[1px] bg-gradient-to-r from-transparent via-[#F59E0B]/40 to-transparent" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
           {/* Brand Col */}
           <div className="md:col-span-2 space-y-4">
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#4F46E5] to-[#06B6D4] p-0.5 shadow-md shadow-[#4F46E5]/20">
-                <div className="w-full h-full bg-[#0A0F1E] rounded-[10px] flex items-center justify-center">
-                  <Terminal className="w-4 h-4 text-[#06B6D4]" />
+              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#F59E0B] to-[#EA580C] p-0.5 shadow-md shadow-[#F59E0B]/20">
+                <div className="w-full h-full bg-[#02040A] rounded-[10px] flex items-center justify-center">
+                  <Terminal className="w-4 h-4 text-[#F59E0B]" />
                 </div>
               </div>
               <span className="font-heading font-extrabold text-xl tracking-tight text-white">
@@ -42,7 +42,7 @@ export function Footer() {
                 <li key={item.href}>
                   <Link
                     href={item.href}
-                    className="hover:text-[#06B6D4] transition-colors"
+                    className="hover:text-[#F59E0B] transition-colors"
                   >
                     {item.label}
                   </Link>
@@ -58,22 +58,22 @@ export function Footer() {
             </h4>
             <ul className="space-y-2 text-sm text-[#94A3B8]">
               <li>
-                <Link href="/about" className="hover:text-[#06B6D4] transition-colors">
+                <Link href="/about" className="hover:text-[#F59E0B] transition-colors">
                   Visi & Misi Kelas
                 </Link>
               </li>
               <li>
-                <Link href="/members" className="hover:text-[#06B6D4] transition-colors">
+                <Link href="/members" className="hover:text-[#F59E0B] transition-colors">
                   Direktori {siteConfig.classInfo.memberCount} Anggota
                 </Link>
               </li>
               <li>
-                <Link href="/gallery" className="hover:text-[#06B6D4] transition-colors">
+                <Link href="/gallery" className="hover:text-[#F59E0B] transition-colors">
                   Dokumentasi & Galeri
                 </Link>
               </li>
               <li>
-                <Link href="/contact" className="hover:text-[#06B6D4] transition-colors">
+                <Link href="/contact" className="hover:text-[#F59E0B] transition-colors">
                   Buku Tamu & Pesan
                 </Link>
               </li>
@@ -82,7 +82,7 @@ export function Footer() {
                   href={siteConfig.socials.instagram}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 text-[#06B6D4] hover:underline"
+                  className="inline-flex items-center gap-1 text-[#F59E0B] hover:underline"
                 >
                   Instagram Resmi
                   <ExternalLink className="w-3 h-3" />

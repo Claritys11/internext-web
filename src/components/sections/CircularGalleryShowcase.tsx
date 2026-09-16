@@ -26,7 +26,7 @@ function FlipCard({ project, className, style, isActive, onSelect }: FlipCardPro
     <div
       className={cn(
         "group w-24 h-36 sm:w-28 sm:h-40 md:w-30 md:h-42 rounded-2xl [perspective:1000px] transition-transform duration-300 ease-in-out cursor-pointer select-none",
-        isActive ? "scale-110 z-30 ring-2 ring-[#06B6D4]" : "hover:scale-105 hover:z-20",
+        isActive ? "scale-110 z-30 ring-2 ring-[#F59E0B]" : "hover:scale-105 hover:z-20",
         className
       )}
       style={style}
@@ -52,62 +52,63 @@ function FlipCard({ project, className, style, isActive, onSelect }: FlipCardPro
         )}
       >
         {/* Front side - Project Image & Badge */}
-        <div className="absolute inset-0 rounded-2xl overflow-hidden [backface-visibility:hidden] border border-white/[0.15] bg-[#111827]/60 backdrop-blur-md">
+        <div className="absolute inset-0 rounded-2xl overflow-hidden [backface-visibility:hidden] border border-white/[0.15] bg-[#0F172A]/80 backdrop-blur-md">
           <div className="relative w-full h-full">
             <Image
               src={project.thumbnail}
               alt={project.title}
               fill
-              sizes="(max-width: 640px) 96px, 120px"
               className="object-cover"
+              sizes="(max-width: 640px) 112px, 128px"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#0A0F1E] via-transparent to-black/40" />
-            <div className="absolute top-2 left-2 right-2 flex justify-between items-center">
-              <span className="text-[9px] font-mono font-semibold px-2 py-0.5 rounded-full bg-[#4F46E5]/90 text-white backdrop-blur-md">
+            <div className="absolute inset-0 bg-gradient-to-t from-[#02040A] via-transparent to-black/40" />
+            <div className="absolute top-2 left-2 right-2 flex items-center justify-between">
+              <span className="text-[9px] font-mono font-semibold px-2 py-0.5 rounded-full bg-[#F59E0B]/90 text-[#02040A] backdrop-blur-md">
                 {project.category}
               </span>
             </div>
             <div className="absolute bottom-2 left-2 right-2">
-              <p className="text-xs font-bold text-white leading-tight truncate">
-                {project.title.split("—")[0]}
-              </p>
-              <p className="text-[10px] text-[#06B6D4] font-mono">
-                {project.year}
+              <h4 className="font-heading font-bold text-xs text-white truncate drop-shadow-sm">
+                {project.title}
+              </h4>
+              <p className="text-[10px] text-[#F59E0B] font-mono">
+                ★ 360° View
               </p>
             </div>
           </div>
         </div>
 
-        {/* Back side - Tech Stack & Detail */}
-        <div className="absolute inset-0 rounded-2xl bg-[#0F172A]/70 backdrop-blur-md border border-[#06B6D4]/50 p-3 flex flex-col justify-between [transform:rotateY(180deg)] [backface-visibility:hidden] shadow-lg shadow-[#4F46E5]/30">
+        {/* Back side - Tech Stack & Quick Link */}
+        <div className="absolute inset-0 rounded-2xl bg-[#0F172A]/90 backdrop-blur-md border border-[#F59E0B]/50 p-3 flex flex-col justify-between [transform:rotateY(180deg)] [backface-visibility:hidden] shadow-lg shadow-[#F59E0B]/20">
           <div>
-            <h4 className="font-heading font-bold text-xs text-white leading-snug mb-1 line-clamp-2">
+            <span className="text-[9px] font-mono uppercase text-[#F59E0B] font-semibold tracking-wider block mb-1">
+              {project.category}
+            </span>
+            <h5 className="font-heading font-bold text-xs text-white leading-tight mb-1 line-clamp-2">
               {project.title}
-            </h4>
+            </h5>
             <p className="text-[10px] text-[#94A3B8] leading-tight line-clamp-3 mb-2">
-              {project.tagline}
+              {project.tagline || project.description}
             </p>
-          </div>
-          <div>
-            <div className="flex flex-wrap gap-1 mb-2">
-              {project.techStack.slice(0, 2).map((tech) => (
+            <div className="flex flex-wrap gap-1">
+              {project.techStack.slice(0, 3).map((tech, idx) => (
                 <span
-                  key={tech}
+                  key={idx}
                   className="text-[8px] font-mono bg-white/[0.08] text-[#E2E8F0] px-1.5 py-0.5 rounded"
                 >
                   {tech}
                 </span>
               ))}
             </div>
-            <Link
-              href={`/projects#${project.slug}`}
-              onClick={(e) => e.stopPropagation()}
-              className="w-full py-1 rounded-md bg-[#06B6D4] text-[#0A0F1E] font-bold text-[10px] flex items-center justify-center gap-1 hover:bg-white transition-colors"
-            >
-              <span>Detail</span>
-              <ExternalLink className="w-2.5 h-2.5" />
-            </Link>
           </div>
+          <Link
+            href={`/projects#${project.slug}`}
+            onClick={(e) => e.stopPropagation()}
+            className="w-full py-1 rounded-md bg-gradient-to-r from-[#F59E0B] to-[#EA580C] text-[#02040A] font-bold text-[10px] flex items-center justify-center gap-1 hover:brightness-110 transition-all"
+          >
+            <span>Detail</span>
+            <ExternalLink className="w-2.5 h-2.5" />
+          </Link>
         </div>
       </div>
     </div>
@@ -124,17 +125,17 @@ interface FeaturedCardProps {
 function FeaturedHighlightCard({
   project,
   badgeText,
-  badgeColor = "#06B6D4",
+  badgeColor = "#F59E0B",
   rank,
 }: FeaturedCardProps) {
   return (
     <Link
       href={`/projects#${project.slug}`}
-      className="group relative z-20 block rounded-2xl bg-[#111827]/65 hover:bg-[#1E293B]/80 border border-white/[0.1] hover:border-[#06B6D4]/50 p-3.5 backdrop-blur-xl transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_12px_32px_rgba(6,182,212,0.18)] select-none"
+      className="group relative z-20 block rounded-2xl bg-[#0F172A]/80 hover:bg-[#1E293B]/90 border border-white/[0.08] hover:border-[#F59E0B]/50 p-3.5 backdrop-blur-xl transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_12px_32px_rgba(245,158,11,0.18)] select-none"
     >
       <div className="flex items-start gap-3">
         {/* Thumbnail */}
-        <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-xl overflow-hidden shrink-0 border border-white/10 bg-[#0A0F1E]">
+        <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-xl overflow-hidden shrink-0 border border-white/10 bg-[#02040A]">
           <Image
             src={project.thumbnail}
             alt={project.title}
@@ -166,7 +167,7 @@ function FeaturedHighlightCard({
             </span>
           </div>
 
-          <h4 className="font-heading font-bold text-xs sm:text-sm text-white truncate group-hover:text-[#06B6D4] transition-colors">
+          <h4 className="font-heading font-bold text-xs sm:text-sm text-white truncate group-hover:text-[#F59E0B] transition-colors">
             {project.title.split("—")[0]}
           </h4>
           <p className="text-[10px] text-[#94A3B8] line-clamp-2 leading-tight mt-0.5 mb-2">
@@ -184,7 +185,7 @@ function FeaturedHighlightCard({
                 </span>
               ))}
             </div>
-            <div className="flex items-center gap-1 text-[10px] font-semibold text-[#06B6D4] group-hover:translate-x-0.5 transition-transform shrink-0">
+            <div className="flex items-center gap-1 text-[10px] font-semibold text-[#F59E0B] group-hover:translate-x-0.5 transition-transform shrink-0">
               <span>Detail</span>
               <ArrowRight className="w-2.5 h-2.5" />
             </div>
@@ -308,9 +309,9 @@ export function CircularGalleryShowcase({
         className="w-full max-w-[1480px] mx-auto px-4 sm:px-6 lg:px-8 transition-transform will-change-transform"
       >
         {/* Clean, sleek header with opaque text shielding (so background motion path never bleeds through text) */}
-        <div className="relative z-20 text-center max-w-3xl mx-auto mb-10 sm:mb-14 bg-[#0A0F1E]/95 shadow-[0_0_50px_40px_#0A0F1E] rounded-3xl p-3">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#4F46E5]/15 border border-[#4F46E5]/40 text-xs font-mono text-[#A5B4FC] mb-4 shadow-sm">
-            <Sparkles className="w-3.5 h-3.5 text-[#06B6D4]" />
+        <div className="relative z-20 text-center max-w-3xl mx-auto mb-10 sm:mb-14 bg-[#02040A]/95 shadow-[0_0_50px_40px_#02040A] rounded-3xl p-3">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#F59E0B]/15 border border-[#F59E0B]/40 text-xs font-mono text-[#F59E0B] mb-4 shadow-sm">
+            <Sparkles className="w-3.5 h-3.5 text-[#EA580C]" />
             <span className="font-semibold">Interactive Student Showcase</span>
           </div>
 
@@ -329,8 +330,8 @@ export function CircularGalleryShowcase({
           {/* Left Flank: 3 Featured Highlights (Visible on xl+) */}
           <div className="hidden xl:block xl:col-span-3 space-y-4">
             <div className="flex items-center gap-2 px-1 mb-2">
-              <span className="w-2 h-2 rounded-full bg-[#06B6D4] animate-ping" />
-              <span className="text-xs font-mono font-bold text-[#06B6D4] uppercase tracking-wider">
+              <span className="w-2 h-2 rounded-full bg-[#F59E0B] animate-ping" />
+              <span className="text-xs font-mono font-bold text-[#F59E0B] uppercase tracking-wider">
                 Unggulan Pilihan • 01-03
               </span>
             </div>
@@ -339,7 +340,7 @@ export function CircularGalleryShowcase({
                 key={`left-${project.id}`}
                 project={project}
                 badgeText="Pilihan Utama"
-                badgeColor="#06B6D4"
+                badgeColor="#F59E0B"
                 rank={`#0${idx + 1}`}
               />
             ))}
@@ -364,7 +365,7 @@ export function CircularGalleryShowcase({
                 }}
               />
               <div
-                className="absolute rounded-full border border-[#06B6D4]/15 pointer-events-none animate-pulse"
+                className="absolute rounded-full border border-[#F59E0B]/15 pointer-events-none animate-pulse"
                 style={{
                   width: `${radius * 2 + 40}px`,
                   height: `${radius * 2 + 40}px`,
@@ -373,14 +374,14 @@ export function CircularGalleryShowcase({
 
               {/* Central Hub Display */}
               <div className="absolute inset-0 flex flex-col items-center justify-center z-10 pointer-events-none p-6 text-center">
-                <div className="w-28 h-28 md:w-32 md:h-32 rounded-full bg-[#111827]/70 border border-white/[0.12] shadow-2xl backdrop-blur-xl flex flex-col items-center justify-center p-3">
-                  <div className="w-8 h-8 md:w-9 md:h-9 rounded-full bg-gradient-to-tr from-[#4F46E5] to-[#06B6D4] flex items-center justify-center mb-1.5 shadow-lg shadow-[#4F46E5]/30">
-                    <Sparkles className="w-4 h-4 text-white" />
+                <div className="w-28 h-28 md:w-32 md:h-32 rounded-full bg-[#0F172A]/80 border border-[#F59E0B]/20 shadow-2xl backdrop-blur-xl flex flex-col items-center justify-center p-3">
+                  <div className="w-8 h-8 md:w-9 md:h-9 rounded-full bg-gradient-to-tr from-[#F59E0B] to-[#EA580C] flex items-center justify-center mb-1.5 shadow-lg shadow-[#F59E0B]/30">
+                    <Sparkles className="w-4 h-4 text-[#02040A]" />
                   </div>
                   <span className="font-heading font-extrabold text-xs md:text-sm text-white">
                     Showcase 360°
                   </span>
-                  <span className="text-[9px] font-mono text-[#06B6D4] mt-0.5">
+                  <span className="text-[9px] font-mono text-[#F59E0B] mt-0.5">
                     {totalItems} Karya Unggulan
                   </span>
                 </div>
@@ -414,8 +415,8 @@ export function CircularGalleryShowcase({
           {/* Right Flank: 3 Featured Highlights (Visible on xl+) */}
           <div className="hidden xl:block xl:col-span-3 space-y-4">
             <div className="flex items-center gap-2 px-1 mb-2">
-              <span className="w-2 h-2 rounded-full bg-[#CCFF00] animate-ping" />
-              <span className="text-xs font-mono font-bold text-[#CCFF00] uppercase tracking-wider">
+              <span className="w-2 h-2 rounded-full bg-[#EA580C] animate-ping" />
+              <span className="text-xs font-mono font-bold text-[#EA580C] uppercase tracking-wider">
                 Riset & Inovasi • 04-06
               </span>
             </div>
@@ -424,7 +425,7 @@ export function CircularGalleryShowcase({
                 key={`right-${project.id}`}
                 project={project}
                 badgeText="Riset AI / Web"
-                badgeColor="#CCFF00"
+                badgeColor="#EA580C"
                 rank={`#0${idx + 4}`}
               />
             ))}
@@ -434,8 +435,8 @@ export function CircularGalleryShowcase({
         {/* Responsive Featured Cards for Tablet & Laptop (< xl screens) */}
         <div className="xl:hidden mt-8 sm:mt-12">
           <div className="flex items-center justify-center gap-2 mb-6">
-            <span className="w-2 h-2 rounded-full bg-[#06B6D4] animate-ping" />
-            <h3 className="text-xs sm:text-sm font-mono font-bold text-[#06B6D4] uppercase tracking-wider text-center">
+            <span className="w-2 h-2 rounded-full bg-[#F59E0B] animate-ping" />
+            <h3 className="text-xs sm:text-sm font-mono font-bold text-[#F59E0B] uppercase tracking-wider text-center">
               ⭐ 6 Karya Unggulan Pilihan Siswa
             </h3>
           </div>
@@ -445,7 +446,7 @@ export function CircularGalleryShowcase({
                 key={`responsive-${project.id}`}
                 project={project}
                 badgeText={idx < 3 ? "Pilihan Utama" : "Inovasi Riset"}
-                badgeColor={idx < 3 ? "#06B6D4" : "#CCFF00"}
+                badgeColor={idx < 3 ? "#F59E0B" : "#EA580C"}
                 rank={`#0${idx + 1}`}
               />
             ))}
@@ -456,7 +457,7 @@ export function CircularGalleryShowcase({
         <div className="mt-14 text-center flex flex-col sm:flex-row items-center justify-center gap-4">
           <Link
             href="/projects"
-            className="btn-gradient px-6 py-3 rounded-xl text-xs font-semibold inline-flex items-center gap-2 shadow-lg hover:shadow-[#06B6D4]/25 transition-shadow"
+            className="btn-gradient px-6 py-3 rounded-xl text-xs font-semibold inline-flex items-center gap-2 shadow-lg hover:shadow-[#EA580C]/25 transition-shadow"
           >
             <span>Eksplorasi Semua Portofolio Karya Siswa</span>
             <ArrowRight className="w-4 h-4" />

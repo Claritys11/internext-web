@@ -319,17 +319,17 @@ export const Masonry: React.FC<MasonryProps> = ({
               ) : (
                 <>
                   {/* Subtle Dark Gradient Overlay for Readability */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#0A0F1E] via-[#0A0F1E]/60 to-transparent opacity-90 group-hover:opacity-95 transition-opacity" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#02040A] via-[#02040A]/60 to-transparent opacity-90 group-hover:opacity-95 transition-opacity" />
 
                   {/* Top Badges */}
                   <div className="absolute top-3.5 left-3.5 right-3.5 flex items-center justify-between pointer-events-none z-10">
                     {item.category && (
-                      <span className="px-2.5 py-1 rounded-md text-[10px] font-mono font-bold tracking-wider uppercase bg-[#06B6D4]/20 border border-[#06B6D4]/40 text-[#06B6D4] backdrop-blur-md shadow-sm">
+                      <span className="px-2.5 py-1 rounded-md text-[10px] font-mono font-bold tracking-wider uppercase bg-[#F59E0B]/20 border border-[#F59E0B]/40 text-[#F59E0B] backdrop-blur-md shadow-sm">
                         {item.category}
                       </span>
                     )}
                     {item.badge && (
-                      <span className="px-2 py-0.5 rounded text-[10px] font-mono font-medium text-[#CCFF00] bg-[#CCFF00]/10 border border-[#CCFF00]/30 backdrop-blur-md">
+                      <span className="px-2 py-0.5 rounded text-[10px] font-mono font-medium text-[#EA580C] bg-[#EA580C]/10 border border-[#EA580C]/30 backdrop-blur-md">
                         {item.badge}
                       </span>
                     )}
@@ -343,7 +343,7 @@ export const Masonry: React.FC<MasonryProps> = ({
                       </span>
                     )}
                     {item.title && (
-                      <h4 className="font-heading text-sm sm:text-base font-bold text-white group-hover:text-[#06B6D4] transition-colors line-clamp-2 leading-snug">
+                      <h4 className="font-heading text-sm sm:text-base font-bold text-white group-hover:text-[#F59E0B] transition-colors line-clamp-2 leading-snug">
                         {item.title}
                       </h4>
                     )}

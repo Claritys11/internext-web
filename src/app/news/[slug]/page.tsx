@@ -35,7 +35,7 @@ export default async function ArticleDetailPage({
           {/* Back link */}
           <Link
             href="/news"
-            className="inline-flex items-center gap-2 text-xs font-mono text-[#06B6D4] hover:text-white transition-colors mb-8"
+            className="inline-flex items-center gap-2 text-xs font-mono text-[#F59E0B] hover:text-[#EA580C] transition-colors mb-8"
           >
             <ArrowLeft className="w-4 h-4" />
             <span>Kembali ke Warta Berita</span>
@@ -44,11 +44,11 @@ export default async function ArticleDetailPage({
           {/* Article Header */}
           <div className="mb-8">
             <div className="flex items-center gap-2 mb-3">
-              <span className="text-xs font-mono font-semibold px-2.5 py-1 rounded-full bg-[#4F46E5] text-white">
+              <span className="text-xs font-mono font-semibold px-2.5 py-1 rounded-full bg-gradient-to-r from-[#F59E0B] to-[#EA580C] text-[#02040A] font-bold">
                 {article.category}
               </span>
               <span className="text-xs font-mono text-[#64748B] flex items-center gap-1">
-                <Clock className="w-3.5 h-3.5 text-[#06B6D4]" />
+                <Clock className="w-3.5 h-3.5 text-[#F59E0B]" />
                 {article.readTime}
               </span>
             </div>

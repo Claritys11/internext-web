@@ -12,7 +12,7 @@ export function ProjectCard({ project }: { project: Project }) {
     >
       <div>
         {/* Project Thumbnail Image */}
-        <div className="relative w-full h-48 sm:h-52 overflow-hidden bg-[#0A0F1E]">
+        <div className="relative w-full h-48 sm:h-52 overflow-hidden bg-[#02040A]">
           <Image
             src={project.thumbnail}
             alt={project.title}
@@ -20,11 +20,11 @@ export function ProjectCard({ project }: { project: Project }) {
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             className="object-cover group-hover:scale-105 transition-transform duration-300"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#111827] via-transparent to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0F172A] via-transparent to-transparent" />
 
           {/* Category Pill */}
           <div className="absolute top-3 left-3">
-            <span className="text-xs font-mono font-semibold px-2.5 py-1 rounded-full bg-[#0A0F1E]/80 text-[#06B6D4] border border-[#06B6D4]/30 backdrop-blur-md">
+            <span className="text-xs font-mono font-semibold px-2.5 py-1 rounded-full bg-[#02040A]/80 text-[#F59E0B] border border-[#F59E0B]/30 backdrop-blur-md">
               {project.category}
             </span>
           </div>
@@ -38,7 +38,7 @@ export function ProjectCard({ project }: { project: Project }) {
 
         {/* Project Info */}
         <div className="p-5">
-          <h3 className="font-heading text-lg font-bold text-white group-hover:text-[#06B6D4] transition-colors mb-1.5 leading-snug">
+          <h3 className="font-heading text-lg font-bold text-white group-hover:text-[#F59E0B] transition-colors mb-1.5 leading-snug">
             {project.title}
           </h3>
 
@@ -48,7 +48,7 @@ export function ProjectCard({ project }: { project: Project }) {
 
           {/* Team Contributors */}
           <div className="flex items-center gap-1.5 mb-4 text-xs text-[#64748B]">
-            <Users className="w-3.5 h-3.5 text-[#A5B4FC]" />
+            <Users className="w-3.5 h-3.5 text-[#EA580C]" />
             <span className="truncate">{project.team.join(", ")}</span>
           </div>
 

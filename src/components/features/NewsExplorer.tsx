@@ -66,7 +66,7 @@ export function NewsExplorer({ articles }: { articles: Article[] }) {
             placeholder="Cari warta, topik, penulis..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full bg-[#0A0F1E] border border-white/[0.1] rounded-xl pl-10 pr-4 py-2 text-sm text-white placeholder:text-[#64748B] focus:outline-none focus:border-[#06B6D4] transition-colors"
+            className="w-full bg-[#02040A] border border-white/[0.1] rounded-xl pl-10 pr-4 py-2 text-sm text-white placeholder:text-[#64748B] focus:outline-none focus:border-[#F59E0B] transition-colors"
           />
         </div>
 
@@ -78,7 +78,7 @@ export function NewsExplorer({ articles }: { articles: Article[] }) {
               onClick={() => setSelectedCategory(cat.value)}
               className={`px-3.5 py-1.5 rounded-xl text-xs font-mono whitespace-nowrap transition-all ${
                 selectedCategory === cat.value
-                  ? "bg-[#06B6D4] text-[#0A0F1E] font-bold shadow-md shadow-[#06B6D4]/20"
+                  ? "bg-[#F59E0B] text-[#02040A] font-bold shadow-md shadow-[#F59E0B]/20"
                   : "bg-white/[0.04] text-[#94A3B8] hover:text-white hover:bg-white/[0.08]"
               }`}
             >
@@ -94,7 +94,7 @@ export function NewsExplorer({ articles }: { articles: Article[] }) {
             title="Tampilan Masonry GSAP"
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono transition-all ${
               viewMode === "masonry"
-                ? "bg-[#06B6D4]/20 text-[#06B6D4] font-semibold border border-[#06B6D4]/40"
+                ? "bg-[#F59E0B]/20 text-[#F59E0B] font-semibold border border-[#F59E0B]/40"
                 : "text-[#64748B] hover:text-white"
             }`}
           >

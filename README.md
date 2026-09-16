@@ -4,38 +4,65 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-v4-38B2AC?style=for-the-badge&logo=tailwind-css)](https://tailwindcss.com/)
 [![GSAP](https://img.shields.io/badge/GSAP-3.12-88CE02?style=for-the-badge&logo=greensock)](https://greensock.com/gsap/)
+[![Prisma](https://img.shields.io/badge/Prisma-6.x-2D3748?style=for-the-badge&logo=prisma)](https://www.prisma.io/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-336791?style=for-the-badge&logo=postgresql)](https://www.postgresql.org/)
+[![Coolify](https://img.shields.io/badge/Deploy-Coolify-6B21A8?style=for-the-badge)](https://coolify.io/)
 [![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
 
-**Internext** adalah platform web resmi identitas digital, dokumentasi kegiatan, dan portofolio komprehensif bagi **Kelas XII Rekayasa Perangkat Lunak (RPL)**. Dibangun dengan standar rekayasa perangkat lunak modern, arsitektur yang tangguh, serta pengalaman visual interaktif tingkat tinggi (*cinematic web aesthetics*).
+**Internext** adalah platform web resmi identitas digital, dokumentasi kegiatan, dan portofolio komprehensif bagi **Kelas XI Internasional SMK Telkom Malang** (25 siswa). Dibangun dengan standar rekayasa perangkat lunak modern, arsitektur yang tangguh, integrasi database PostgreSQL via Prisma ORM, serta palet visual **Gargantua Glow (Black Hole Vibes)**.
+
+---
+
+## 🎨 Palet Desain: Gargantua Glow (Black Hole Vibes)
+
+Platform mengadopsi tema estetika kosmik berdaya pikat tinggi dengan kontras tajam:
+
+| Komponen | Token Hex | Karakteristik Visual |
+| :--- | :--- | :--- |
+| **Text** | `#F8FAFC` | Slate White — Tipografi tajam & kontras tinggi |
+| **Background** | `#02040A` | Deepest Void — Kedalaman ruang hampa kosmik |
+| **Primary** | `#F59E0B` | Accretion Disk Gold — Emas amber cakram akresi lubang hitam |
+| **Secondary** | `#0F172A` | Accretion Slate — Permukaan wadah & kartu berlatar gelap |
+| **Accent** | `#EA580C` | Cosmic Jet Flame — Pendaran oranye semburan relativistik |
+
+- **Brand Gradient**: `linear-gradient(135deg, #F59E0B 0%, #EA580C 100%)`
+- **Buttons (`.btn-gradient`)**: Menggunakan teks gelap `#02040A` di atas latar emas-oranye gradasi untuk visual punch yang tegas.
 
 ---
 
 ## ✨ Fitur Utama & Pengalaman Interaktif
 
-### 1. 🌐 Galeri & Inovasi Internext 360° (Studio Showcase)
-- **Adaptif & Dinamis**: Terhubung langsung ke katalog data portofolio siswa; proyek baru otomatis muncul pada arena lingkaran orbital 360°.
-- **Studio Flanked Highlights**: Diapit oleh 3 kartu unggulan di sayap kiri (#01–#03) dan 3 kartu riset di sayap kanan (#04–#06), membingkai arena 360° di bagian tengah.
-- **Interaksi 3D Flip Card**: Kartu berputar 180° untuk menampilkan *tech stack*, deskripsi riset, dan tautan langsung ke detail karya.
+### 1. 🧭 Navigasi Dinamis Morphing (`anime-navbar.tsx`)
+- Menggunakan pendekatan responsif scroll cerdas:
+  - **Di Posisi Teratas**: Tampil sebagai bar navigasi penuh (*full-width header*) dengan logo dan tautan terbentang luas.
+  - **Saat Di-Scroll**: Bertransisi halus (*spring physics*) menjadi *compact floating pill* rounded-full tanpa memicu *double-scrollbar* atau perubahan tinggi layout halaman.
+  - Dilengkapi pendaran aura partikel aktif (*luminous anime active aura*) dengan gradasi `#EA580C` dan `#F59E0B`.
 
-### 2. ⚡ Nahkoda & Penggerak Internext (6 Pimpinan Kelas)
-- Menampilkan 6 pengurus inti kelas (*Ketua Kelas, Wakil Ketua, Sekretaris, Bendahara, Divisi IT & Riset, Divisi Media & Humas*).
-- Desain *tilted non-parallel frosted glassmorphism* terinspirasi Web3/Tech handle branding (`fakhri.eth`, `alya.design`, `rafi.dev`, `zahra.finance`, `bima.build`, `nabila.sys`) lengkap dengan *rank points* dan efek rotasi hover asimetris.
+### 2. 🧱 React Bits `<Masonry />` (Warta Berita & Eksplorasi Karya)
+- Diintegrasikan di halaman `/news` dan `/projects`.
+- Menghadirkan tata letak bertingkat (*staggered masonry*) yang dinamis dengan animasi GSAP smooth entrance, filter kategori instan, serta tombol pengalih mode (*Masonry* vs *Grid*).
 
-### 3. 🌀 GSAP Scroll MotionPath (Pelacak Kedalaman & Inertia)
-- Jalur kurva SVG bercahaya neon ganda (*lime yellow* & *electric cyan*) mengalir mengikuti progres scroll dari puncak Hero hingga ke footer.
-- **Arsitektur Layering Cerdas**: Jalur berada di lapisan `z-0` di balik semua elemen kartu (*frosted glass backlight* terpancar halus), sementara seluruh teks judul dilindungi dengan perisai solid sehingga teks 100% tajam dan bebas dari bias garis.
+### 3. 🌐 React Bits `<DomeGallery />` 360° (Galeri Kubah Interaktif)
+- Diintegrasikan di halaman `/gallery`.
+- Menampilkan foto-foto memori dan kegiatan siswa dalam proyeksi kubah bola 3D interaktif berbasis gestur drag/swipe dengan dukungan pembesaran foto (*click to enlarge*).
 
-### 4. 📰 Kabar & Warta Terkini (Infinite Draggable News Carousel)
-- Didukung GSAP `Draggable` dengan *momentum throwing* dan *snap-to-card*.
-- Mendukung geser bebas (*free drag*), tombol navigasi Next/Prev, serta *auto-ticker loop* yang otomatis berhenti saat kursor diarahkan ke kartu.
+### 4. 💬 Live Chat & Buku Tamu Digital (`/contact`)
+- Menggantikan buku tamu konvensional menjadi aplikasi percakapan multi-kanal:
+  - **#apresiasi-publik**: Kanal resmi pesan apresiasi dan motivasi publik dari pengunjung, alumni, dan guru.
+  - **#ngobrol-santai**: Kanal interaksi terbuka tanpa bot otomatis.
+- Terintegrasi langsung dengan database PostgreSQL melalui Prisma ORM dengan *mock fallback store* otomatis jika database belum tersambung.
 
-### 5. 🎬 Cinematic / Motion Footer (Curtain Reveal & Magnetic Navigation)
-- Efek *theatrical curtain reveal* saat pengguna mencapai akhir halaman beranda.
-- Teks raksasa latar belakang *parallax* `INTERNEXT`, pendaran aurora animasi *breathe*, pita *marquee* diagonal, serta tombol interaktif berbasis fisika magnetik (*Magnetic Buttons*).
+### 5. ⚙️ Portal Admin CMS Terpusat (`/admin`)
+- Seluruh konten dinamis dapat dikelola secara langsung melalui antarmuka admin:
+  - Profil & identitas kelas (wali kelas, ketua kelas, lokasi lab, bio).
+  - Direktori 25 siswa anggota kelas (nama, peran, keahlian, quote, sosial media).
+  - Portofolio proyek & karya digital siswa.
+  - Warta berita, agenda kalender, dan album galeri.
+  - Moderasi pesan obrolan & ucapan tamu.
 
-### 6. 👥 Direktori 36 Anggota Kelas & Buku Tamu Digital
-- Profil mendalam tiap siswa lengkap dengan *skills*, portofolio, tautan GitHub/LinkedIn, dan kutipan motivasi.
-- Formulir Buku Tamu Digital untuk menerima aspirasi, pesan, dan kesan dari rekan siswa, guru, serta alumni.
+### 6. 🎬 Cinematic Motion Footer
+- Efek *theatrical curtain reveal* di dasar halaman beranda.
+- Teks latar *parallax* `INTERNEXT`, animasi pernapasan aurora pendaran Gargantua Glow, *marquee ticker* diagonal, serta tombol magnetik (*Magnetic Buttons*).
 
 ---
 
@@ -43,94 +70,71 @@
 
 - **Framework**: [Next.js 16.3.5](https://nextjs.org/) (App Router, Turbopack)
 - **Language**: [TypeScript 5](https://www.typescriptlang.org/)
-- **Styling**: [Tailwind CSS v4](https://tailwindcss.com/) & Vanilla CSS Modules
-- **Animasi & Interaktivitas**: [GSAP 3](https://greensock.com/gsap/) (`ScrollTrigger`, `Draggable`, `MotionPathPlugin`)
+- **Database & ORM**: [PostgreSQL 16](https://www.postgresql.org/) & [Prisma ORM 6](https://www.prisma.io/)
+- **Styling**: [Tailwind CSS v4](https://tailwindcss.com/) & Vanilla CSS Tokens
+- **Animasi & Interaktivitas**: [GSAP 3](https://greensock.com/gsap/) (`ScrollTrigger`, `Draggable`, `MotionPathPlugin`) & [Framer Motion](https://www.framer.com/motion/)
 - **Ikonografi**: [Lucide React](https://lucide.dev/)
-- **Typography**: [Space Grotesk](https://fonts.google.com/specimen/Space+Grotesk), [Inter](https://fonts.google.com/specimen/Inter), [JetBrains Mono](https://fonts.google.com/specimen/JetBrains+Mono)
+- **Containerization & Deployment**: Docker Compose & [Coolify](https://coolify.io/)
 
 ---
 
-## 📁 Struktur Direktori
+## 🚀 Panduan Menjalankan & Deploy
 
-```text
-webclass/
-├── src/
-│   ├── app/                    # Next.js App Router (Pages, Layouts, Route Handlers)
-│   │   ├── about/              # Halaman Visi, Misi & Filosofi
-│   │   ├── admin/              # Portal Manajemen & Pengawasan
-│   │   ├── contact/            # Buku Tamu Digital
-│   │   ├── events/             # Agenda, Kalender & Dokumentasi
-│   │   ├── gallery/            # Galeri Foto & Kilas Balik
-│   │   ├── members/            # Direktori Lengkap 36 Anggota
-│   │   ├── news/               # Warta Berita & Pengumuman
-│   │   ├── projects/           # Eksplorasi Karya Siswa
-│   │   ├── globals.css         # Design Tokens & Utilitas Glassmorphism
-│   │   ├── layout.tsx          # Root Layout
-│   │   └── page.tsx            # Beranda Utama
-│   ├── components/
-│   │   ├── features/           # Kartu Fitur (EventCard, MemberCard, ProjectCard, dll.)
-│   │   ├── layout/             # Navbar, Footer
-│   │   ├── sections/           # HeroSection, StatsBar, CircularGallery, Leadership, Carousel
-│   │   ├── shared/             # ScrollMotionPath, DynamicParticles
-│   │   └── ui/                 # UI Primitives & motion-footer.tsx
-│   ├── config/                 # Metadata Situs & Konfigurasi Kelas
-│   └── lib/                    # API Services, Mock Data, Utilities, Types
-├── public/                     # Aset Gambar, Logo, & Font Statis
-├── CONTRIBUTING.md             # Panduan Kontribusi
-├── CODE_OF_CONDUCT.md         # Pedoman Etika & Komunitas
-├── SECURITY.md                 # Kebijakan Keamanan
-└── LICENSE                     # Lisensi MIT
-```
+### A. Pengembangan Lokal
 
----
-
-## 🚀 Memulai Pengembangan Lokal
-
-### Prasyarat
-- [Node.js](https://nodejs.org/) v18.18.0 atau yang lebih baru
-- `npm`, `pnpm`, atau `yarn`
-
-### Instalasi & Menjalankan Server
-
-1. **Clone repository**:
+1. **Clone repository & install dependensi**:
    ```bash
-   git clone https://github.com/your-org/internext-web.git
-   cd internext-web
-   ```
-
-2. **Install dependensi**:
-   ```bash
+   git clone git@github.com:Claritys11/internext-web.git
+   cd webclass
    npm install
    ```
 
-3. **Jalankan server pengembangan**:
+2. **Setup Environment**:
+   Salin `.env.example` ke `.env`:
+   ```bash
+   cp .env.example .env
+   ```
+   Atur `DATABASE_URL` sesuai konfigurasi PostgreSQL lokal Anda (opsional, aplikasi memiliki fallback mock store otomatis):
+   ```env
+   DATABASE_URL="postgresql://internext:internext_secure_pwd@localhost:5432/internext_db?schema=public"
+   ```
+
+3. **Inisialisasi Prisma ORM**:
+   ```bash
+   npx prisma generate
+   # Jika database aktif:
+   # npx prisma db push
+   ```
+
+4. **Jalankan server dev**:
    ```bash
    npm run dev
    ```
-   Buka peramban di [http://localhost:3000](http://localhost:3000) atau [http://localhost:3001](http://localhost:3001).
+   Akses di [http://localhost:3000](http://localhost:3000) atau [http://localhost:3001](http://localhost:3001).
 
-4. **Kompilasi produksi**:
-   ```bash
-   npm run build
-   npm run start
-   ```
-
-5. **Pemeriksaan Type Safety**:
+5. **Validasi Type Safety**:
    ```bash
    npx tsc --noEmit
    ```
 
 ---
 
-## 🤝 Kontribusi & Kebijakan Proyek
+### B. Deployment ke Coolify via Docker Compose
 
-Kami menyambut partisipasi dari seluruh rekan kelas dan komunitas. Silakan baca dokumen pendukung:
-- 📖 [Panduan Kontribusi](CONTRIBUTING.md)
-- 📜 [Code of Conduct](CODE_OF_CONDUCT.md)
-- 🔒 [Kebijakan Keamanan](SECURITY.md)
+Proyek ini telah dikonfigurasi siap pakai untuk dideploy pada platform **Coolify** menggunakan resource terpisah atau Docker Compose gabungan:
+
+1. Buat resource baru di Coolify bertipe **Docker Compose**.
+2. Masukkan file `docker-compose.yml` yang tersedia di root proyek:
+   - Service `app`: Menjalankan Next.js standalone container pada port `3000`.
+   - Service `postgres`: Menyediakan instance database PostgreSQL dengan volume data persisten.
+3. Atur environment variables di dashboard Coolify:
+   - `DATABASE_URL`: URL koneksi PostgreSQL ke container `postgres`.
+   - `NODE_ENV`: `production`.
+4. Klik **Deploy** — Coolify akan otomatis melakukan *build* multi-stage dan menjalankan platform.
 
 ---
 
 ## 📄 Lisensi
 
-Proyek ini dilisensikan di bawah [MIT License](LICENSE) — bebas digunakan dan dikembangkan untuk keperluan edukasi dan komunitas kelas.
+Proyek ini dilisensikan di bawah [MIT License](LICENSE) — dibangun dengan dedikasi dan bangga oleh siswa **Kelas XI Internasional SMK Telkom Malang**.
+

@@ -1,43 +1,49 @@
 # Internext UI & Design System Guide
 
-Authoritative design system specification based on Notion Master Project Plan.
+Authoritative design system specification for the Internext web platform.
 
 ## 1. Brand Concept
 - **Brand Name**: Internext (*Internet* + *Next*)
+- **School**: SMK Telkom Malang
+- **Class**: Kelas XI Internasional (25 Siswa Kreator)
 - **Tagline**: *"Connected. Forward. Together."*
-- **Aesthetic**: Futuristic, tech-forward, clean, digital headquarters.
+- **Aesthetic Theme**: **Gargantua Glow (Black Hole Vibes)** — Deepest cosmic void with accretion disk gold & relativistic jet flame accents.
 
-## 2. Color Palette
-- **Dark Mode Background (Midnight Blue)**: `#0A0F1E`
-- **Surface Elevation 1 (Card/Container)**: `#111827`
-- **Surface Elevation 2 (Hover/Active)**: `#1E293B`
-- **Primary Accent (Electric Indigo)**: `#4F46E5`
-- **Secondary Accent (Neon Cyan)**: `#06B6D4`
-- **Primary Text (Pure White)**: `#F8FAFC`
-- **Muted Text / Subtle Borders (Slate Gray)**: `#64748B` / `rgba(255, 255, 255, 0.08)`
-- **Brand Gradient**: `linear-gradient(135deg, #4F46E5 0%, #06B6D4 100%)`
+## 2. Color Palette — Gargantua Glow (Black Hole Vibes)
 
-### Semantic Colors
-- **Success**: `#10B981` (Emerald)
-- **Warning**: `#F59E0B` (Amber)
-- **Error / Destructive**: `#EF4444` (Rose / Red)
-- **Info**: `#3B82F6` (Sky Blue)
+| Role | Token / Name | Hex Code | Purpose & Application |
+| :--- | :--- | :--- | :--- |
+| **Text** | `Foreground` | `#F8FAFC` | Clean, crisp, high-contrast readable text |
+| **Background** | `Midnight Void` | `#02040A` | Deepest abyss background, backdrop blur anchors |
+| **Primary** | `Accretion Gold` | `#F59E0B` | Primary CTAs, active states, luminous halo highlights |
+| **Secondary** | `Accretion Slate` | `#0F172A` | Cards, container surfaces, elevate 1 layer |
+| **Accent** | `Cosmic Flame` | `#EA580C` | High-energy secondary accent, badges, warning signals |
+
+### Semantic Tokens & Gradients
+- **Brand Gradient**: `linear-gradient(135deg, #F59E0B 0%, #EA580C 100%)`
+- **Text Gradient**: `linear-gradient(to right, #F59E0B, #EA580C, #FDE68A)`
+- **Accretion Halo Glow**: `radial-gradient(circle, rgba(245, 158, 11, 0.18) 0%, rgba(234, 88, 12, 0.12) 35%, transparent 70%)`
+- **Surface Elevation 1**: `#0F172A` / `rgba(15, 23, 42, 0.8)`
+- **Border Utility**: `1px solid rgba(255, 255, 255, 0.08)` / `border-[#F59E0B]/20`
 
 ## 3. Typography
 - **Headings & Display**: `Space Grotesk` (Google Fonts) — Geometric, futuristic character.
 - **Body UI & Content**: `Inter` (Google Fonts) — High readability, modern standard.
-- **Numbers, Stats & Code**: `JetBrains Mono` — Monospace alignment for metrics and tags.
+- **Numbers, Stats & Code**: `JetBrains Mono` — Monospace alignment for metrics, terminal tags, and dates.
 
 ## 4. Component Standards
-- **Buttons**:
-  - Primary: Gradient Indigo-to-Cyan, subtle glow on hover, scale `1.02`.
-  - Secondary: Ghost / Outline with Indigo border, translucent hover state.
-- **Cards**:
-  - Border radius: `12px` to `16px`.
+- **Buttons (`.btn-gradient`)**:
+  - Background: Gradient `#F59E0B` to `#EA580C`.
+  - Text: Dark `#02040A` bold font for maximum readability and punch.
+  - Hover: Scale `1.03`, drop-shadow glow `shadow-lg shadow-[#F59E0B]/25`.
+- **Cards (`.glass-card`)**:
+  - Background: `rgba(15, 23, 42, 0.75)` with `backdrop-blur-xl`.
   - Border: `1px solid rgba(255, 255, 255, 0.08)`.
-  - Hover: Subtle translateY(-3px) and box-shadow glow.
-- **Navigation**:
-  - Sticky glassmorphism header with backdrop blur (`backdrop-blur-md bg-[#0A0F1E]/80`).
+  - Hover: `border-[#F59E0B]/40` and smooth `translateY(-3px)`.
+- **Navigation (`Anime Navbar`)**:
+  - Pill shape when scrolled (`bg-[#02040A]/95` border `border-[#F59E0B]/20`).
+  - Active tab luminous particle aura with `#F59E0B` and `#EA580C` shimmer.
 - **Motion Guidelines**:
-  - Purposeful transitions (`duration-200` to `duration-300`).
+  - Smooth GSAP scroll inertia and motion paths.
   - Strict compliance with `prefers-reduced-motion`.
+

@@ -8,7 +8,7 @@ export function ArticleCard({ article }: { article: Article }) {
   return (
     <article className="glass-card overflow-hidden transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-between group">
       <div>
-        <div className="relative w-full h-44 sm:h-48 overflow-hidden bg-[#0A0F1E]">
+        <div className="relative w-full h-44 sm:h-48 overflow-hidden bg-[#02040A]">
           <Image
             src={article.coverImage}
             alt={article.title}
@@ -16,14 +16,14 @@ export function ArticleCard({ article }: { article: Article }) {
             sizes="(max-width: 768px) 100vw, 50vw"
             className="object-cover group-hover:scale-105 transition-transform duration-300"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#111827] via-transparent to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0F172A] via-transparent to-transparent" />
 
           <div className="absolute top-3 left-3 flex gap-2">
-            <span className="text-xs font-mono font-semibold px-2.5 py-1 rounded-full bg-[#4F46E5] text-white shadow-md">
+            <span className="text-xs font-mono font-semibold px-2.5 py-1 rounded-full bg-gradient-to-r from-[#F59E0B] to-[#EA580C] text-[#02040A] font-bold shadow-md">
               {article.category}
             </span>
             {article.isPinned && (
-              <span className="text-xs font-mono font-semibold px-2.5 py-1 rounded-full bg-[#F59E0B] text-[#0A0F1E]">
+              <span className="text-xs font-mono font-semibold px-2.5 py-1 rounded-full bg-[#EA580C] text-white">
                 📌 Highlight
               </span>
             )}
@@ -35,12 +35,12 @@ export function ArticleCard({ article }: { article: Article }) {
             <span>{formatDate(article.date)}</span>
             <span>•</span>
             <span className="flex items-center gap-1">
-              <Clock className="w-3 h-3 text-[#06B6D4]" />
+              <Clock className="w-3 h-3 text-[#F59E0B]" />
               {article.readTime}
             </span>
           </div>
 
-          <h3 className="font-heading text-lg font-bold text-white group-hover:text-[#06B6D4] transition-colors mb-2 leading-snug">
+          <h3 className="font-heading text-lg font-bold text-white group-hover:text-[#F59E0B] transition-colors mb-2 leading-snug">
             {article.title}
           </h3>
 
@@ -78,7 +78,7 @@ export function ArticleCard({ article }: { article: Article }) {
 
         <Link
           href={`/news/${article.slug}`}
-          className="text-xs font-semibold text-[#06B6D4] group-hover:translate-x-1 transition-transform flex items-center gap-1"
+          className="text-xs font-semibold text-[#F59E0B] hover:text-[#EA580C] group-hover:translate-x-1 transition-transform flex items-center gap-1"
         >
           <span>Baca</span>
           <ArrowRight className="w-3.5 h-3.5" />

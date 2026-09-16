@@ -44,8 +44,8 @@ const STYLES = `
   
   --pill-bg-1-hover: rgba(255, 255, 255, 0.12);
   --pill-bg-2-hover: rgba(255, 255, 255, 0.04);
-  --pill-border-hover: #06B6D4;
-  --pill-shadow-hover: rgba(6, 182, 212, 0.25);
+  --pill-border-hover: #F59E0B;
+  --pill-shadow-hover: rgba(245, 158, 11, 0.25);
   --pill-highlight-hover: rgba(255, 255, 255, 0.3);
 }
 
@@ -87,12 +87,12 @@ const STYLES = `
   -webkit-mask-image: linear-gradient(to bottom, transparent, black 25%, black 75%, transparent);
 }
 
-/* Theme-adaptive Aurora Glow (Internext Midnight Cyan & Indigo) */
+/* Theme-adaptive Aurora Glow (Gargantua Glow Amber & Flare Orange) */
 .footer-aurora {
   background: radial-gradient(
     circle at 50% 50%, 
-    rgba(6, 182, 212, 0.22) 0%, 
-    rgba(79, 70, 229, 0.18) 40%, 
+    rgba(245, 158, 11, 0.25) 0%, 
+    rgba(234, 88, 12, 0.18) 40%, 
     transparent 70%
   );
 }
@@ -101,9 +101,9 @@ const STYLES = `
 .footer-glass-pill {
   background: linear-gradient(145deg, var(--pill-bg-1) 0%, var(--pill-bg-2) 100%);
   box-shadow: 
-      0 10px 30px -10px var(--pill-shadow), 
-      inset 0 1px 1px var(--pill-highlight), 
-      inset 0 -1px 2px var(--pill-inset-shadow);
+    0 10px 30px -10px var(--pill-shadow), 
+    inset 0 1px 1px var(--pill-highlight), 
+    inset 0 -1px 2px var(--pill-inset-shadow);
   border: 1px solid var(--pill-border);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
@@ -114,8 +114,8 @@ const STYLES = `
   background: linear-gradient(145deg, var(--pill-bg-1-hover) 0%, var(--pill-bg-2-hover) 100%);
   border-color: var(--pill-border-hover);
   box-shadow: 
-      0 20px 40px -10px var(--pill-shadow-hover), 
-      inset 0 1px 1px var(--pill-highlight-hover);
+    0 20px 40px -10px var(--pill-shadow-hover), 
+    inset 0 1px 1px var(--pill-highlight-hover);
   color: #FFFFFF;
 }
 
@@ -138,7 +138,7 @@ const STYLES = `
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  filter: drop-shadow(0px 0px 30px rgba(6, 182, 212, 0.35));
+  filter: drop-shadow(0px 0px 30px rgba(245, 158, 11, 0.35));
 }
 `;
 
@@ -227,11 +227,11 @@ MagneticButton.displayName = "MagneticButton";
 // -------------------------------------------------------------------------
 const MarqueeItem = () => (
   <div className="flex items-center space-x-12 px-6 select-none">
-    <span>CONNECTED. FORWARD. TOGETHER.</span> <span className="text-[#06B6D4]">✦</span>
-    <span>SMK TELKOM MALANG • XI INTERNASIONAL</span> <span className="text-[#CCFF00]">✦</span>
-    <span>DIGITAL IDENTITY & INNOVATION</span> <span className="text-[#818CF8]">✦</span>
-    <span>25 TALENTED STUDENT CREATORS</span> <span className="text-[#06B6D4]">✦</span>
-    <span>CRAFTED WITH PRIDE & EXCELLENCE</span> <span className="text-[#CCFF00]">✦</span>
+    <span>CONNECTED. FORWARD. TOGETHER.</span> <span className="text-[#EA580C]">✦</span>
+    <span>SMK TELKOM MALANG • XI INTERNASIONAL</span> <span className="text-[#F59E0B]">✦</span>
+    <span>DIGITAL IDENTITY & INNOVATION</span> <span className="text-[#EA580C]">✦</span>
+    <span>25 TALENTED STUDENT CREATORS</span> <span className="text-[#F59E0B]">✦</span>
+    <span>CRAFTED WITH PRIDE & EXCELLENCE</span> <span className="text-[#EA580C]">✦</span>
   </div>
 );
 
@@ -310,7 +310,7 @@ export function CinematicFooter() {
         style={{ clipPath: "polygon(0% 0, 100% 0%, 100% 100%, 0 100%)" }}
       >
         {/* The actual footer stays fixed to the viewport underneath everything, filling the screen */}
-        <footer className="fixed bottom-0 left-0 flex h-screen w-full flex-col justify-between overflow-hidden bg-[#0A0F1E] text-white cinematic-footer-wrapper">
+        <footer className="fixed bottom-0 left-0 flex h-screen w-full flex-col justify-between overflow-hidden bg-[#02040A] text-white cinematic-footer-wrapper">
           {/* Ambient Light & Grid Background */}
           <div className="footer-aurora absolute left-1/2 top-1/2 h-[65vh] w-[85vw] -translate-x-1/2 -translate-y-1/2 animate-footer-breathe rounded-[50%] blur-[110px] pointer-events-none z-0" />
           <div className="footer-bg-grid absolute inset-0 z-0 pointer-events-none" />
@@ -324,7 +324,7 @@ export function CinematicFooter() {
           </div>
 
           {/* 1. Diagonal Sleek Infinite Marquee Ticker (pinned near top of footer) */}
-          <div className="absolute top-6 sm:top-10 left-0 w-full overflow-hidden border-y border-white/[0.08] bg-[#0A0F1E]/80 backdrop-blur-md py-3 sm:py-3.5 z-10 -rotate-1 scale-105 shadow-2xl">
+          <div className="absolute top-6 sm:top-10 left-0 w-full overflow-hidden border-y border-white/[0.08] bg-[#02040A]/80 backdrop-blur-md py-3 sm:py-3.5 z-10 -rotate-1 scale-105 shadow-2xl">
             <div className="flex w-max animate-footer-scroll-marquee text-xs md:text-sm font-bold tracking-[0.25em] text-[#94A3B8] uppercase">
               <MarqueeItem />
               <MarqueeItem />
@@ -333,8 +333,8 @@ export function CinematicFooter() {
 
           {/* 2. Main Center Hero Content */}
           <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-4 sm:px-6 pt-16 sm:pt-20 w-full max-w-5xl mx-auto text-center">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/[0.05] border border-white/10 text-xs font-mono text-[#06B6D4] mb-4 sm:mb-6 backdrop-blur-md shadow-sm">
-              <Sparkles className="w-3.5 h-3.5 text-[#CCFF00]" />
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/[0.05] border border-[#F59E0B]/30 text-xs font-mono text-[#F59E0B] mb-4 sm:mb-6 backdrop-blur-md shadow-sm">
+              <Sparkles className="w-3.5 h-3.5 text-[#EA580C]" />
               <span>Official Digital Platform • Class XII RPL</span>
             </div>
 
@@ -355,7 +355,7 @@ export function CinematicFooter() {
                   href="/contact"
                   className="footer-glass-pill px-6 sm:px-9 py-3 sm:py-4 rounded-full text-white font-bold text-sm sm:text-base flex items-center gap-2.5 sm:gap-3 group shadow-lg"
                 >
-                  <MessageSquare className="w-4 sm:w-5 h-4 sm:h-5 text-[#06B6D4] group-hover:scale-110 transition-transform" />
+                  <MessageSquare className="w-4 sm:w-5 h-4 sm:h-5 text-[#F59E0B] group-hover:scale-110 transition-transform" />
                   <span>Buku Tamu Digital</span>
                 </MagneticButton>
 
@@ -364,7 +364,7 @@ export function CinematicFooter() {
                   href="/members"
                   className="footer-glass-pill px-6 sm:px-9 py-3 sm:py-4 rounded-full text-white font-bold text-sm sm:text-base flex items-center gap-2.5 sm:gap-3 group shadow-lg"
                 >
-                  <Users className="w-4 sm:w-5 h-4 sm:h-5 text-[#CCFF00] group-hover:scale-110 transition-transform" />
+                  <Users className="w-4 sm:w-5 h-4 sm:h-5 text-[#EA580C] group-hover:scale-110 transition-transform" />
                   <span>Direktori 25 Anggota</span>
                 </MagneticButton>
 
@@ -373,7 +373,7 @@ export function CinematicFooter() {
                   href="/projects"
                   className="footer-glass-pill px-6 sm:px-9 py-3 sm:py-4 rounded-full text-white font-bold text-sm sm:text-base flex items-center gap-2.5 sm:gap-3 group shadow-lg"
                 >
-                  <Sparkles className="w-4 sm:w-5 h-4 sm:h-5 text-[#818CF8] group-hover:scale-110 transition-transform" />
+                  <Sparkles className="w-4 sm:w-5 h-4 sm:h-5 text-[#F59E0B] group-hover:scale-110 transition-transform" />
                   <span>Galeri Karya 360°</span>
                 </MagneticButton>
               </div>
@@ -385,7 +385,7 @@ export function CinematicFooter() {
                   href="/about"
                   className="footer-glass-pill px-3.5 sm:px-5 py-1.5 sm:py-2 rounded-full text-[#CBD5E1] font-medium text-xs sm:text-sm hover:text-white flex items-center gap-1.5 sm:gap-2"
                 >
-                  <BookOpen className="w-3.5 h-3.5 text-[#06B6D4]" />
+                  <BookOpen className="w-3.5 h-3.5 text-[#F59E0B]" />
                   <span>Visi & Misi Kelas</span>
                 </MagneticButton>
 
@@ -394,7 +394,7 @@ export function CinematicFooter() {
                   href="/events"
                   className="footer-glass-pill px-3.5 sm:px-5 py-1.5 sm:py-2 rounded-full text-[#CBD5E1] font-medium text-xs sm:text-sm hover:text-white flex items-center gap-1.5 sm:gap-2"
                 >
-                  <Calendar className="w-3.5 h-3.5 text-[#10B981]" />
+                  <Calendar className="w-3.5 h-3.5 text-[#EA580C]" />
                   <span>Agenda Kegiatan</span>
                 </MagneticButton>
 
@@ -413,7 +413,7 @@ export function CinematicFooter() {
                   rel="noopener noreferrer"
                   className="footer-glass-pill px-3.5 sm:px-5 py-1.5 sm:py-2 rounded-full text-[#CBD5E1] font-medium text-xs sm:text-sm hover:text-white flex items-center gap-1.5"
                 >
-                  <InstagramIcon className="w-3.5 h-3.5 text-[#EC4899]" />
+                  <InstagramIcon className="w-3.5 h-3.5 text-[#EA580C]" />
                   <span>Instagram Resmi</span>
                   <ExternalLink className="w-3 h-3 text-[#64748B]" />
                 </MagneticButton>
@@ -423,7 +423,7 @@ export function CinematicFooter() {
                   href="/admin"
                   className="footer-glass-pill px-3.5 sm:px-5 py-1.5 sm:py-2 rounded-full text-[#CBD5E1] font-medium text-xs sm:text-sm hover:text-white flex items-center gap-1.5 sm:gap-2"
                 >
-                  <ShieldCheck className="w-3.5 h-3.5 text-[#A5B4FC]" />
+                  <ShieldCheck className="w-3.5 h-3.5 text-[#F59E0B]" />
                   <span>Portal Admin</span>
                 </MagneticButton>
               </div>
@@ -458,7 +458,7 @@ export function CinematicFooter() {
               aria-label="Kembali ke atas"
               className="w-10 h-10 sm:w-11 sm:h-11 rounded-full footer-glass-pill flex items-center justify-center text-[#94A3B8] hover:text-white group order-3 shadow-md"
             >
-              <ArrowUp className="w-4 sm:w-5 h-4 sm:h-5 transform group-hover:-translate-y-1 transition-transform duration-300 text-[#06B6D4]" />
+              <ArrowUp className="w-4 sm:w-5 h-4 sm:h-5 transform group-hover:-translate-y-1 transition-transform duration-300 text-[#F59E0B]" />
             </MagneticButton>
           </div>
         </footer>

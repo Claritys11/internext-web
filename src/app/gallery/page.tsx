@@ -118,19 +118,19 @@ export default function GalleryPage() {
   }, []);
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#0A0F1E]">
+    <div className="flex flex-col min-h-screen bg-[#02040A]">
       <Navbar />
 
       <main className="flex-1 py-12 md:py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* 1. Header: Judul & Penjelasan Singkat */}
           <div className="text-center max-w-3xl mx-auto mb-10">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#06B6D4]/10 border border-[#06B6D4]/30 text-xs font-mono text-[#06B6D4] mb-4 backdrop-blur-md">
-              <Sparkles className="w-3.5 h-3.5 text-[#CCFF00]" />
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#F59E0B]/10 border border-[#F59E0B]/30 text-xs font-mono text-[#F59E0B] mb-4 backdrop-blur-md">
+              <Sparkles className="w-3.5 h-3.5 text-[#EA580C]" />
               <span>Eksplorasi Kubah 3D Interaktif • Momen & Memori Kelas</span>
             </div>
             <h1 className="font-heading text-4xl sm:text-5xl md:text-6xl font-extrabold text-white tracking-tight mb-4 leading-tight">
-              Kubah Galeri 3D <span className="text-gradient-cyan">Internext</span>
+              Kubah Galeri 3D <span className="text-gradient">Internext</span>
             </h1>
             <p className="text-base sm:text-lg text-[#94A3B8] leading-relaxed max-w-2xl mx-auto">
               Eksplorasi rekaman visual perjalanan, prestasi, dan kenangan tak terlupakan siswa XI Internasional SMK Telkom Malang dalam kubah 360° interaktif. Geser untuk memutar sudut pandang dan klik foto mana saja untuk memperbesar memori.
@@ -140,7 +140,7 @@ export default function GalleryPage() {
           {/* 2. Interactive Hint & Controls Bar */}
           <div className="glass-card p-3.5 sm:p-4 mb-6 flex flex-col sm:flex-row items-center justify-between gap-3 border-white/[0.08]">
             <div className="flex items-center gap-2 text-xs font-mono text-[#CBD5E1]">
-              <Compass className="w-4 h-4 text-[#06B6D4] animate-spin" style={{ animationDuration: "12s" }} />
+              <Compass className="w-4 h-4 text-[#F59E0B] animate-spin" style={{ animationDuration: "12s" }} />
               <span>
                 <strong className="text-white">Interaksi:</strong> Drag / geser kubah untuk memutar 360° • Klik tile foto untuk memperbesar
               </span>
@@ -151,7 +151,7 @@ export default function GalleryPage() {
                 onClick={() => setGrayscale(!grayscale)}
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono transition-all ${
                   grayscale
-                    ? "bg-[#CCFF00]/20 text-[#CCFF00] border border-[#CCFF00]/40 font-semibold"
+                    ? "bg-[#EA580C]/20 text-[#EA580C] border border-[#EA580C]/40 font-semibold"
                     : "bg-white/[0.05] text-[#94A3B8] hover:text-white border border-white/[0.08]"
                 }`}
                 title="Beralih efek warna / hitam-putih"
@@ -163,10 +163,10 @@ export default function GalleryPage() {
           </div>
 
           {/* 3. The 3D Dome Gallery Container */}
-          <div className="w-full h-[65vh] sm:h-[72vh] md:h-[78vh] relative rounded-3xl overflow-hidden border border-white/[0.1] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.7)] bg-[#0A0F1E] mb-20">
+          <div className="w-full h-[65vh] sm:h-[72vh] md:h-[78vh] relative rounded-3xl overflow-hidden border border-white/[0.1] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.7)] bg-[#02040A] mb-20">
             <DomeGallery
               images={domeImages}
-              overlayBlurColor="#0A0F1E"
+              overlayBlurColor="#02040A"
               grayscale={grayscale}
               openedImageWidth="450px"
               openedImageHeight="450px"
@@ -178,12 +178,12 @@ export default function GalleryPage() {
             />
 
             {/* Corner Decorative Tech Badges */}
-            <div className="absolute top-4 left-4 z-10 pointer-events-none hidden sm:flex items-center gap-2 px-3 py-1 rounded-lg bg-[#0A0F1E]/80 border border-white/[0.08] backdrop-blur-md text-[10px] font-mono text-[#06B6D4]">
-              <span className="w-2 h-2 rounded-full bg-[#10B981] animate-pulse" />
+            <div className="absolute top-4 left-4 z-10 pointer-events-none hidden sm:flex items-center gap-2 px-3 py-1 rounded-lg bg-[#02040A]/80 border border-white/[0.08] backdrop-blur-md text-[10px] font-mono text-[#F59E0B]">
+              <span className="w-2 h-2 rounded-full bg-[#EA580C] animate-pulse" />
               <span>3D SPHERICAL PROJECTION • ACTIVE</span>
             </div>
 
-            <div className="absolute bottom-4 right-4 z-10 pointer-events-none hidden sm:flex items-center gap-2 px-3 py-1 rounded-lg bg-[#0A0F1E]/80 border border-white/[0.08] backdrop-blur-md text-[10px] font-mono text-[#64748B]">
+            <div className="absolute bottom-4 right-4 z-10 pointer-events-none hidden sm:flex items-center gap-2 px-3 py-1 rounded-lg bg-[#02040A]/80 border border-white/[0.08] backdrop-blur-md text-[10px] font-mono text-[#64748B]">
               <span>TOTAL 35 SEGMENTS • GESTURE ENGINE</span>
             </div>
           </div>
@@ -192,8 +192,8 @@ export default function GalleryPage() {
           <div className="pt-4 border-t border-white/[0.08]">
             <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-4">
               <div>
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#4F46E5]/10 border border-[#4F46E5]/30 text-xs font-mono text-[#A5B4FC] mb-2">
-                  <Camera className="w-3.5 h-3.5 text-[#06B6D4]" />
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#F59E0B]/10 border border-[#F59E0B]/30 text-xs font-mono text-[#F59E0B] mb-2">
+                  <Camera className="w-3.5 h-3.5 text-[#EA580C]" />
                   <span>Arsip Foto & Video Terkurasi</span>
                 </div>
                 <h2 className="font-heading text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
@@ -207,7 +207,7 @@ export default function GalleryPage() {
                   onClick={() => setActiveTab("all")}
                   className={`px-3.5 py-1.5 rounded-xl text-xs font-mono font-semibold transition-all ${
                     activeTab === "all"
-                      ? "bg-[#4F46E5] text-white shadow-md shadow-[#4F46E5]/30"
+                      ? "bg-[#F59E0B] text-[#02040A] shadow-md shadow-[#F59E0B]/30 font-bold"
                       : "bg-white/[0.04] text-[#94A3B8] hover:text-white"
                   }`}
                 >
@@ -217,7 +217,7 @@ export default function GalleryPage() {
                   onClick={() => setActiveTab("photo")}
                   className={`px-3.5 py-1.5 rounded-xl text-xs font-mono font-semibold flex items-center gap-1.5 transition-all ${
                     activeTab === "photo"
-                      ? "bg-[#4F46E5] text-white shadow-md shadow-[#4F46E5]/30"
+                      ? "bg-[#F59E0B] text-[#02040A] shadow-md shadow-[#F59E0B]/30 font-bold"
                       : "bg-white/[0.04] text-[#94A3B8] hover:text-white"
                   }`}
                 >
@@ -228,7 +228,7 @@ export default function GalleryPage() {
                   onClick={() => setActiveTab("video")}
                   className={`px-3.5 py-1.5 rounded-xl text-xs font-mono font-semibold flex items-center gap-1.5 transition-all ${
                     activeTab === "video"
-                      ? "bg-[#4F46E5] text-white shadow-md shadow-[#4F46E5]/30"
+                      ? "bg-[#F59E0B] text-[#02040A] shadow-md shadow-[#F59E0B]/30 font-bold"
                       : "bg-white/[0.04] text-[#94A3B8] hover:text-white"
                   }`}
                 >
@@ -248,7 +248,7 @@ export default function GalleryPage() {
                     key={item.id}
                     className="glass-card overflow-hidden group hover:-translate-y-1 transition-all duration-300"
                   >
-                    <div className="relative w-full h-64 sm:h-80 overflow-hidden bg-[#0A0F1E]">
+                    <div className="relative w-full h-64 sm:h-80 overflow-hidden bg-[#02040A]">
                       <Image
                         src={item.url}
                         alt={item.title}
@@ -256,10 +256,10 @@ export default function GalleryPage() {
                         sizes="(max-width: 768px) 100vw, 50vw"
                         className="object-cover group-hover:scale-105 transition-transform duration-300"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-[#0A0F1E] via-transparent to-transparent opacity-85" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#02040A] via-transparent to-transparent opacity-85" />
 
                       <div className="absolute top-3 left-3">
-                        <span className="text-xs font-mono font-semibold px-2.5 py-1 rounded-full bg-black/60 text-[#06B6D4] backdrop-blur-md border border-[#06B6D4]/30">
+                        <span className="text-xs font-mono font-semibold px-2.5 py-1 rounded-full bg-black/60 text-[#F59E0B] backdrop-blur-md border border-[#F59E0B]/30">
                           {item.album}
                         </span>
                       </div>

@@ -18,28 +18,28 @@ export function StatsBar({ profile }: StatsBarProps) {
       value: `${memberCount}`,
       sub: "Siswa Berbakat",
       icon: Users,
-      color: "from-[#4F46E5] to-[#6366F1]",
+      color: "from-[#F59E0B] to-[#EA580C]",
     },
     {
       label: "Karya Siswa",
       value: `${projectCount}+`,
       sub: "Aplikasi & Riset",
       icon: Code2,
-      color: "from-[#06B6D4] to-[#3B82F6]",
+      color: "from-[#EA580C] to-[#D97706]",
     },
     {
       label: "Prestasi Diraih",
       value: `${achievementCount}`,
       sub: "Tingkat LKS & Nasional",
       icon: Trophy,
-      color: "from-[#F59E0B] to-[#EF4444]",
+      color: "from-[#F59E0B] to-[#B45309]",
     },
     {
       label: "Agenda & Kegiatan",
       value: `${eventCount}`,
       sub: "Dokumentasi Lengkap",
       icon: CalendarCheck,
-      color: "from-[#10B981] to-[#059669]",
+      color: "from-[#D97706] to-[#EA580C]",
     },
   ];
 
@@ -57,7 +57,7 @@ export function StatsBar({ profile }: StatsBarProps) {
                 <div
                   className={`w-12 h-12 rounded-xl bg-gradient-to-br ${item.color} p-0.5 shadow-md group-hover:scale-105 transition-transform`}
                 >
-                  <div className="w-full h-full bg-[#0A0F1E]/80 rounded-[10px] flex items-center justify-center">
+                  <div className="w-full h-full bg-[#02040A]/90 rounded-[10px] flex items-center justify-center">
                     <Icon className="w-5 h-5 text-white" />
                   </div>
                 </div>

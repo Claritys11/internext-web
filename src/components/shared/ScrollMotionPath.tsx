@@ -182,13 +182,13 @@ export function ScrollMotionPath() {
         className="w-full h-full absolute inset-0 overflow-visible opacity-95"
       >
         <defs>
-          {/* Luminous Neon Gradient (Lime Yellow -> Electric Cyan -> Indigo) */}
+          {/* Luminous Gargantua Accretion Disk Gradient (Gold -> Fiery Orange -> Amber) */}
           <linearGradient id="motionPathGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stopColor="#CCFF00" stopOpacity="0.95" />
-            <stop offset="25%" stopColor="#06B6D4" stopOpacity="1" />
-            <stop offset="50%" stopColor="#818CF8" stopOpacity="0.95" />
-            <stop offset="75%" stopColor="#06B6D4" stopOpacity="1" />
-            <stop offset="100%" stopColor="#CCFF00" stopOpacity="0.95" />
+            <stop offset="0%" stopColor="#F59E0B" stopOpacity="0.95" />
+            <stop offset="25%" stopColor="#EA580C" stopOpacity="1" />
+            <stop offset="50%" stopColor="#D97706" stopOpacity="0.95" />
+            <stop offset="75%" stopColor="#EA580C" stopOpacity="1" />
+            <stop offset="100%" stopColor="#F59E0B" stopOpacity="0.95" />
           </linearGradient>
 
           {/* Intense SVG Glow filter */}
@@ -218,7 +218,7 @@ export function ScrollMotionPath() {
           ref={guidePathRef}
           d={pathData}
           fill="none"
-          stroke="rgba(6, 182, 212, 0.2)"
+          stroke="rgba(245, 158, 11, 0.2)"
           strokeWidth="1.5"
           strokeDasharray="6 10"
         />
@@ -243,8 +243,8 @@ export function ScrollMotionPath() {
               cx={pt.x}
               cy={pt.y}
               r="10"
-              fill="rgba(6, 182, 212, 0.12)"
-              stroke="#06B6D4"
+              fill="rgba(234, 88, 12, 0.12)"
+              stroke="#EA580C"
               strokeWidth="1.5"
               strokeDasharray="2 2"
               opacity="0.7"
@@ -254,8 +254,8 @@ export function ScrollMotionPath() {
               cx={pt.x}
               cy={pt.y}
               r="4.5"
-              fill="#0A0F1E"
-              stroke="#CCFF00"
+              fill="#02040A"
+              stroke="#F59E0B"
               strokeWidth="2"
             />
             {/* Core light */}
@@ -269,24 +269,24 @@ export function ScrollMotionPath() {
         ))}
 
         {/* Chasing Glowing MotionPath Orb System (layers strictly below all content) */}
-        {/* 1. Wide Ambient Cyan Aura for backlight diffusion through frosted glass cards */}
+        {/* 1. Wide Ambient Relativistic Jet Aura */}
         <circle
           ref={wideGlowRef}
           r="48"
           cx={points[0]?.x || 720}
           cy={points[0]?.y || 180}
-          fill="#06B6D4"
+          fill="#EA580C"
           opacity="0.35"
           filter="url(#orbPulseGlow)"
         />
 
-        {/* 2. Concentrated Lime Aura that shines clearly through frosted glass */}
+        {/* 2. Concentrated Accretion Gold Aura */}
         <circle
           ref={glowOrbRef}
           r="34"
           cx={points[0]?.x || 720}
           cy={points[0]?.y || 180}
-          fill="#CCFF00"
+          fill="#F59E0B"
           opacity="0.55"
           filter="url(#orbPulseGlow)"
         />
@@ -297,8 +297,8 @@ export function ScrollMotionPath() {
           r="10"
           cx={points[0]?.x || 720}
           cy={points[0]?.y || 180}
-          fill="#CCFF00"
-          stroke="#06B6D4"
+          fill="#F59E0B"
+          stroke="#EA580C"
           strokeWidth="2.5"
           filter="url(#neonPathGlow)"
         />

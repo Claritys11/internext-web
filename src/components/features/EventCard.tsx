@@ -9,7 +9,7 @@ export function EventCard({ event }: { event: EventItem }) {
   return (
     <div className="glass-card overflow-hidden transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-between group">
       <div>
-        <div className="relative w-full h-44 sm:h-48 overflow-hidden bg-[#0A0F1E]">
+        <div className="relative w-full h-44 sm:h-48 overflow-hidden bg-[#02040A]">
           <Image
             src={event.coverImage}
             alt={event.title}
@@ -17,17 +17,17 @@ export function EventCard({ event }: { event: EventItem }) {
             sizes="(max-width: 768px) 100vw, 50vw"
             className="object-cover group-hover:scale-105 transition-transform duration-300"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#111827] via-transparent to-black/30" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0F172A] via-transparent to-black/30" />
 
           <div className="absolute top-3 left-3 flex gap-2">
-            <span className="text-xs font-mono font-semibold px-2.5 py-1 rounded-full bg-[#06B6D4] text-[#0A0F1E] font-bold">
+            <span className="text-xs font-mono font-semibold px-2.5 py-1 rounded-full bg-gradient-to-r from-[#F59E0B] to-[#EA580C] text-[#02040A] font-bold">
               {event.category}
             </span>
           </div>
 
           <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between text-xs font-mono text-white">
             <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-black/60 backdrop-blur-md">
-              <Calendar className="w-3.5 h-3.5 text-[#06B6D4]" />
+              <Calendar className="w-3.5 h-3.5 text-[#F59E0B]" />
               {formatDate(event.date)}
             </span>
             <span
@@ -43,7 +43,7 @@ export function EventCard({ event }: { event: EventItem }) {
         </div>
 
         <div className="p-5">
-          <h3 className="font-heading text-lg font-bold text-white group-hover:text-[#06B6D4] transition-colors mb-2 leading-snug">
+          <h3 className="font-heading text-lg font-bold text-white group-hover:text-[#F59E0B] transition-colors mb-2 leading-snug">
             {event.title}
           </h3>
 
@@ -57,7 +57,7 @@ export function EventCard({ event }: { event: EventItem }) {
               <span className="text-[#CBD5E1] truncate">{event.location}</span>
             </div>
             <div className="flex items-center gap-2">
-              <Users className="w-3.5 h-3.5 text-[#A5B4FC]" />
+              <Users className="w-3.5 h-3.5 text-[#EA580C]" />
               <span className="text-[#CBD5E1] truncate">{event.committee}</span>
             </div>
           </div>
@@ -68,7 +68,7 @@ export function EventCard({ event }: { event: EventItem }) {
         <span className="text-[11px] font-mono text-[#64748B]">
           Agenda Resmi
         </span>
-        <span className="text-xs font-semibold text-[#06B6D4]">
+        <span className="text-xs font-semibold text-[#F59E0B]">
           Lihat Jadwal →
         </span>
       </div>

@@ -73,12 +73,12 @@ export default function ProjectsPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Header Banner */}
           <div className="text-center max-w-3xl mx-auto mb-12">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#06B6D4]/10 border border-[#06B6D4]/30 text-xs font-mono text-[#06B6D4] mb-4">
-              <Code2 className="w-3.5 h-3.5" />
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#F59E0B]/10 border border-[#F59E0B]/30 text-xs font-mono text-[#F59E0B] mb-4">
+              <Code2 className="w-3.5 h-3.5 text-[#EA580C]" />
               <span>Portofolio & Showcase Digital</span>
             </div>
             <h1 className="font-heading text-4xl sm:text-5xl font-extrabold text-white tracking-tight mb-4">
-              Karya & Proyek <span className="text-gradient-cyan">Siswa</span>
+              Karya & Proyek <span className="text-gradient">Siswa</span>
             </h1>
             <p className="text-base text-[#94A3B8] leading-relaxed">
               Kumpulan inovasi aplikasi web, mobile, Internet of Things, dan kecerdasan buatan yang dirancang dan dibangun oleh siswa Internext.
@@ -94,7 +94,7 @@ export default function ProjectsPage() {
                 placeholder="Cari karya, teknologi, tim..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full bg-[#0A0F1E] border border-white/[0.1] rounded-xl pl-10 pr-4 py-2 text-sm text-white placeholder:text-[#64748B] focus:outline-none focus:border-[#06B6D4] transition-colors"
+                className="w-full bg-[#02040A] border border-white/[0.1] rounded-xl pl-10 pr-4 py-2 text-sm text-white placeholder:text-[#64748B] focus:outline-none focus:border-[#F59E0B] transition-colors"
               />
             </div>
 
@@ -105,7 +105,7 @@ export default function ProjectsPage() {
                   onClick={() => setSelectedCategory(cat.value)}
                   className={`px-3.5 py-1.5 rounded-xl text-xs font-mono whitespace-nowrap transition-all ${
                     selectedCategory === cat.value
-                      ? "bg-[#06B6D4] text-[#0A0F1E] font-bold shadow-md shadow-[#06B6D4]/20"
+                      ? "bg-[#F59E0B] text-[#02040A] font-bold shadow-md shadow-[#F59E0B]/20"
                       : "bg-white/[0.04] text-[#94A3B8] hover:text-white hover:bg-white/[0.08]"
                   }`}
                 >
@@ -121,7 +121,7 @@ export default function ProjectsPage() {
                 title="Tampilan Masonry GSAP"
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono transition-all ${
                   viewMode === "masonry"
-                    ? "bg-[#06B6D4]/20 text-[#06B6D4] font-semibold border border-[#06B6D4]/40"
+                    ? "bg-[#F59E0B]/20 text-[#F59E0B] font-semibold border border-[#F59E0B]/40"
                     : "text-[#64748B] hover:text-white"
                 }`}
               >

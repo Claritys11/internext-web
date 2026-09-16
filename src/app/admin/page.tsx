@@ -553,37 +553,37 @@ export default function AdminDashboardPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#0A0F1E] flex flex-col items-center justify-center text-white">
-        <RefreshCw className="w-8 h-8 text-[#06B6D4] animate-spin mb-4" />
+      <div className="min-h-screen bg-[#02040A] flex flex-col items-center justify-center text-white">
+        <RefreshCw className="w-8 h-8 text-[#F59E0B] animate-spin mb-4" />
         <p className="font-mono text-sm text-[#94A3B8]">Menghubungkan ke CMS Admin & PostgreSQL...</p>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#0A0F1E] flex flex-col md:flex-row text-white">
+    <div className="min-h-screen bg-[#02040A] flex flex-col md:flex-row text-white">
       {/* Toast Notification */}
       {toastMessage && (
-        <div className="fixed top-6 right-6 z-50 flex items-center gap-3 bg-[#4F46E5] text-white px-5 py-3.5 rounded-xl shadow-2xl border border-white/20 animate-in fade-in slide-in-from-top-4 duration-300">
-          <Check className="w-5 h-5 text-[#06B6D4]" />
+        <div className="fixed top-6 right-6 z-50 flex items-center gap-3 bg-[#F59E0B] text-white px-5 py-3.5 rounded-xl shadow-2xl border border-white/20 animate-in fade-in slide-in-from-top-4 duration-300">
+          <Check className="w-5 h-5 text-[#F59E0B]" />
           <span className="text-sm font-medium">{toastMessage}</span>
         </div>
       )}
 
       {/* Sidebar Navigation */}
-      <aside className="w-full md:w-64 border-r border-white/[0.08] bg-[#0A0F1E]/95 backdrop-blur-xl p-5 flex flex-col justify-between shrink-0">
+      <aside className="w-full md:w-64 border-r border-white/[0.08] bg-[#02040A]/95 backdrop-blur-xl p-5 flex flex-col justify-between shrink-0">
         <div>
           {/* Header Brand */}
           <div className="flex items-center justify-between mb-8">
             <Link href="/" className="flex items-center gap-2.5 text-white group">
-              <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-[#4F46E5] to-[#06B6D4] flex items-center justify-center shadow-md shadow-[#4F46E5]/20">
+              <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-[#F59E0B] to-[#EA580C] flex items-center justify-center shadow-md shadow-[#F59E0B]/20">
                 <ShieldCheck className="w-5 h-5 text-white" />
               </div>
               <div>
                 <span className="font-heading font-extrabold text-base tracking-tight block leading-none">
                   ADMIN HQ
                 </span>
-                <span className="text-[10px] font-mono text-[#06B6D4]">
+                <span className="text-[10px] font-mono text-[#F59E0B]">
                   XI Internasional
                 </span>
               </div>
@@ -599,7 +599,7 @@ export default function AdminDashboardPage() {
               onClick={() => setActiveTab("overview")}
               className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition-all ${
                 activeTab === "overview"
-                  ? "bg-[#4F46E5] text-white shadow-md shadow-[#4F46E5]/30 font-semibold"
+                  ? "bg-[#F59E0B] text-[#02040A] shadow-md shadow-[#F59E0B]/30 font-bold font-semibold"
                   : "text-[#94A3B8] hover:text-white hover:bg-white/[0.04]"
               }`}
             >
@@ -611,7 +611,7 @@ export default function AdminDashboardPage() {
               onClick={() => setActiveTab("profile")}
               className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition-all ${
                 activeTab === "profile"
-                  ? "bg-[#4F46E5] text-white shadow-md shadow-[#4F46E5]/30 font-semibold"
+                  ? "bg-[#F59E0B] text-[#02040A] shadow-md shadow-[#F59E0B]/30 font-bold font-semibold"
                   : "text-[#94A3B8] hover:text-white hover:bg-white/[0.04]"
               }`}
             >
@@ -623,7 +623,7 @@ export default function AdminDashboardPage() {
               onClick={() => setActiveTab("members")}
               className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl transition-all ${
                 activeTab === "members"
-                  ? "bg-[#4F46E5] text-white shadow-md shadow-[#4F46E5]/30 font-semibold"
+                  ? "bg-[#F59E0B] text-[#02040A] shadow-md shadow-[#F59E0B]/30 font-bold font-semibold"
                   : "text-[#94A3B8] hover:text-white hover:bg-white/[0.04]"
               }`}
             >
@@ -640,7 +640,7 @@ export default function AdminDashboardPage() {
               onClick={() => setActiveTab("projects")}
               className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl transition-all ${
                 activeTab === "projects"
-                  ? "bg-[#4F46E5] text-white shadow-md shadow-[#4F46E5]/30 font-semibold"
+                  ? "bg-[#F59E0B] text-[#02040A] shadow-md shadow-[#F59E0B]/30 font-bold font-semibold"
                   : "text-[#94A3B8] hover:text-white hover:bg-white/[0.04]"
               }`}
             >
@@ -657,7 +657,7 @@ export default function AdminDashboardPage() {
               onClick={() => setActiveTab("articles")}
               className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl transition-all ${
                 activeTab === "articles"
-                  ? "bg-[#4F46E5] text-white shadow-md shadow-[#4F46E5]/30 font-semibold"
+                  ? "bg-[#F59E0B] text-[#02040A] shadow-md shadow-[#F59E0B]/30 font-bold font-semibold"
                   : "text-[#94A3B8] hover:text-white hover:bg-white/[0.04]"
               }`}
             >
@@ -674,7 +674,7 @@ export default function AdminDashboardPage() {
               onClick={() => setActiveTab("events")}
               className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl transition-all ${
                 activeTab === "events"
-                  ? "bg-[#4F46E5] text-white shadow-md shadow-[#4F46E5]/30 font-semibold"
+                  ? "bg-[#F59E0B] text-[#02040A] shadow-md shadow-[#F59E0B]/30 font-bold font-semibold"
                   : "text-[#94A3B8] hover:text-white hover:bg-white/[0.04]"
               }`}
             >
@@ -691,7 +691,7 @@ export default function AdminDashboardPage() {
               onClick={() => setActiveTab("gallery")}
               className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl transition-all ${
                 activeTab === "gallery"
-                  ? "bg-[#4F46E5] text-white shadow-md shadow-[#4F46E5]/30 font-semibold"
+                  ? "bg-[#F59E0B] text-[#02040A] shadow-md shadow-[#F59E0B]/30 font-bold font-semibold"
                   : "text-[#94A3B8] hover:text-white hover:bg-white/[0.04]"
               }`}
             >
@@ -708,7 +708,7 @@ export default function AdminDashboardPage() {
               onClick={() => setActiveTab("chat")}
               className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl transition-all ${
                 activeTab === "chat"
-                  ? "bg-[#4F46E5] text-white shadow-md shadow-[#4F46E5]/30 font-semibold"
+                  ? "bg-[#F59E0B] text-[#02040A] shadow-md shadow-[#F59E0B]/30 font-bold font-semibold"
                   : "text-[#94A3B8] hover:text-white hover:bg-white/[0.04]"
               }`}
             >
@@ -716,7 +716,7 @@ export default function AdminDashboardPage() {
                 <MessageSquare className="w-4 h-4" />
                 <span>Moderasi Chat</span>
               </div>
-              <span className="text-[11px] font-mono px-1.5 py-0.5 rounded bg-[#06B6D4]/20 text-[#06B6D4]">
+              <span className="text-[11px] font-mono px-1.5 py-0.5 rounded bg-[#EA580C]/20 text-[#F59E0B]">
                 {messages.length}
               </span>
             </button>
@@ -737,7 +737,7 @@ export default function AdminDashboardPage() {
 
           <Link
             href="/"
-            className="flex items-center gap-2 text-xs font-semibold text-[#94A3B8] hover:text-[#06B6D4] px-3.5 py-2 transition-colors"
+            className="flex items-center gap-2 text-xs font-semibold text-[#94A3B8] hover:text-[#F59E0B] px-3.5 py-2 transition-colors"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
             <span>Kembali ke Beranda</span>
@@ -773,13 +773,13 @@ export default function AdminDashboardPage() {
               disabled={refreshing}
               className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white/[0.04] border border-white/[0.1] hover:bg-white/[0.08] text-xs font-mono text-[#CBD5E1] transition-colors"
             >
-              <RefreshCw className={`w-3.5 h-3.5 ${refreshing ? "animate-spin text-[#06B6D4]" : ""}`} />
+              <RefreshCw className={`w-3.5 h-3.5 ${refreshing ? "animate-spin text-[#F59E0B]" : ""}`} />
               <span>{refreshing ? "Memperbarui..." : "Segarkan"}</span>
             </button>
             <Link
               href="/contact"
               target="_blank"
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#06B6D4]/15 border border-[#06B6D4]/30 hover:bg-[#06B6D4]/25 text-xs font-semibold text-[#06B6D4] transition-colors"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#F59E0B]/15 border border-[#F59E0B]/30 hover:bg-[#F59E0B]/25 text-xs font-semibold text-[#F59E0B] transition-colors"
             >
               <MessageSquare className="w-3.5 h-3.5" />
               <span>Buka Live Chat</span>
@@ -795,7 +795,7 @@ export default function AdminDashboardPage() {
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
               <div className="glass-card p-5 border-white/[0.08]">
                 <div className="flex items-center gap-3 mb-3">
-                  <div className="w-10 h-10 rounded-xl bg-[#4F46E5]/20 flex items-center justify-center text-[#A5B4FC]">
+                  <div className="w-10 h-10 rounded-xl bg-[#F59E0B]/20 flex items-center justify-center text-[#F59E0B]">
                     <Users className="w-5 h-5" />
                   </div>
                   <div>
@@ -812,7 +812,7 @@ export default function AdminDashboardPage() {
 
               <div className="glass-card p-5 border-white/[0.08]">
                 <div className="flex items-center gap-3 mb-3">
-                  <div className="w-10 h-10 rounded-xl bg-[#06B6D4]/20 flex items-center justify-center text-[#06B6D4]">
+                  <div className="w-10 h-10 rounded-xl bg-[#EA580C]/20 flex items-center justify-center text-[#F59E0B]">
                     <Code2 className="w-5 h-5" />
                   </div>
                   <div>
@@ -867,8 +867,8 @@ export default function AdminDashboardPage() {
               <div className="glass-card p-6 sm:p-8 border-white/[0.08]">
                 <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-6">
                   <div>
-                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#4F46E5]/10 border border-[#4F46E5]/30 text-xs font-mono text-[#A5B4FC] mb-2">
-                      <GraduationCap className="w-3.5 h-3.5 text-[#06B6D4]" />
+                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#F59E0B]/10 border border-[#F59E0B]/30 text-xs font-mono text-[#F59E0B] mb-2">
+                      <GraduationCap className="w-3.5 h-3.5 text-[#F59E0B]" />
                       <span>Identitas Resmi Kelas</span>
                     </div>
                     <h2 className="text-xl font-heading font-bold text-white">
@@ -901,7 +901,7 @@ export default function AdminDashboardPage() {
                   </div>
                   <div className="p-3.5 rounded-xl bg-white/[0.02] border border-white/[0.05]">
                     <span className="text-[#64748B] block mb-1">Lokasi Lab:</span>
-                    <span className="text-[#06B6D4] font-semibold">{profile.labLocation}</span>
+                    <span className="text-[#F59E0B] font-semibold">{profile.labLocation}</span>
                   </div>
                 </div>
               </div>
@@ -914,9 +914,9 @@ export default function AdminDashboardPage() {
                   setActiveTab("members");
                   handleOpenNewMember();
                 }}
-                className="p-5 rounded-2xl bg-[#4F46E5]/10 border border-[#4F46E5]/30 hover:bg-[#4F46E5]/20 text-left transition-all group"
+                className="p-5 rounded-2xl bg-[#F59E0B]/10 border border-[#F59E0B]/30 hover:bg-[#F59E0B]/20 text-left transition-all group"
               >
-                <Users className="w-6 h-6 text-[#A5B4FC] mb-3 group-hover:scale-110 transition-transform" />
+                <Users className="w-6 h-6 text-[#F59E0B] mb-3 group-hover:scale-110 transition-transform" />
                 <h3 className="font-semibold text-white text-sm mb-1">+ Tambah Siswa Baru</h3>
                 <p className="text-xs text-[#94A3B8]">Daftarkan siswa baru ke direktori 25 anggota kelas.</p>
               </button>
@@ -926,9 +926,9 @@ export default function AdminDashboardPage() {
                   setActiveTab("projects");
                   handleOpenNewProject();
                 }}
-                className="p-5 rounded-2xl bg-[#06B6D4]/10 border border-[#06B6D4]/30 hover:bg-[#06B6D4]/20 text-left transition-all group"
+                className="p-5 rounded-2xl bg-[#F59E0B]/10 border border-[#F59E0B]/30 hover:bg-[#EA580C]/20 text-left transition-all group"
               >
-                <Code2 className="w-6 h-6 text-[#06B6D4] mb-3 group-hover:scale-110 transition-transform" />
+                <Code2 className="w-6 h-6 text-[#F59E0B] mb-3 group-hover:scale-110 transition-transform" />
                 <h3 className="font-semibold text-white text-sm mb-1">+ Tambah Karya Siswa</h3>
                 <p className="text-xs text-[#94A3B8]">Tambahkan aplikasi atau riset baru ke showcase 360°.</p>
               </button>
@@ -954,7 +954,7 @@ export default function AdminDashboardPage() {
             <form onSubmit={handleSaveProfile} className="space-y-6">
               <div className="glass-card p-6 sm:p-8 border-white/[0.08] space-y-6">
                 <h3 className="text-lg font-heading font-bold text-white flex items-center gap-2">
-                  <School className="w-5 h-5 text-[#06B6D4]" />
+                  <School className="w-5 h-5 text-[#F59E0B]" />
                   <span>Identitas Sekolah & Kelas</span>
                 </h3>
 
@@ -970,7 +970,7 @@ export default function AdminDashboardPage() {
                         setProfileForm({ ...profileForm, school: e.target.value })
                       }
                       required
-                      className="w-full bg-[#0A0F1E] border border-white/[0.1] rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-[#06B6D4]"
+                      className="w-full bg-[#02040A] border border-white/[0.1] rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-[#F59E0B]"
                     />
                   </div>
 
@@ -985,7 +985,7 @@ export default function AdminDashboardPage() {
                         setProfileForm({ ...profileForm, name: e.target.value })
                       }
                       required
-                      className="w-full bg-[#0A0F1E] border border-white/[0.1] rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-[#06B6D4]"
+                      className="w-full bg-[#02040A] border border-white/[0.1] rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-[#F59E0B]"
                     />
                   </div>
 
@@ -999,7 +999,7 @@ export default function AdminDashboardPage() {
                       onChange={(e) =>
                         setProfileForm({ ...profileForm, generation: e.target.value })
                       }
-                      className="w-full bg-[#0A0F1E] border border-white/[0.1] rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-[#06B6D4]"
+                      className="w-full bg-[#02040A] border border-white/[0.1] rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-[#F59E0B]"
                     />
                   </div>
 
@@ -1016,7 +1016,7 @@ export default function AdminDashboardPage() {
                           memberCount: parseInt(e.target.value) || 25,
                         })
                       }
-                      className="w-full bg-[#0A0F1E] border border-white/[0.1] rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-[#06B6D4]"
+                      className="w-full bg-[#02040A] border border-white/[0.1] rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-[#F59E0B]"
                     />
                   </div>
                 </div>
@@ -1031,7 +1031,7 @@ export default function AdminDashboardPage() {
                     onChange={(e) =>
                       setProfileForm({ ...profileForm, tagline: e.target.value })
                     }
-                    className="w-full bg-[#0A0F1E] border border-white/[0.1] rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-[#06B6D4]"
+                    className="w-full bg-[#02040A] border border-white/[0.1] rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-[#F59E0B]"
                   />
                 </div>
 
@@ -1045,7 +1045,7 @@ export default function AdminDashboardPage() {
                     onChange={(e) =>
                       setProfileForm({ ...profileForm, description: e.target.value })
                     }
-                    className="w-full bg-[#0A0F1E] border border-white/[0.1] rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-[#06B6D4]"
+                    className="w-full bg-[#02040A] border border-white/[0.1] rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-[#F59E0B]"
                   />
                 </div>
               </div>
@@ -1053,7 +1053,7 @@ export default function AdminDashboardPage() {
               {/* Leadership & Location */}
               <div className="glass-card p-6 sm:p-8 border-white/[0.08] space-y-6">
                 <h3 className="text-lg font-heading font-bold text-white flex items-center gap-2">
-                  <GraduationCap className="w-5 h-5 text-[#4F46E5]" />
+                  <GraduationCap className="w-5 h-5 text-[#EA580C]" />
                   <span>Struktur & Laboratorium</span>
                 </h3>
 
@@ -1068,7 +1068,7 @@ export default function AdminDashboardPage() {
                       onChange={(e) =>
                         setProfileForm({ ...profileForm, homeroomTeacher: e.target.value })
                       }
-                      className="w-full bg-[#0A0F1E] border border-white/[0.1] rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-[#06B6D4]"
+                      className="w-full bg-[#02040A] border border-white/[0.1] rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-[#F59E0B]"
                     />
                   </div>
 
@@ -1082,7 +1082,7 @@ export default function AdminDashboardPage() {
                       onChange={(e) =>
                         setProfileForm({ ...profileForm, classPresident: e.target.value })
                       }
-                      className="w-full bg-[#0A0F1E] border border-white/[0.1] rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-[#06B6D4]"
+                      className="w-full bg-[#02040A] border border-white/[0.1] rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-[#F59E0B]"
                     />
                   </div>
 
@@ -1096,7 +1096,7 @@ export default function AdminDashboardPage() {
                       onChange={(e) =>
                         setProfileForm({ ...profileForm, vicePresident: e.target.value })
                       }
-                      className="w-full bg-[#0A0F1E] border border-white/[0.1] rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-[#06B6D4]"
+                      className="w-full bg-[#02040A] border border-white/[0.1] rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-[#F59E0B]"
                     />
                   </div>
                 </div>
@@ -1111,7 +1111,7 @@ export default function AdminDashboardPage() {
                     onChange={(e) =>
                       setProfileForm({ ...profileForm, labLocation: e.target.value })
                     }
-                    className="w-full bg-[#0A0F1E] border border-white/[0.1] rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-[#06B6D4]"
+                    className="w-full bg-[#02040A] border border-white/[0.1] rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-[#F59E0B]"
                   />
                 </div>
               </div>
@@ -1134,7 +1134,7 @@ export default function AdminDashboardPage() {
                       onChange={(e) =>
                         setProfileForm({ ...profileForm, email: e.target.value })
                       }
-                      className="w-full bg-[#0A0F1E] border border-white/[0.1] rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-[#06B6D4]"
+                      className="w-full bg-[#02040A] border border-white/[0.1] rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-[#F59E0B]"
                     />
                   </div>
 
@@ -1148,7 +1148,7 @@ export default function AdminDashboardPage() {
                       onChange={(e) =>
                         setProfileForm({ ...profileForm, instagram: e.target.value })
                       }
-                      className="w-full bg-[#0A0F1E] border border-white/[0.1] rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-[#06B6D4]"
+                      className="w-full bg-[#02040A] border border-white/[0.1] rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-[#F59E0B]"
                     />
                   </div>
 
@@ -1162,7 +1162,7 @@ export default function AdminDashboardPage() {
                       onChange={(e) =>
                         setProfileForm({ ...profileForm, github: e.target.value })
                       }
-                      className="w-full bg-[#0A0F1E] border border-white/[0.1] rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-[#06B6D4]"
+                      className="w-full bg-[#02040A] border border-white/[0.1] rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-[#F59E0B]"
                     />
                   </div>
 
@@ -1176,7 +1176,7 @@ export default function AdminDashboardPage() {
                       onChange={(e) =>
                         setProfileForm({ ...profileForm, youtube: e.target.value })
                       }
-                      className="w-full bg-[#0A0F1E] border border-white/[0.1] rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-[#06B6D4]"
+                      className="w-full bg-[#02040A] border border-white/[0.1] rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-[#F59E0B]"
                     />
                   </div>
                 </div>
@@ -1187,7 +1187,7 @@ export default function AdminDashboardPage() {
                 <button
                   type="submit"
                   disabled={isSavingProfile}
-                  className="btn-gradient px-8 py-3 rounded-xl text-sm font-semibold flex items-center gap-2 shadow-lg shadow-[#4F46E5]/20 hover:scale-105 transition-transform"
+                  className="btn-gradient px-8 py-3 rounded-xl text-sm font-semibold flex items-center gap-2 shadow-lg shadow-[#F59E0B]/20 hover:scale-105 transition-transform"
                 >
                   <Save className="w-4 h-4" />
                   <span>{isSavingProfile ? "Menyimpan ke Database..." : "Simpan Perubahan Profil"}</span>
@@ -1210,7 +1210,7 @@ export default function AdminDashboardPage() {
                     placeholder="Cari siswa atau peran..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full bg-[#0A0F1E] border border-white/[0.1] rounded-xl pl-10 pr-4 py-2 text-xs text-white placeholder:text-[#64748B] focus:outline-none focus:border-[#06B6D4]"
+                    className="w-full bg-[#02040A] border border-white/[0.1] rounded-xl pl-10 pr-4 py-2 text-xs text-white placeholder:text-[#64748B] focus:outline-none focus:border-[#F59E0B]"
                   />
                 </div>
 
@@ -1218,7 +1218,7 @@ export default function AdminDashboardPage() {
                   <button
                     onClick={() => setMemberRoleFilter("all")}
                     className={`px-3 py-1 rounded-lg transition-colors ${
-                      memberRoleFilter === "all" ? "bg-[#4F46E5] text-white" : "text-[#94A3B8]"
+                      memberRoleFilter === "all" ? "bg-[#F59E0B] text-white" : "text-[#94A3B8]"
                     }`}
                   >
                     Semua
@@ -1226,7 +1226,7 @@ export default function AdminDashboardPage() {
                   <button
                     onClick={() => setMemberRoleFilter("management")}
                     className={`px-3 py-1 rounded-lg transition-colors ${
-                      memberRoleFilter === "management" ? "bg-[#4F46E5] text-white" : "text-[#94A3B8]"
+                      memberRoleFilter === "management" ? "bg-[#F59E0B] text-white" : "text-[#94A3B8]"
                     }`}
                   >
                     Nahkoda
@@ -1234,7 +1234,7 @@ export default function AdminDashboardPage() {
                   <button
                     onClick={() => setMemberRoleFilter("member")}
                     className={`px-3 py-1 rounded-lg transition-colors ${
-                      memberRoleFilter === "member" ? "bg-[#4F46E5] text-white" : "text-[#94A3B8]"
+                      memberRoleFilter === "member" ? "bg-[#F59E0B] text-white" : "text-[#94A3B8]"
                     }`}
                   >
                     Anggota
@@ -1256,7 +1256,7 @@ export default function AdminDashboardPage() {
               {filteredMembers.map((member) => (
                 <div
                   key={member.id}
-                  className="glass-card p-5 border-white/[0.08] flex flex-col justify-between hover:border-[#06B6D4]/40 transition-colors group"
+                  className="glass-card p-5 border-white/[0.08] flex flex-col justify-between hover:border-[#F59E0B]/40 transition-colors group"
                 >
                   <div>
                     <div className="flex items-start gap-3.5 mb-3">
@@ -1275,12 +1275,12 @@ export default function AdminDashboardPage() {
                             {member.name}
                           </h4>
                           {member.isManagement && (
-                            <span className="px-1.5 py-0.5 rounded bg-[#4F46E5]/20 border border-[#4F46E5]/40 text-[10px] font-mono text-[#A5B4FC]">
+                            <span className="px-1.5 py-0.5 rounded bg-[#F59E0B]/20 border border-[#F59E0B]/40 text-[10px] font-mono text-[#F59E0B]">
                               Nahkoda
                             </span>
                           )}
                         </div>
-                        <span className="text-xs text-[#06B6D4] font-medium block truncate">
+                        <span className="text-xs text-[#F59E0B] font-medium block truncate">
                           {member.role} ({member.nickname})
                         </span>
                       </div>
@@ -1316,7 +1316,7 @@ export default function AdminDashboardPage() {
                           setEditingMember(member);
                           setIsMemberModalOpen(true);
                         }}
-                        className="p-1.5 rounded-lg bg-white/[0.05] hover:bg-white/[0.1] text-[#A5B4FC] transition-colors"
+                        className="p-1.5 rounded-lg bg-white/[0.05] hover:bg-white/[0.1] text-[#F59E0B] transition-colors"
                         title="Edit Siswa"
                       >
                         <Edit className="w-3.5 h-3.5" />
@@ -1362,10 +1362,10 @@ export default function AdminDashboardPage() {
               {projects.map((proj) => (
                 <div
                   key={proj.id}
-                  className="glass-card overflow-hidden border-white/[0.08] flex flex-col justify-between group hover:border-[#06B6D4]/40 transition-colors"
+                  className="glass-card overflow-hidden border-white/[0.08] flex flex-col justify-between group hover:border-[#F59E0B]/40 transition-colors"
                 >
                   <div>
-                    <div className="relative h-44 w-full bg-[#0A0F1E]">
+                    <div className="relative h-44 w-full bg-[#02040A]">
                       <Image
                         src={proj.thumbnail}
                         alt={proj.title}
@@ -1373,9 +1373,9 @@ export default function AdminDashboardPage() {
                         className="object-cover group-hover:scale-105 transition-transform duration-500"
                         unoptimized
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-[#0A0F1E] via-transparent to-transparent" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#02040A] via-transparent to-transparent" />
                       <div className="absolute top-3 left-3 flex items-center gap-1.5">
-                        <span className="px-2 py-0.5 rounded-md bg-[#0A0F1E]/80 backdrop-blur-md text-[10px] font-mono text-[#06B6D4] border border-[#06B6D4]/30">
+                        <span className="px-2 py-0.5 rounded-md bg-[#02040A]/80 backdrop-blur-md text-[10px] font-mono text-[#F59E0B] border border-[#F59E0B]/30">
                           {proj.category}
                         </span>
                         {proj.featured && (
@@ -1391,7 +1391,7 @@ export default function AdminDashboardPage() {
                       <h4 className="font-heading font-bold text-white text-base mb-1">
                         {proj.title}
                       </h4>
-                      <p className="text-xs text-[#06B6D4] font-medium mb-2">{proj.tagline}</p>
+                      <p className="text-xs text-[#F59E0B] font-medium mb-2">{proj.tagline}</p>
                       <p className="text-xs text-[#94A3B8] line-clamp-2 mb-4">
                         {proj.description}
                       </p>
@@ -1419,7 +1419,7 @@ export default function AdminDashboardPage() {
                           setEditingProject(proj);
                           setIsProjectModalOpen(true);
                         }}
-                        className="p-1.5 rounded-lg bg-white/[0.05] hover:bg-white/[0.1] text-[#06B6D4] transition-colors"
+                        className="p-1.5 rounded-lg bg-white/[0.05] hover:bg-white/[0.1] text-[#F59E0B] transition-colors"
                         title="Edit Proyek"
                       >
                         <Edit className="w-3.5 h-3.5" />
@@ -1553,7 +1553,7 @@ export default function AdminDashboardPage() {
                       <span className="px-2.5 py-1 rounded-full bg-[#10B981]/15 border border-[#10B981]/30 text-[10px] font-mono text-[#10B981]">
                         {ev.category}
                       </span>
-                      <span className="text-xs font-mono text-[#06B6D4] font-semibold">
+                      <span className="text-xs font-mono text-[#F59E0B] font-semibold">
                         {ev.date}
                       </span>
                     </div>
@@ -1575,7 +1575,7 @@ export default function AdminDashboardPage() {
                         setEditingEvent(ev);
                         setIsEventModalOpen(true);
                       }}
-                      className="p-1.5 rounded-lg bg-white/[0.05] hover:bg-white/[0.1] text-[#06B6D4] transition-colors"
+                      className="p-1.5 rounded-lg bg-white/[0.05] hover:bg-white/[0.1] text-[#F59E0B] transition-colors"
                     >
                       <Edit className="w-3.5 h-3.5" />
                     </button>
@@ -1620,7 +1620,7 @@ export default function AdminDashboardPage() {
                   key={item.id}
                   className="glass-card overflow-hidden border-white/[0.08] group relative"
                 >
-                  <div className="relative h-44 w-full bg-[#0A0F1E]">
+                  <div className="relative h-44 w-full bg-[#02040A]">
                     <Image
                       src={item.url}
                       alt={item.title}
@@ -1628,7 +1628,7 @@ export default function AdminDashboardPage() {
                       className="object-cover group-hover:scale-105 transition-transform duration-300"
                       unoptimized
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#0A0F1E] via-transparent to-transparent opacity-80" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#02040A] via-transparent to-transparent opacity-80" />
                     <button
                       onClick={() => handleDeleteGallery(item.id, item.title)}
                       className="absolute top-2 right-2 p-1.5 rounded-lg bg-red-500/80 text-white opacity-0 group-hover:opacity-100 transition-opacity"
@@ -1638,7 +1638,7 @@ export default function AdminDashboardPage() {
                     </button>
                   </div>
                   <div className="p-3">
-                    <span className="text-[10px] font-mono text-[#06B6D4] block mb-0.5">
+                    <span className="text-[10px] font-mono text-[#F59E0B] block mb-0.5">
                       {item.album}
                     </span>
                     <h5 className="text-xs font-semibold text-white truncate">
@@ -1662,7 +1662,7 @@ export default function AdminDashboardPage() {
                   onClick={() => setSelectedChatChannel(ch.id)}
                   className={`px-3.5 py-2 rounded-xl text-xs font-mono transition-all flex items-center gap-2 ${
                     selectedChatChannel === ch.id
-                      ? "bg-[#4F46E5] text-white shadow-md font-semibold"
+                      ? "bg-[#F59E0B] text-white shadow-md font-semibold"
                       : "bg-white/[0.04] text-[#94A3B8] hover:text-white"
                   }`}
                 >
@@ -1677,7 +1677,7 @@ export default function AdminDashboardPage() {
             {/* Admin Broadcast Box */}
             <div className="glass-card p-5 border-white/[0.08]">
               <h4 className="font-heading font-bold text-sm text-white mb-2 flex items-center gap-2">
-                <Send className="w-4 h-4 text-[#06B6D4]" />
+                <Send className="w-4 h-4 text-[#F59E0B]" />
                 <span>Kirim Pesan Resmi Admin ke #{selectedChatChannel}</span>
               </h4>
               <p className="text-xs text-[#94A3B8] mb-4">
@@ -1694,7 +1694,7 @@ export default function AdminDashboardPage() {
                       type="text"
                       value={broadcastName}
                       onChange={(e) => setBroadcastName(e.target.value)}
-                      className="w-full bg-[#0A0F1E] border border-white/[0.1] rounded-xl px-3 py-2 text-xs text-white"
+                      className="w-full bg-[#02040A] border border-white/[0.1] rounded-xl px-3 py-2 text-xs text-white"
                     />
                   </div>
                   <div>
@@ -1704,7 +1704,7 @@ export default function AdminDashboardPage() {
                     <select
                       value={broadcastRole}
                       onChange={(e) => setBroadcastRole(e.target.value as any)}
-                      className="w-full bg-[#0A0F1E] border border-white/[0.1] rounded-xl px-3 py-2 text-xs text-white"
+                      className="w-full bg-[#02040A] border border-white/[0.1] rounded-xl px-3 py-2 text-xs text-white"
                     >
                       <option value="Admin">Admin</option>
                       <option value="Guru">Guru / Pembina</option>
@@ -1719,7 +1719,7 @@ export default function AdminDashboardPage() {
                     placeholder={`Tulis pesan atau pengumuman resmi untuk kanal #${selectedChatChannel}...`}
                     value={broadcastMessage}
                     onChange={(e) => setBroadcastMessage(e.target.value)}
-                    className="w-full bg-[#0A0F1E] border border-white/[0.1] rounded-xl p-3 text-xs text-white focus:outline-none focus:border-[#06B6D4]"
+                    className="w-full bg-[#02040A] border border-white/[0.1] rounded-xl p-3 text-xs text-white focus:outline-none focus:border-[#F59E0B]"
                   />
                 </div>
 
@@ -1761,7 +1761,7 @@ export default function AdminDashboardPage() {
                       <div>
                         <div className="flex items-center gap-2 mb-1">
                           <span className="font-semibold text-xs text-white">{msg.name}</span>
-                          <span className="px-1.5 py-0.5 rounded bg-[#4F46E5]/20 text-[10px] font-mono text-[#A5B4FC]">
+                          <span className="px-1.5 py-0.5 rounded bg-[#F59E0B]/20 text-[10px] font-mono text-[#F59E0B]">
                             {msg.role}
                           </span>
                           <span className="text-[10px] font-mono text-[#64748B]">
@@ -1792,7 +1792,7 @@ export default function AdminDashboardPage() {
       {/* ========================================================================= */}
       {isMemberModalOpen && editingMember && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-in fade-in">
-          <div className="bg-[#0A0F1E] border border-white/20 rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
+          <div className="bg-[#02040A] border border-white/20 rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between pb-3 border-b border-white/10">
               <h3 className="font-heading font-bold text-base text-white">
                 {editingMember.id ? "Edit Siswa / Nahkoda" : "Tambah Siswa Baru"}
@@ -1894,7 +1894,7 @@ export default function AdminDashboardPage() {
                   onChange={(e) =>
                     setEditingMember({ ...editingMember, isManagement: e.target.checked })
                   }
-                  className="rounded bg-white/10 border-white/20 text-[#4F46E5]"
+                  className="rounded bg-white/10 border-white/20 text-[#EA580C]"
                 />
                 <label htmlFor="isManagementCheckbox" className="font-mono text-[#CBD5E1]">
                   Tandai sebagai Pengurus Kelas / Nahkoda
@@ -1926,7 +1926,7 @@ export default function AdminDashboardPage() {
       {/* ========================================================================= */}
       {isProjectModalOpen && editingProject && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-in fade-in">
-          <div className="bg-[#0A0F1E] border border-white/20 rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
+          <div className="bg-[#02040A] border border-white/20 rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between pb-3 border-b border-white/10">
               <h3 className="font-heading font-bold text-base text-white">
                 {editingProject.id ? "Edit Karya Siswa" : "Tambah Karya Baru"}
@@ -1964,7 +1964,7 @@ export default function AdminDashboardPage() {
                         category: e.target.value as any,
                       })
                     }
-                    className="w-full bg-[#0A0F1E] border border-white/10 rounded-xl px-3 py-2 text-white"
+                    className="w-full bg-[#02040A] border border-white/10 rounded-xl px-3 py-2 text-white"
                   >
                     <option value="Web App">Web App</option>
                     <option value="Mobile App">Mobile App</option>
@@ -2036,7 +2036,7 @@ export default function AdminDashboardPage() {
                   onChange={(e) =>
                     setEditingProject({ ...editingProject, featured: e.target.checked })
                   }
-                  className="rounded bg-white/10 border-white/20 text-[#06B6D4]"
+                  className="rounded bg-white/10 border-white/20 text-[#F59E0B]"
                 />
                 <label htmlFor="featuredCheckbox" className="font-mono text-[#CBD5E1]">
                   Tampilkan di 360° Circular Gallery Beranda (Featured)
@@ -2068,7 +2068,7 @@ export default function AdminDashboardPage() {
       {/* ========================================================================= */}
       {isArticleModalOpen && editingArticle && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-in fade-in">
-          <div className="bg-[#0A0F1E] border border-white/20 rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
+          <div className="bg-[#02040A] border border-white/20 rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between pb-3 border-b border-white/10">
               <h3 className="font-heading font-bold text-base text-white">
                 {editingArticle.id ? "Edit Warta / Artikel" : "Tulis Warta Baru"}
@@ -2106,7 +2106,7 @@ export default function AdminDashboardPage() {
                         category: e.target.value as any,
                       })
                     }
-                    className="w-full bg-[#0A0F1E] border border-white/10 rounded-xl px-3 py-2 text-white"
+                    className="w-full bg-[#02040A] border border-white/10 rounded-xl px-3 py-2 text-white"
                   >
                     <option value="Prestasi">Prestasi</option>
                     <option value="Event">Event</option>
@@ -2190,7 +2190,7 @@ export default function AdminDashboardPage() {
       {/* ========================================================================= */}
       {isEventModalOpen && editingEvent && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-in fade-in">
-          <div className="bg-[#0A0F1E] border border-white/20 rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
+          <div className="bg-[#02040A] border border-white/20 rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between pb-3 border-b border-white/10">
               <h3 className="font-heading font-bold text-base text-white">
                 {editingEvent.id ? "Edit Agenda Kelas" : "Tambah Agenda Baru"}
@@ -2240,7 +2240,7 @@ export default function AdminDashboardPage() {
                         category: e.target.value as any,
                       })
                     }
-                    className="w-full bg-[#0A0F1E] border border-white/10 rounded-xl px-3 py-2 text-white"
+                    className="w-full bg-[#02040A] border border-white/10 rounded-xl px-3 py-2 text-white"
                   >
                     <option value="Akademik">Akademik</option>
                     <option value="Sosial">Sosial</option>
@@ -2312,7 +2312,7 @@ export default function AdminDashboardPage() {
       {/* ========================================================================= */}
       {isGalleryModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-in fade-in">
-          <div className="bg-[#0A0F1E] border border-white/20 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
+          <div className="bg-[#02040A] border border-white/20 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
             <div className="flex items-center justify-between pb-3 border-b border-white/10">
               <h3 className="font-heading font-bold text-base text-white">
                 Tambah Foto Galeri
@@ -2347,7 +2347,7 @@ export default function AdminDashboardPage() {
                   onChange={(e) =>
                     setNewGalleryForm({ ...newGalleryForm, album: e.target.value })
                   }
-                  className="w-full bg-[#0A0F1E] border border-white/10 rounded-xl px-3 py-2 text-white"
+                  className="w-full bg-[#02040A] border border-white/10 rounded-xl px-3 py-2 text-white"
                 >
                   <option value="Kegiatan">Kegiatan</option>
                   <option value="Prestasi">Prestasi</option>

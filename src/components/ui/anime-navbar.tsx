@@ -54,7 +54,7 @@ export function AnimeNavBar({ items, className, defaultActive = "Home" }: NavBar
     <div className={cn("fixed top-4 left-0 right-0 z-[9999] pointer-events-none", className)}>
       <div className="flex justify-center pt-2 px-4 pointer-events-auto">
         <motion.div
-          className="flex items-center gap-1.5 sm:gap-2 bg-[#0A0F1E]/80 border border-white/10 backdrop-blur-xl py-1.5 px-2 rounded-full shadow-2xl shadow-black/80 relative"
+          className="flex items-center gap-1.5 sm:gap-2 bg-[#02040A]/90 border border-[#F59E0B]/20 backdrop-blur-xl py-1.5 px-2 rounded-full shadow-2xl shadow-black/80 relative"
           initial={{ y: -20, opacity: 0, scale: 0.95 }}
           animate={{ y: 0, opacity: 1, scale: 1 }}
           transition={{
@@ -97,12 +97,12 @@ export function AnimeNavBar({ items, className, defaultActive = "Home" }: NavBar
                       ease: "easeInOut",
                     }}
                   >
-                    <div className="absolute inset-0 bg-[#06B6D4]/30 rounded-full blur-md" />
-                    <div className="absolute inset-[-4px] bg-[#4F46E5]/25 rounded-full blur-xl" />
-                    <div className="absolute inset-[-8px] bg-[#06B6D4]/15 rounded-full blur-2xl" />
+                    <div className="absolute inset-0 bg-[#EA580C]/30 rounded-full blur-md" />
+                    <div className="absolute inset-[-4px] bg-[#F59E0B]/25 rounded-full blur-xl" />
+                    <div className="absolute inset-[-8px] bg-[#EA580C]/15 rounded-full blur-2xl" />
 
                     <div
-                      className="absolute inset-0 bg-gradient-to-r from-[#06B6D4]/0 via-[#06B6D4]/30 to-[#06B6D4]/0"
+                      className="absolute inset-0 bg-gradient-to-r from-[#EA580C]/0 via-[#F59E0B]/35 to-[#EA580C]/0"
                       style={{
                         animation: "shine 3s ease-in-out infinite",
                       }}

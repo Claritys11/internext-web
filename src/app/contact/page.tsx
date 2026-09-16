@@ -361,7 +361,7 @@ export default function ContactChatPage() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#0A0F1E] text-slate-100 selection:bg-[#06B6D4]/30 selection:text-cyan-200">
+    <div className="flex flex-col min-h-screen bg-[#02040A] text-slate-100 selection:bg-[#F59E0B]/30 selection:text-[#EA580C]">
       <Navbar />
 
       {/* Main Container */}
@@ -369,12 +369,12 @@ export default function ContactChatPage() {
         {/* Page Top Title */}
         <div className="mb-6 flex flex-col md:flex-row md:items-end md:justify-between gap-4">
           <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#4F46E5]/15 border border-[#4F46E5]/30 text-xs font-mono text-[#A5B4FC] mb-3">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#F59E0B]/15 border border-[#F59E0B]/30 text-xs font-mono text-[#F59E0B] mb-3">
               <span className="w-2 h-2 rounded-full bg-[#10B981] animate-ping" />
               <span>Database Integrated • PostgreSQL Ready</span>
             </div>
             <h1 className="font-heading text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
-              Kontak & <span className="text-gradient-cyan">Buku Tamu Interaktif</span>
+              Kontak & <span className="text-gradient">Buku Tamu Interaktif</span>
             </h1>
             <p className="text-sm text-[#94A3B8] mt-1">
               Ruang obrolan langsung dan buku tamu digital kelas XI Internasional SMK Telkom Malang. Tersimpan permanen ke database!
@@ -386,7 +386,7 @@ export default function ContactChatPage() {
             <div className="w-2.5 h-2.5 rounded-full bg-[#10B981] shadow-[0_0_8px_#10B981]" />
             <div>
               <p className="font-medium text-white">{siteConfig.classInfo.memberCount} Siswa Moklet</p>
-              <p className="text-[11px] text-[#06B6D4]">Lab TI & IoT Aktif • Terhubung Database</p>
+              <p className="text-[11px] text-[#F59E0B]">Lab TI & IoT Aktif • Terhubung Database</p>
             </div>
           </div>
         </div>
@@ -400,7 +400,7 @@ export default function ContactChatPage() {
             className={`
               fixed lg:static inset-y-0 left-0 z-40
               w-72 sm:w-80 lg:w-72 xl:w-80 shrink-0
-              bg-[#0E1528] lg:bg-transparent
+              bg-[#02040A] lg:bg-transparent
               border-r border-white/[0.08] flex flex-col
               transition-transform duration-300 ease-in-out
               ${sidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
@@ -409,14 +409,14 @@ export default function ContactChatPage() {
             {/* Sidebar Header */}
             <div className="p-4 border-b border-white/[0.08] flex items-center justify-between">
               <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-[#4F46E5] to-[#06B6D4] flex items-center justify-center text-white shadow-md">
+                <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-[#F59E0B] to-[#EA580C] flex items-center justify-center text-[#02040A] shadow-md font-bold">
                   <MessageSquare className="w-4 h-4" />
                 </div>
                 <div>
                   <h3 className="font-heading font-bold text-sm text-white leading-tight">
                     Internext Chat
                   </h3>
-                  <span className="text-[10px] font-mono text-[#06B6D4] block">
+                  <span className="text-[10px] font-mono text-[#F59E0B] block">
                     XI Internasional • Moklet
                   </span>
                 </div>
@@ -428,14 +428,14 @@ export default function ContactChatPage() {
                 className="lg:hidden p-1.5 rounded-lg text-[#94A3B8] hover:text-white hover:bg-white/[0.08]"
                 aria-label="Tutup sidebar"
               >
-                <X className="w-5 h-5" />
+                <X className="w-4 h-4" />
               </button>
             </div>
 
             {/* Channels List */}
-            <div className="p-3 space-y-1">
-              <span className="px-3 text-[11px] font-mono uppercase tracking-wider text-[#64748B] block mb-2">
-                Kanal Obrolan
+            <div className="p-3 space-y-1 overflow-y-auto">
+              <span className="text-[10px] font-mono uppercase tracking-wider text-[#64748B] px-2 py-1 block">
+                Saluran Percakapan
               </span>
               {CHANNELS.map((ch) => {
                 const IconComponent = ch.icon;
@@ -452,7 +452,7 @@ export default function ContactChatPage() {
                       w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-left text-xs font-medium transition-all group
                       ${
                         isActive
-                          ? "bg-gradient-to-r from-[#4F46E5]/30 to-[#06B6D4]/15 text-white border border-[#06B6D4]/40 shadow-sm"
+                          ? "bg-gradient-to-r from-[#F59E0B]/25 to-[#EA580C]/20 text-white border border-[#F59E0B]/40 shadow-sm"
                           : "text-[#94A3B8] hover:text-white hover:bg-white/[0.05]"
                       }
                     `}
@@ -460,7 +460,7 @@ export default function ContactChatPage() {
                     <div className="flex items-center gap-2.5 min-w-0">
                       <IconComponent
                         className={`w-4 h-4 shrink-0 transition-colors ${
-                          isActive ? "text-[#06B6D4]" : "text-[#64748B] group-hover:text-[#A5B4FC]"
+                          isActive ? "text-[#F59E0B]" : "text-[#64748B] group-hover:text-[#F59E0B]"
                         }`}
                       />
                       <span className="truncate font-mono">{ch.name}</span>
@@ -470,8 +470,8 @@ export default function ContactChatPage() {
                       <span
                         className={`text-[9px] px-2 py-0.5 rounded-full font-mono shrink-0 ${
                           ch.id === "apresiasi-publik"
-                            ? "bg-[#CCFF00]/20 text-[#CCFF00] border border-[#CCFF00]/30 font-bold"
-                            : "bg-[#06B6D4]/20 text-[#06B6D4]"
+                            ? "bg-[#EA580C]/20 text-[#EA580C] border border-[#EA580C]/30 font-bold"
+                            : "bg-[#F59E0B]/20 text-[#F59E0B]"
                         }`}
                       >
                         {ch.badge}
@@ -489,12 +489,12 @@ export default function ContactChatPage() {
               </span>
 
               {/* Email Card with Copy Button */}
-              <div className="p-3 rounded-xl bg-[#0A0F1E]/60 border border-white/[0.06] flex items-center justify-between gap-2">
+              <div className="p-3 rounded-xl bg-[#02040A]/60 border border-white/[0.06] flex items-center justify-between gap-2">
                 <div className="min-w-0">
                   <span className="text-[10px] font-mono text-[#64748B] block">Email Resmi</span>
                   <a
                     href={`mailto:${siteConfig.socials.email}`}
-                    className="text-xs text-white hover:text-[#06B6D4] truncate font-mono block transition-colors"
+                    className="text-xs text-white hover:text-[#F59E0B] truncate font-mono block transition-colors"
                   >
                     {siteConfig.socials.email}
                   </a>
@@ -518,8 +518,8 @@ export default function ContactChatPage() {
               </div>
 
               {/* Campus Location Card */}
-              <div className="p-3 rounded-xl bg-[#0A0F1E]/60 border border-white/[0.06] flex items-start gap-2.5 text-xs">
-                <MapPin className="w-4 h-4 text-[#06B6D4] shrink-0 mt-0.5" />
+              <div className="p-3 rounded-xl bg-[#02040A]/60 border border-white/[0.06] flex items-start gap-2.5 text-xs">
+                <MapPin className="w-4 h-4 text-[#F59E0B] shrink-0 mt-0.5" />
                 <div>
                   <span className="text-[10px] font-mono text-[#64748B] block">Lokasi Kampus</span>
                   <p className="text-white font-medium">{siteConfig.classInfo.school}</p>
@@ -528,7 +528,7 @@ export default function ContactChatPage() {
               </div>
 
               {/* Class Leadership Pill */}
-              <div className="p-3 rounded-xl bg-[#0A0F1E]/60 border border-white/[0.06] text-xs">
+              <div className="p-3 rounded-xl bg-[#02040A]/60 border border-white/[0.06] text-xs">
                 <div className="flex items-center justify-between">
                   <span className="text-[10px] font-mono text-[#64748B]">Ketua Kelas</span>
                   <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#10B981]/15 text-[#10B981] font-mono">
@@ -556,7 +556,7 @@ export default function ContactChatPage() {
           {/* ============================================================ */}
           {/* RIGHT COLUMN: Active Chat Stream & Message Input              */}
           {/* ============================================================ */}
-          <div className="flex-1 flex flex-col h-full bg-[#0A0F1E]/90 min-w-0">
+          <div className="flex-1 flex flex-col h-full bg-[#02040A]/90 min-w-0">
             {/* Chat Top Header */}
             <div className="h-16 px-4 sm:px-6 border-b border-white/[0.08] flex items-center justify-between gap-3 bg-white/[0.01]">
               <div className="flex items-center gap-3 min-w-0">
@@ -569,7 +569,7 @@ export default function ContactChatPage() {
                 </button>
 
                 <div className="flex items-center gap-2 min-w-0">
-                  <activeChannel.icon className="w-5 h-5 text-[#06B6D4] shrink-0" />
+                  <activeChannel.icon className="w-5 h-5 text-[#F59E0B] shrink-0" />
                   <div className="min-w-0">
                     <h2 className="font-heading font-bold text-sm sm:text-base text-white truncate">
                       #{activeChannel.name}
@@ -598,7 +598,7 @@ export default function ContactChatPage() {
                     placeholder="Cari pesan..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full bg-white/[0.05] border border-white/[0.08] rounded-xl pl-8 pr-3 py-1.5 text-xs text-white placeholder-[#64748B] focus:outline-none focus:border-[#06B6D4] transition-colors"
+                    className="w-full bg-white/[0.05] border border-white/[0.08] rounded-xl pl-8 pr-3 py-1.5 text-xs text-white placeholder-[#64748B] focus:outline-none focus:border-[#F59E0B] transition-colors"
                   />
                   {searchQuery && (
                     <button
@@ -618,9 +618,9 @@ export default function ContactChatPage() {
               className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4 scroll-smooth"
             >
               {/* Channel Welcome Banner Card */}
-              <div className="p-4 rounded-xl bg-gradient-to-r from-[#4F46E5]/10 via-[#06B6D4]/5 to-transparent border border-white/[0.06] mb-4">
+              <div className="p-4 rounded-xl bg-gradient-to-r from-[#F59E0B]/10 via-[#EA580C]/5 to-transparent border border-white/[0.06] mb-4">
                 <div className="flex items-start gap-3">
-                  <div className="w-9 h-9 rounded-xl bg-[#06B6D4]/15 text-[#06B6D4] flex items-center justify-center shrink-0">
+                  <div className="w-9 h-9 rounded-xl bg-[#F59E0B]/15 text-[#F59E0B] flex items-center justify-center shrink-0">
                     <activeChannel.icon className="w-5 h-5" />
                   </div>
                   <div>
@@ -631,12 +631,12 @@ export default function ContactChatPage() {
                       {activeChannel.topic}
                     </p>
                     {activeChannel.id === "apresiasi-publik" && (
-                      <span className="inline-block mt-2 text-[10px] font-mono px-2 py-0.5 rounded bg-[#CCFF00]/15 text-[#CCFF00] border border-[#CCFF00]/30 font-semibold">
+                      <span className="inline-block mt-2 text-[10px] font-mono px-2 py-0.5 rounded bg-[#EA580C]/15 text-[#EA580C] border border-[#EA580C]/30 font-semibold">
                         ✨ Kanal Apresiasi Resmi • Jejak Buku Tamu Digital
                       </span>
                     )}
                     {activeChannel.id === "ngobrol-santai" && (
-                      <span className="inline-block mt-2 text-[10px] font-mono px-2 py-0.5 rounded bg-[#06B6D4]/15 text-[#06B6D4] border border-[#06B6D4]/30 font-semibold">
+                      <span className="inline-block mt-2 text-[10px] font-mono px-2 py-0.5 rounded bg-[#F59E0B]/15 text-[#F59E0B] border border-[#F59E0B]/30 font-semibold">
                         💬 Obrolan Murni • Tanpa Bot Otomatis
                       </span>
                     )}
@@ -646,7 +646,7 @@ export default function ContactChatPage() {
 
               {/* Filter Notice */}
               {searchQuery && (
-                <div className="text-xs font-mono text-[#06B6D4] bg-[#06B6D4]/10 border border-[#06B6D4]/20 p-2 rounded-lg flex items-center justify-between">
+                <div className="text-xs font-mono text-[#F59E0B] bg-[#F59E0B]/10 border border-[#F59E0B]/20 p-2 rounded-lg flex items-center justify-between">
                   <span>Hasil pencarian untuk: &ldquo;{searchQuery}&rdquo; ({currentChannelMessages.length} ditemukan)</span>
                   <button
                     onClick={() => setSearchQuery("")}
@@ -682,7 +682,7 @@ export default function ContactChatPage() {
                     <div
                       className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 font-bold text-xs text-white shadow-md bg-gradient-to-br ${
                         msg.isBot
-                          ? "from-violet-600 to-fuchsia-600"
+                          ? "from-amber-600 to-orange-600"
                           : roleStyle.bg
                       }`}
                     >
@@ -714,7 +714,7 @@ export default function ContactChatPage() {
                           {msg.role}
                         </span>
                         {isUser && (
-                          <span className="text-[10px] font-mono text-[#06B6D4] bg-[#06B6D4]/10 px-1.5 py-0.5 rounded">
+                          <span className="text-[10px] font-mono text-[#F59E0B] bg-[#F59E0B]/10 px-1.5 py-0.5 rounded">
                             Anda
                           </span>
                         )}
@@ -726,11 +726,11 @@ export default function ContactChatPage() {
                       {/* Quoted reply if any */}
                       {msg.replyTo && (
                         <div
-                          className={`mb-1.5 px-3 py-1 rounded-lg bg-white/[0.04] border-l-2 border-[#06B6D4] text-[11px] text-[#94A3B8] flex items-center gap-1.5 ${
+                          className={`mb-1.5 px-3 py-1 rounded-lg bg-white/[0.04] border-l-2 border-[#F59E0B] text-[11px] text-[#94A3B8] flex items-center gap-1.5 ${
                             isUser ? "text-right" : ""
                           }`}
                         >
-                          <CornerDownRight className="w-3 h-3 text-[#06B6D4] shrink-0" />
+                          <CornerDownRight className="w-3 h-3 text-[#F59E0B] shrink-0" />
                           <span>
                             Membalas <strong className="text-white">{msg.replyTo.name}</strong>: &ldquo;{msg.replyTo.message}&rdquo;
                           </span>
@@ -741,10 +741,10 @@ export default function ContactChatPage() {
                       <div
                         className={`p-3.5 sm:p-4 rounded-2xl text-xs sm:text-sm leading-relaxed shadow-sm ${
                           isUser
-                            ? "bg-gradient-to-r from-[#4F46E5]/90 to-[#06B6D4]/90 text-white rounded-tr-none border border-cyan-400/30"
+                            ? "bg-gradient-to-r from-[#F59E0B] to-[#EA580C] text-[#02040A] font-medium rounded-tr-none border border-[#F59E0B]/30"
                             : msg.isBot
-                            ? "bg-[#161F38] text-[#E2E8F0] rounded-tl-none border border-violet-500/30 shadow-violet-500/5"
-                            : "bg-[#111827] text-[#CBD5E1] rounded-tl-none border border-white/[0.08]"
+                            ? "bg-[#0F172A] text-[#F8FAFC] rounded-tl-none border border-[#F59E0B]/30 shadow-[#F59E0B]/5"
+                            : "bg-[#0F172A] text-[#CBD5E1] rounded-tl-none border border-white/[0.08]"
                         }`}
                       >
                         <p className="whitespace-pre-line">{msg.message}</p>
@@ -765,7 +765,7 @@ export default function ContactChatPage() {
                               inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-mono transition-all
                               ${
                                 r.userReacted
-                                  ? "bg-[#06B6D4]/25 text-[#06B6D4] border border-[#06B6D4]/50 scale-105"
+                                  ? "bg-[#F59E0B]/25 text-[#F59E0B] border border-[#F59E0B]/50 scale-105"
                                   : "bg-white/[0.04] text-[#94A3B8] hover:bg-white/[0.08] border border-white/[0.05]"
                               }
                             `}
@@ -793,7 +793,7 @@ export default function ContactChatPage() {
                               setReplyingTo(msg);
                               inputRef.current?.focus();
                             }}
-                            className="text-[10px] font-mono text-[#64748B] hover:text-[#06B6D4] px-1.5 py-0.5 rounded hover:bg-white/[0.06] flex items-center gap-1 ml-1"
+                            className="text-[10px] font-mono text-[#64748B] hover:text-[#F59E0B] px-1.5 py-0.5 rounded hover:bg-white/[0.06] flex items-center gap-1 ml-1"
                           >
                             <CornerDownRight className="w-3 h-3" />
                             <span>Balas</span>
@@ -808,18 +808,18 @@ export default function ContactChatPage() {
               {/* Bot Typing Indicator */}
               {isTyping && (
                 <div className="flex items-center gap-3 text-xs text-[#94A3B8] p-2">
-                  <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-violet-600 to-fuchsia-600 flex items-center justify-center text-white shrink-0">
+                  <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-amber-600 to-orange-600 flex items-center justify-center text-[#02040A] font-bold shrink-0">
                     <Bot className="w-4 h-4 animate-pulse" />
                   </div>
-                  <div className="bg-[#161F38] border border-violet-500/20 px-3.5 py-2 rounded-2xl rounded-tl-none flex items-center gap-2">
+                  <div className="bg-[#0F172A] border border-[#F59E0B]/20 px-3.5 py-2 rounded-2xl rounded-tl-none flex items-center gap-2">
                     <span className="font-semibold text-white text-[11px]">
                       {typingSender}
                     </span>
                     <span className="text-[11px] text-[#94A3B8]">sedang mengetik</span>
                     <span className="flex gap-1">
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#06B6D4] animate-bounce" />
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#06B6D4] animate-bounce [animation-delay:0.2s]" />
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#06B6D4] animate-bounce [animation-delay:0.4s]" />
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#F59E0B] animate-bounce" />
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#F59E0B] animate-bounce [animation-delay:0.2s]" />
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#F59E0B] animate-bounce [animation-delay:0.4s]" />
                     </span>
                   </div>
                 </div>
@@ -829,11 +829,11 @@ export default function ContactChatPage() {
             {/* ============================================================ */}
             {/* BOTTOM INPUT BAR: Identity, Emojis, Input & Send Button      */}
             {/* ============================================================ */}
-            <div className="p-3 sm:p-4 border-t border-white/[0.08] bg-[#0E1528]/80 backdrop-blur-md">
+            <div className="p-3 sm:p-4 border-t border-white/[0.08] bg-[#02040A]/80 backdrop-blur-md">
               {replyingTo && (
-                <div className="mb-2 px-3 py-1.5 rounded-xl bg-[#4F46E5]/15 border border-[#4F46E5]/30 flex items-center justify-between text-xs">
-                  <div className="flex items-center gap-2 truncate text-[#A5B4FC]">
-                    <CornerDownRight className="w-3.5 h-3.5 shrink-0 text-[#06B6D4]" />
+                <div className="mb-2 px-3 py-1.5 rounded-xl bg-[#F59E0B]/15 border border-[#F59E0B]/30 flex items-center justify-between text-xs">
+                  <div className="flex items-center gap-2 truncate text-[#F59E0B]">
+                    <CornerDownRight className="w-3.5 h-3.5 shrink-0 text-[#EA580C]" />
                     <span className="truncate">
                       Membalas <strong>{replyingTo.name}</strong>: &ldquo;{replyingTo.message}&rdquo;
                     </span>
@@ -856,7 +856,7 @@ export default function ContactChatPage() {
                     value={userName}
                     onChange={(e) => setUserName(e.target.value)}
                     placeholder="Nama Anda"
-                    className="bg-white/[0.05] border border-white/[0.08] rounded-lg px-2.5 py-1 text-xs text-white font-medium focus:outline-none focus:border-[#06B6D4] w-32 sm:w-40"
+                    className="bg-white/[0.05] border border-white/[0.08] rounded-lg px-2.5 py-1 text-xs text-white font-medium focus:outline-none focus:border-[#F59E0B] w-32 sm:w-40"
                   />
                 </div>
 
@@ -873,7 +873,7 @@ export default function ContactChatPage() {
                           px-2 py-0.5 rounded-md text-[10px] font-mono transition-all
                           ${
                             isSelected
-                              ? "bg-[#06B6D4] text-black font-bold shadow-sm"
+                              ? "bg-[#F59E0B] text-[#02040A] font-bold shadow-sm"
                               : "bg-white/[0.04] text-[#94A3B8] hover:text-white hover:bg-white/[0.08]"
                           }
                         `}
@@ -898,7 +898,7 @@ export default function ContactChatPage() {
                         ? "Tuliskan ucapan apresiasi & motivasi untuk XI Internasional..."
                         : `Kirim pesan santai ke #${activeChannel.name}...`
                     }
-                    className="w-full bg-[#0A0F1E] border border-white/[0.1] rounded-xl pl-4 pr-24 py-3 text-sm text-white placeholder-[#64748B] focus:outline-none focus:border-[#06B6D4] transition-colors"
+                    className="w-full bg-[#02040A] border border-white/[0.1] rounded-xl pl-4 pr-24 py-3 text-sm text-white placeholder-[#64748B] focus:outline-none focus:border-[#F59E0B] transition-colors"
                   />
 
                   {/* Send Button */}

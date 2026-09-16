@@ -48,12 +48,12 @@ export default function MembersPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Header */}
           <div className="text-center max-w-3xl mx-auto mb-12">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#4F46E5]/10 border border-[#4F46E5]/30 text-xs font-mono text-[#A5B4FC] mb-4">
-              <Users className="w-3.5 h-3.5 text-[#06B6D4]" />
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#F59E0B]/10 border border-[#F59E0B]/30 text-xs font-mono text-[#F59E0B] mb-4">
+              <Users className="w-3.5 h-3.5 text-[#EA580C]" />
               <span>Direktori Lengkap Anggota</span>
             </div>
             <h1 className="font-heading text-4xl sm:text-5xl font-extrabold text-white tracking-tight mb-4">
-              Keluarga Besar <span className="text-gradient-cyan">Internext</span>
+              Keluarga Besar <span className="text-gradient">Internext</span>
             </h1>
             <p className="text-base text-[#94A3B8] leading-relaxed">
               Profil, keahlian, dan kutipan personal 25 siswa yang siap berkolaborasi menghasilkan karya terbaik.
@@ -70,7 +70,7 @@ export default function MembersPage() {
                 placeholder="Cari berdasarkan nama, peran, atau skill..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full bg-[#0A0F1E] border border-white/[0.1] rounded-xl pl-10 pr-4 py-2.5 text-sm text-white placeholder:text-[#64748B] focus:outline-none focus:border-[#06B6D4] focus:ring-1 focus:ring-[#06B6D4] transition-colors"
+                className="w-full bg-[#02040A] border border-white/[0.1] rounded-xl pl-10 pr-4 py-2.5 text-sm text-white placeholder:text-[#64748B] focus:outline-none focus:border-[#F59E0B] focus:ring-1 focus:ring-[#F59E0B] transition-colors"
               />
             </div>
 
@@ -80,7 +80,7 @@ export default function MembersPage() {
                 onClick={() => setFilterType("all")}
                 className={`px-4 py-2 rounded-xl text-xs font-mono font-medium transition-all ${
                   filterType === "all"
-                    ? "bg-[#4F46E5] text-white shadow-md shadow-[#4F46E5]/30"
+                    ? "bg-[#F59E0B] text-[#02040A] font-bold shadow-md shadow-[#F59E0B]/30"
                     : "bg-white/[0.04] text-[#94A3B8] hover:text-white hover:bg-white/[0.08]"
                 }`}
               >
@@ -90,7 +90,7 @@ export default function MembersPage() {
                 onClick={() => setFilterType("management")}
                 className={`px-4 py-2 rounded-xl text-xs font-mono font-medium transition-all ${
                   filterType === "management"
-                    ? "bg-[#4F46E5] text-white shadow-md shadow-[#4F46E5]/30"
+                    ? "bg-[#F59E0B] text-[#02040A] font-bold shadow-md shadow-[#F59E0B]/30"
                     : "bg-white/[0.04] text-[#94A3B8] hover:text-white hover:bg-white/[0.08]"
                 }`}
               >
@@ -100,7 +100,7 @@ export default function MembersPage() {
                 onClick={() => setFilterType("member")}
                 className={`px-4 py-2 rounded-xl text-xs font-mono font-medium transition-all ${
                   filterType === "member"
-                    ? "bg-[#4F46E5] text-white shadow-md shadow-[#4F46E5]/30"
+                    ? "bg-[#F59E0B] text-[#02040A] font-bold shadow-md shadow-[#F59E0B]/30"
                     : "bg-white/[0.04] text-[#94A3B8] hover:text-white hover:bg-white/[0.08]"
                 }`}
               >

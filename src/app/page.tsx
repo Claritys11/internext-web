@@ -21,7 +21,7 @@ export default async function HomePage() {
   ]);
 
   return (
-    <div className="flex flex-col min-h-screen relative bg-[#0A0F1E] overflow-x-hidden">
+    <div className="flex flex-col min-h-screen relative bg-[#02040A] overflow-x-hidden">
       {/* GSAP MotionPath scroll tracker guide down the page (z-0, strictly behind all content & text in main) */}
       <ScrollMotionPath />
 
@@ -46,8 +46,8 @@ export default async function HomePage() {
         {/* 6. Upcoming Events & Activities */}
         <section className="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-10">
-            <div className="relative z-20 bg-[#0A0F1E]/95 shadow-[0_0_40px_30px_#0A0F1E] rounded-3xl p-2">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#10B981]/10 border border-[#10B981]/30 text-xs font-mono text-[#10B981] mb-3">
+            <div className="relative z-20 bg-[#02040A]/95 shadow-[0_0_40px_30px_#02040A] rounded-3xl p-2">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#F59E0B]/10 border border-[#F59E0B]/30 text-xs font-mono text-[#F59E0B] mb-3">
                 <Calendar className="w-3.5 h-3.5" />
                 <span>Agenda & Dokumentasi</span>
               </div>
@@ -57,7 +57,7 @@ export default async function HomePage() {
             </div>
             <Link
               href="/events"
-              className="mt-4 sm:mt-0 inline-flex items-center gap-1.5 text-sm font-semibold text-[#06B6D4] hover:text-white transition-colors"
+              className="mt-4 sm:mt-0 inline-flex items-center gap-1.5 text-sm font-semibold text-[#F59E0B] hover:text-[#EA580C] transition-colors"
             >
               <span>Lihat Kalender Lengkap</span>
               <ArrowRight className="w-4 h-4" />

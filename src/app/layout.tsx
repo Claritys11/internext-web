@@ -56,7 +56,7 @@ export default function RootLayout({
       lang="id"
       className={`${inter.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable} dark scroll-smooth`}
     >
-      <body className="min-h-screen bg-[#0A0F1E] text-[#F8FAFC] font-sans antialiased selection:bg-[#4F46E5]/30 selection:text-[#06B6D4]">
+      <body className="min-h-screen bg-[#02040A] text-[#F8FAFC] font-sans antialiased selection:bg-[#F59E0B]/30 selection:text-[#EA580C]">
         {children}
       </body>
     </html>

@@ -48,12 +48,12 @@ export default async function AboutPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Header Banner */}
           <div className="text-center max-w-3xl mx-auto mb-16">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#4F46E5]/10 border border-[#4F46E5]/30 text-xs font-mono text-[#A5B4FC] mb-4">
-              <Sparkles className="w-3.5 h-3.5 text-[#06B6D4]" />
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#F59E0B]/10 border border-[#F59E0B]/30 text-xs font-mono text-[#F59E0B] mb-4">
+              <Sparkles className="w-3.5 h-3.5 text-[#EA580C]" />
               <span>Profil & Identitas Kelas</span>
             </div>
             <h1 className="font-heading text-4xl sm:text-5xl font-extrabold text-white tracking-tight mb-4">
-              Tentang <span className="text-gradient-cyan">Internext</span>
+              Tentang <span className="text-gradient">Internext</span>
             </h1>
             <p className="text-base text-[#94A3B8] leading-relaxed">
               Mengenal lebih dekat identitas, sejarah, visi misi, serta semangat di balik perjalanan kelas kami.
@@ -63,7 +63,7 @@ export default async function AboutPage() {
           {/* Quick Info Grid */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
             <div className="glass-card p-6 border-white/[0.08]">
-              <div className="w-10 h-10 rounded-xl bg-[#4F46E5]/20 flex items-center justify-center mb-4 text-[#A5B4FC]">
+              <div className="w-10 h-10 rounded-xl bg-[#F59E0B]/20 flex items-center justify-center mb-4 text-[#F59E0B]">
                 <Users className="w-5 h-5" />
               </div>
               <h3 className="font-heading text-lg font-bold text-white mb-2">Identitas Kelas</h3>
@@ -77,7 +77,7 @@ export default async function AboutPage() {
             </div>
 
             <div className="glass-card p-6 border-white/[0.08]">
-              <div className="w-10 h-10 rounded-xl bg-[#06B6D4]/20 flex items-center justify-center mb-4 text-[#06B6D4]">
+              <div className="w-10 h-10 rounded-xl bg-[#EA580C]/20 flex items-center justify-center mb-4 text-[#EA580C]">
                 <Target className="w-5 h-5" />
               </div>
               <h3 className="font-heading text-lg font-bold text-white mb-2">Visi Kelas</h3>
@@ -102,7 +102,7 @@ export default async function AboutPage() {
           {/* Philosophy Section */}
           <div className="glass-card p-8 sm:p-10 mb-16 relative overflow-hidden">
             <div className="relative z-10 max-w-3xl">
-              <span className="text-xs font-mono uppercase tracking-widest text-[#06B6D4] font-semibold">
+              <span className="text-xs font-mono uppercase tracking-widest text-[#EA580C] font-semibold">
                 Filosofi Nama
               </span>
               <h2 className="font-heading text-2xl sm:text-3xl font-extrabold text-white mt-1 mb-4">
@@ -121,7 +121,7 @@ export default async function AboutPage() {
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-12">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.04] text-xs font-mono text-[#94A3B8] mb-2">
-                <History className="w-3.5 h-3.5 text-[#06B6D4]" />
+                <History className="w-3.5 h-3.5 text-[#F59E0B]" />
                 <span>Jejak Perjalanan</span>
               </div>
               <h2 className="font-heading text-3xl font-extrabold text-white">
@@ -133,15 +133,15 @@ export default async function AboutPage() {
               {milestones.map((item, idx) => (
                 <div key={idx} className="relative group">
                   {/* Dot */}
-                  <div className="absolute -left-[31px] sm:-left-[39px] top-1.5 w-4 h-4 rounded-full bg-[#0A0F1E] border-2 border-[#06B6D4] group-hover:scale-125 transition-transform" />
+                  <div className="absolute -left-[31px] sm:-left-[39px] top-1.5 w-4 h-4 rounded-full bg-[#02040A] border-2 border-[#F59E0B] group-hover:scale-125 transition-transform" />
 
                   {/* Year Tag */}
-                  <span className="sm:absolute sm:-left-36 top-1 text-xs font-mono text-[#06B6D4] font-semibold block mb-1 sm:mb-0">
+                  <span className="sm:absolute sm:-left-36 top-1 text-xs font-mono text-[#F59E0B] font-semibold block mb-1 sm:mb-0">
                     {item.year}
                   </span>
 
                   {/* Card */}
-                  <div className="glass-card p-5 hover:border-[#4F46E5]/40 transition-colors">
+                  <div className="glass-card p-5 hover:border-[#F59E0B]/40 transition-colors">
                     <h4 className="font-heading text-base font-bold text-white mb-1.5">
                       {item.title}
                     </h4>

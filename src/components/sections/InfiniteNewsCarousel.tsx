@@ -126,12 +126,12 @@ export function InfiniteNewsCarousel({ articles }: InfiniteNewsCarouselProps) {
     <section className="py-24 overflow-hidden bg-white/[0.01] border-t border-b border-white/[0.06] relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-10">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
-          <div className="relative z-20 bg-[#0A0F1E]/95 shadow-[0_0_40px_30px_#0A0F1E] rounded-3xl p-2">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#06B6D4]/10 border border-[#06B6D4]/30 text-xs font-mono text-[#06B6D4] mb-3">
+          <div className="relative z-20 bg-[#02040A]/95 shadow-[0_0_40px_30px_#02040A] rounded-3xl p-2">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#F59E0B]/10 border border-[#F59E0B]/30 text-xs font-mono text-[#F59E0B] mb-3">
               <Newspaper className="w-3.5 h-3.5" />
               <span>Warta Terkini & Pengumuman</span>
               <span className="text-white/30">•</span>
-              <span className="text-[#A5B4FC]">GSAP Interactive Carousel</span>
+              <span className="text-[#EA580C]">GSAP Interactive Carousel</span>
             </div>
             <h2 className="font-heading text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
               Kabar Terbaru <span className="text-gradient">Internext</span>
@@ -159,7 +159,7 @@ export function InfiniteNewsCarousel({ articles }: InfiniteNewsCarouselProps) {
             </button>
             <Link
               href="/news"
-              className="hidden sm:inline-flex items-center gap-1.5 text-xs font-mono text-[#06B6D4] hover:text-white ml-2 transition-colors"
+              className="hidden sm:inline-flex items-center gap-1.5 text-xs font-mono text-[#F59E0B] hover:text-[#EA580C] ml-2 transition-colors"
             >
               <span>Arsip Berita</span>
               <ArrowRight className="w-3.5 h-3.5" />
@@ -169,97 +169,102 @@ export function InfiniteNewsCarousel({ articles }: InfiniteNewsCarouselProps) {
       </div>
 
       {/* Draggable Carousel Track Container */}
-      <div ref={containerRef} className="w-full cursor-grab active:cursor-grabbing select-none px-4 sm:px-8">
-        <div ref={trackRef} className="flex gap-6 will-change-transform py-4">
-          {displayArticles.map((article, idx) => (
-            <div
-              key={`${article.id}-${idx}`}
-              className="w-[300px] sm:w-[360px] shrink-0 glass-card overflow-hidden transition-all duration-300 hover:border-[#06B6D4]/50 flex flex-col justify-between group"
-            >
-              <div>
-                {/* Cover Image */}
-                <div className="relative w-full h-48 overflow-hidden bg-[#0A0F1E]">
-                  <Image
-                    src={article.coverImage}
-                    alt={article.title}
-                    fill
-                    sizes="360px"
-                    className="object-cover group-hover:scale-105 transition-transform duration-500 pointer-events-none"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#111827] via-transparent to-transparent" />
-
-                  <div className="absolute top-3 left-3 flex gap-2">
-                    <span className="text-xs font-mono font-semibold px-2.5 py-1 rounded-full bg-[#4F46E5] text-white shadow-md">
-                      {article.category}
-                    </span>
-                    {article.isPinned && (
-                      <span className="text-xs font-mono font-semibold px-2.5 py-1 rounded-full bg-[#F59E0B] text-[#0A0F1E]">
-                        📌 Highlight
-                      </span>
-                    )}
-                  </div>
-                </div>
-
-                {/* Article Info */}
-                <div className="p-5">
-                  <div className="flex items-center gap-2 text-xs font-mono text-[#64748B] mb-2">
-                    <span>{formatDate(article.date)}</span>
-                    <span>•</span>
-                    <span className="flex items-center gap-1">
-                      <Clock className="w-3 h-3 text-[#06B6D4]" />
-                      {article.readTime}
-                    </span>
-                  </div>
-
-                  <h3 className="font-heading text-lg font-bold text-white group-hover:text-[#06B6D4] transition-colors mb-2 leading-snug line-clamp-2">
-                    {article.title}
-                  </h3>
-
-                  <p className="text-xs text-[#94A3B8] leading-relaxed line-clamp-3 mb-4">
-                    {article.summary}
-                  </p>
-
-                  <div className="flex flex-wrap gap-1">
-                    {article.tags.slice(0, 2).map((tag) => (
-                      <span
-                        key={tag}
-                        className="text-[10px] font-mono text-[#64748B] bg-white/[0.04] px-2 py-0.5 rounded"
-                      >
-                        #{tag}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              {/* Card Footer */}
-              <div className="p-5 pt-0 flex items-center justify-between border-t border-white/[0.06] mt-2 pt-3.5">
-                <div className="flex items-center gap-2">
-                  <div className="relative w-6 h-6 rounded-full overflow-hidden border border-white/[0.1]">
+      <div ref={containerRef} className="overflow-hidden cursor-grab active:cursor-grabbing -mx-4 px-4 py-2">
+          <div
+            ref={trackRef}
+            className="flex gap-6 select-none will-change-transform"
+            style={{ width: "max-content" }}
+          >
+            {displayArticles.map((article, index) => (
+              <article
+                key={`${article.id}-${index}`}
+                className="w-[300px] sm:w-[360px] shrink-0 glass-card overflow-hidden transition-all duration-300 hover:border-[#F59E0B]/50 flex flex-col justify-between group"
+              >
+                <div>
+                  {/* Image with category pill */}
+                  <div className="relative w-full h-48 overflow-hidden bg-[#02040A]">
                     <Image
-                      src={article.author.avatar}
-                      alt={article.author.name}
+                      src={article.coverImage}
+                      alt={article.title}
                       fill
-                      className="object-cover"
+                      className="object-cover group-hover:scale-105 transition-transform duration-500 pointer-events-none"
                     />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#0F172A] via-transparent to-transparent" />
+                    <div className="absolute top-3 left-3 flex gap-2">
+                      <span className="text-xs font-mono font-semibold px-2.5 py-1 rounded-full bg-gradient-to-r from-[#F59E0B] to-[#EA580C] text-[#02040A] shadow-md">
+                        {article.category}
+                      </span>
+                      {article.isPinned && (
+                        <span className="text-xs font-mono font-semibold px-2.5 py-1 rounded-full bg-[#EA580C] text-white">
+                          Disematkan
+                        </span>
+                      )}
+                    </div>
                   </div>
-                  <span className="text-xs text-[#CBD5E1] font-medium truncate max-w-[120px]">
-                    {article.author.name}
-                  </span>
+
+                  {/* Body Content */}
+                  <div className="p-5">
+                    <div className="flex items-center gap-2 text-xs font-mono text-[#64748B] mb-2">
+                      <span>{formatDate(article.date)}</span>
+                      <span>•</span>
+                      <div className="flex items-center gap-1">
+                        <Clock className="w-3 h-3 text-[#F59E0B]" />
+                        <span>{article.readTime}</span>
+                      </div>
+                    </div>
+
+                    <h3 className="font-heading text-lg font-bold text-white group-hover:text-[#F59E0B] transition-colors mb-2 leading-snug line-clamp-2">
+                      <Link href={`/news/${article.slug}`}>
+                        {article.title}
+                      </Link>
+                    </h3>
+
+                    <p className="text-xs text-[#94A3B8] leading-relaxed line-clamp-3 mb-4">
+                      {article.summary}
+                    </p>
+
+                    {/* Tags */}
+                    <div className="flex flex-wrap gap-1.5 mb-2">
+                      {article.tags.slice(0, 3).map((tag) => (
+                        <span
+                          key={tag}
+                          className="text-[10px] font-mono text-[#94A3B8] bg-white/[0.04] px-2 py-0.5 rounded"
+                        >
+                          #{tag}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
                 </div>
 
-                <Link
-                  href={`/news/${article.slug}`}
-                  className="text-xs font-semibold text-[#06B6D4] group-hover:translate-x-1 transition-transform flex items-center gap-1"
-                >
-                  <span>Baca</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </Link>
-              </div>
-            </div>
-          ))}
+                {/* Footer Metadata */}
+                <div className="px-5 pb-5 pt-3 border-t border-white/[0.06] flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <div className="relative w-6 h-6 rounded-full overflow-hidden border border-white/20">
+                      <Image
+                        src={article.author.avatar}
+                        alt={article.author.name}
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
+                    <span className="text-xs text-[#CBD5E1] font-medium truncate max-w-[120px]">
+                      {article.author.name}
+                    </span>
+                  </div>
+
+                  <Link
+                    href={`/news/${article.slug}`}
+                    className="text-xs font-semibold text-[#F59E0B] group-hover:translate-x-1 transition-transform flex items-center gap-1"
+                  >
+                    <span>Baca</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </Link>
+                </div>
+              </article>
+            ))}
+          </div>
         </div>
-      </div>
     </section>
   );
 }

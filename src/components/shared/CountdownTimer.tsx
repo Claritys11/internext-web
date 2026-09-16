@@ -41,43 +41,43 @@ export function CountdownTimer({ targetDate, label = "Menuju Kelulusan" }: Count
   if (!mounted) {
     return (
       <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/[0.04] border border-white/[0.08] text-xs font-mono text-[#94A3B8]">
-        <Clock className="w-3.5 h-3.5 text-[#06B6D4] animate-pulse" />
+        <Clock className="w-3.5 h-3.5 text-[#F59E0B] animate-pulse" />
         <span>Memuat hitung mundur...</span>
       </div>
     );
   }
 
   return (
-    <div className="inline-flex flex-wrap items-center justify-center gap-2 sm:gap-3 p-1.5 sm:p-2 rounded-2xl bg-[#111827]/80 border border-white/[0.1] shadow-xl backdrop-blur-md">
-      <div className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-mono text-[#06B6D4] bg-[#06B6D4]/10 rounded-lg">
+    <div className="inline-flex flex-wrap items-center justify-center gap-2 sm:gap-3 p-1.5 sm:p-2 rounded-2xl bg-[#0F172A]/80 border border-white/[0.1] shadow-xl backdrop-blur-md">
+      <div className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-mono text-[#F59E0B] bg-[#F59E0B]/10 rounded-lg">
         <Clock className="w-3.5 h-3.5" />
         <span className="font-semibold uppercase tracking-wider">{label}</span>
       </div>
 
       <div className="flex items-center gap-1.5 sm:gap-2 text-center font-mono">
-        <div className="bg-[#0A0F1E] border border-white/[0.06] rounded-xl px-2.5 py-1.5 min-w-[50px]">
+        <div className="bg-[#02040A] border border-white/[0.06] rounded-xl px-2.5 py-1.5 min-w-[50px]">
           <span className="block text-base sm:text-lg font-bold text-white leading-none">
             {timeLeft.days}
           </span>
           <span className="text-[10px] text-[#64748B] uppercase">Hari</span>
         </div>
         <span className="text-white/40 font-bold">:</span>
-        <div className="bg-[#0A0F1E] border border-white/[0.06] rounded-xl px-2.5 py-1.5 min-w-[50px]">
+        <div className="bg-[#02040A] border border-white/[0.06] rounded-xl px-2.5 py-1.5 min-w-[50px]">
           <span className="block text-base sm:text-lg font-bold text-white leading-none">
             {String(timeLeft.hours).padStart(2, "0")}
           </span>
           <span className="text-[10px] text-[#64748B] uppercase">Jam</span>
         </div>
         <span className="text-white/40 font-bold">:</span>
-        <div className="bg-[#0A0F1E] border border-white/[0.06] rounded-xl px-2.5 py-1.5 min-w-[50px]">
+        <div className="bg-[#02040A] border border-white/[0.06] rounded-xl px-2.5 py-1.5 min-w-[50px]">
           <span className="block text-base sm:text-lg font-bold text-white leading-none">
             {String(timeLeft.minutes).padStart(2, "0")}
           </span>
           <span className="text-[10px] text-[#64748B] uppercase">Menit</span>
         </div>
         <span className="text-white/40 font-bold">:</span>
-        <div className="bg-[#0A0F1E] border border-white/[0.06] rounded-xl px-2.5 py-1.5 min-w-[50px]">
-          <span className="block text-base sm:text-lg font-bold text-[#06B6D4] leading-none">
+        <div className="bg-[#02040A] border border-white/[0.06] rounded-xl px-2.5 py-1.5 min-w-[50px]">
+          <span className="block text-base sm:text-lg font-bold text-[#EA580C] leading-none">
             {String(timeLeft.seconds).padStart(2, "0")}
           </span>
           <span className="text-[10px] text-[#64748B] uppercase">Detik</span>

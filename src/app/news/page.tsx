@@ -14,8 +14,8 @@ export default async function NewsPage() {
       <main className="flex-1 py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-12">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#06B6D4]/10 border border-[#06B6D4]/30 text-xs font-mono text-[#06B6D4] mb-4">
-              <Newspaper className="w-3.5 h-3.5" />
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#F59E0B]/10 border border-[#F59E0B]/30 text-xs font-mono text-[#F59E0B] mb-4">
+              <Newspaper className="w-3.5 h-3.5 text-[#EA580C]" />
               <span>Publikasi & Pengumuman Resmi</span>
             </div>
             <h1 className="font-heading text-4xl sm:text-5xl font-extrabold text-white tracking-tight mb-4">

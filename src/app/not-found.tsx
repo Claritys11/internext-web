@@ -10,11 +10,11 @@ export default function NotFound() {
 
       <main className="flex-1 flex items-center justify-center py-24 px-4">
         <div className="glass-card max-w-md w-full p-8 text-center border-white/[0.1]">
-          <div className="w-16 h-16 rounded-2xl bg-[#4F46E5]/20 border border-[#4F46E5]/40 flex items-center justify-center mx-auto mb-6">
-            <Terminal className="w-8 h-8 text-[#06B6D4]" />
+          <div className="w-16 h-16 rounded-2xl bg-[#F59E0B]/20 border border-[#F59E0B]/40 flex items-center justify-center mx-auto mb-6">
+            <Terminal className="w-8 h-8 text-[#F59E0B]" />
           </div>
 
-          <span className="text-xs font-mono font-bold text-[#06B6D4] uppercase tracking-widest block mb-2">
+          <span className="text-xs font-mono font-bold text-[#EA580C] uppercase tracking-widest block mb-2">
             Error 404
           </span>
           <h1 className="font-heading text-2xl sm:text-3xl font-extrabold text-white mb-3">
