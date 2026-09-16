@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-export const siteUrl = "https://internext.web.id";
+export const siteUrl = "https://moklet.int.eu.org";
 
 export function absoluteUrl(path = "/") {
   return new URL(path, siteUrl).toString();
