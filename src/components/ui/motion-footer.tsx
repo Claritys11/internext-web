@@ -6,7 +6,18 @@ import Link from "next/link";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { cn } from "@/lib/utils";
-import { MessageSquare, Users, Sparkles, BookOpen, Calendar, ShieldCheck, ArrowUp, Heart } from "lucide-react";
+import {
+  MessageSquare,
+  Users,
+  Sparkles,
+  BookOpen,
+  Calendar,
+  ShieldCheck,
+  ArrowUp,
+  Heart,
+  ExternalLink,
+} from "lucide-react";
+import { InstagramIcon } from "@/components/ui/Icons";
 
 // Register ScrollTrigger safely for React
 if (typeof window !== "undefined") {
@@ -23,24 +34,24 @@ const STYLES = `
   font-family: 'Plus Jakarta Sans', sans-serif;
   -webkit-font-smoothing: antialiased;
   
-  /* Dynamic Variables using standard shadcn/tailwind v4 tokens */
-  --pill-bg-1: color-mix(in oklch, var(--foreground) 6%, transparent);
-  --pill-bg-2: color-mix(in oklch, var(--foreground) 2%, transparent);
-  --pill-shadow: color-mix(in oklch, var(--background) 50%, transparent);
-  --pill-highlight: color-mix(in oklch, var(--foreground) 15%, transparent);
-  --pill-inset-shadow: color-mix(in oklch, var(--background) 80%, transparent);
-  --pill-border: color-mix(in oklch, var(--foreground) 10%, transparent);
+  /* Dynamic Variables using standard shadcn/tailwind tokens */
+  --pill-bg-1: rgba(255, 255, 255, 0.05);
+  --pill-bg-2: rgba(255, 255, 255, 0.02);
+  --pill-shadow: rgba(0, 0, 0, 0.5);
+  --pill-highlight: rgba(255, 255, 255, 0.15);
+  --pill-inset-shadow: rgba(0, 0, 0, 0.8);
+  --pill-border: rgba(255, 255, 255, 0.1);
   
-  --pill-bg-1-hover: color-mix(in oklch, var(--foreground) 12%, transparent);
-  --pill-bg-2-hover: color-mix(in oklch, var(--foreground) 4%, transparent);
+  --pill-bg-1-hover: rgba(255, 255, 255, 0.12);
+  --pill-bg-2-hover: rgba(255, 255, 255, 0.04);
   --pill-border-hover: #06B6D4;
-  --pill-shadow-hover: color-mix(in oklch, var(--background) 70%, transparent);
-  --pill-highlight-hover: color-mix(in oklch, var(--foreground) 30%, transparent);
+  --pill-shadow-hover: rgba(6, 182, 212, 0.25);
+  --pill-highlight-hover: rgba(255, 255, 255, 0.3);
 }
 
 @keyframes footer-breathe {
   0% { transform: translate(-50%, -50%) scale(1); opacity: 0.6; }
-  100% { transform: translate(-50%, -50%) scale(1.1); opacity: 1; }
+  100% { transform: translate(-50%, -50%) scale(1.15); opacity: 1; }
 }
 
 @keyframes footer-scroll-marquee {
@@ -50,16 +61,16 @@ const STYLES = `
 
 @keyframes footer-heartbeat {
   0%, 100% { transform: scale(1); filter: drop-shadow(0 0 5px rgba(239, 68, 68, 0.5)); }
-  15%, 45% { transform: scale(1.2); filter: drop-shadow(0 0 10px rgba(239, 68, 68, 0.8)); }
+  15%, 45% { transform: scale(1.25); filter: drop-shadow(0 0 10px rgba(239, 68, 68, 0.8)); }
   30% { transform: scale(1); }
 }
 
 .animate-footer-breathe {
-  animation: footer-breathe 8s ease-in-out infinite alternate;
+  animation: footer-breathe 7s ease-in-out infinite alternate;
 }
 
 .animate-footer-scroll-marquee {
-  animation: footer-scroll-marquee 40s linear infinite;
+  animation: footer-scroll-marquee 35s linear infinite;
 }
 
 .animate-footer-heartbeat {
@@ -68,20 +79,20 @@ const STYLES = `
 
 /* Theme-adaptive Grid Background */
 .footer-bg-grid {
-  background-size: 60px 60px;
+  background-size: 50px 50px;
   background-image: 
-    linear-gradient(to right, color-mix(in oklch, var(--foreground) 3%, transparent) 1px, transparent 1px),
-    linear-gradient(to bottom, color-mix(in oklch, var(--foreground) 3%, transparent) 1px, transparent 1px);
-  mask-image: linear-gradient(to bottom, transparent, black 30%, black 70%, transparent);
-  -webkit-mask-image: linear-gradient(to bottom, transparent, black 30%, black 70%, transparent);
+    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  mask-image: linear-gradient(to bottom, transparent, black 25%, black 75%, transparent);
+  -webkit-mask-image: linear-gradient(to bottom, transparent, black 25%, black 75%, transparent);
 }
 
 /* Theme-adaptive Aurora Glow (Internext Midnight Cyan & Indigo) */
 .footer-aurora {
   background: radial-gradient(
     circle at 50% 50%, 
-    rgba(6, 182, 212, 0.18) 0%, 
-    rgba(79, 70, 229, 0.15) 40%, 
+    rgba(6, 182, 212, 0.22) 0%, 
+    rgba(79, 70, 229, 0.18) 40%, 
     transparent 70%
   );
 }
@@ -96,7 +107,7 @@ const STYLES = `
   border: 1px solid var(--pill-border);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .footer-glass-pill:hover {
@@ -110,24 +121,24 @@ const STYLES = `
 
 /* Giant Background Text Masking */
 .footer-giant-bg-text {
-  font-size: 21vw;
-  line-height: 0.75;
+  font-size: clamp(4rem, 19vw, 18rem);
+  line-height: 0.8;
   font-weight: 900;
   letter-spacing: -0.05em;
   color: transparent;
-  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.08);
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.12) 0%, transparent 65%);
+  -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.08);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.12) 0%, transparent 70%);
   -webkit-background-clip: text;
   background-clip: text;
 }
 
 /* Metallic Text Glow */
 .footer-text-glow {
-  background: linear-gradient(180deg, #FFFFFF 0%, rgba(203, 213, 225, 0.6) 100%);
+  background: linear-gradient(180deg, #FFFFFF 0%, rgba(203, 213, 225, 0.7) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  filter: drop-shadow(0px 0px 24px rgba(6, 182, 212, 0.3));
+  filter: drop-shadow(0px 0px 30px rgba(6, 182, 212, 0.35));
 }
 `;
 
@@ -138,6 +149,8 @@ export type MagneticButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> 
   React.AnchorHTMLAttributes<HTMLAnchorElement> & {
     as?: React.ElementType;
     href?: string;
+    target?: string;
+    rel?: string;
   };
 
 export const MagneticButton = React.forwardRef<HTMLElement, MagneticButtonProps>(
@@ -158,13 +171,13 @@ export const MagneticButton = React.forwardRef<HTMLElement, MagneticButtonProps>
           const y = e.clientY - rect.top - w;
 
           gsap.to(element, {
-            x: x * 0.4,
-            y: y * 0.4,
-            rotationX: -y * 0.15,
-            rotationY: x * 0.15,
+            x: x * 0.35,
+            y: y * 0.35,
+            rotationX: -y * 0.12,
+            rotationY: x * 0.12,
             scale: 1.05,
             ease: "power2.out",
-            duration: 0.4,
+            duration: 0.35,
           });
         };
 
@@ -213,63 +226,64 @@ MagneticButton.displayName = "MagneticButton";
 // 3. MAIN COMPONENT
 // -------------------------------------------------------------------------
 const MarqueeItem = () => (
-  <div className="flex items-center space-x-12 px-6">
-    <span>Connected. Forward. Together.</span> <span className="text-[#06B6D4]">✦</span>
-    <span>Class XII RPL • Internext 2026</span> <span className="text-[#CCFF00]">✦</span>
-    <span>Digital Identity & Innovation</span> <span className="text-[#818CF8]">✦</span>
-    <span>36 Talented Student Creators</span> <span className="text-[#06B6D4]">✦</span>
-    <span>Crafted with Pride & Excellence</span> <span className="text-[#CCFF00]">✦</span>
+  <div className="flex items-center space-x-12 px-6 select-none">
+    <span>CONNECTED. FORWARD. TOGETHER.</span> <span className="text-[#06B6D4]">✦</span>
+    <span>CLASS XII RPL • INTERNEXT 2026</span> <span className="text-[#CCFF00]">✦</span>
+    <span>DIGITAL IDENTITY & INNOVATION</span> <span className="text-[#818CF8]">✦</span>
+    <span>36 TALENTED STUDENT CREATORS</span> <span className="text-[#06B6D4]">✦</span>
+    <span>CRAFTED WITH PRIDE & EXCELLENCE</span> <span className="text-[#CCFF00]">✦</span>
   </div>
 );
 
 export function CinematicFooter() {
-  const wrapperRef = useRef<HTMLDivElement>(null);
+  const footerRef = useRef<HTMLElement>(null);
   const giantTextRef = useRef<HTMLDivElement>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
   const linksRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-    if (!wrapperRef.current) return;
+    if (!footerRef.current) return;
 
     // React strict mode compatible GSAP context cleanup
     const ctx = gsap.context(() => {
-      // Background Parallax
-      gsap.fromTo(
-        giantTextRef.current,
-        { y: "10vh", scale: 0.85, opacity: 0 },
-        {
-          y: "0vh",
-          scale: 1,
-          opacity: 1,
-          ease: "power1.out",
-          scrollTrigger: {
-            trigger: wrapperRef.current,
-            start: "top 80%",
-            end: "bottom bottom",
-            scrub: 1,
-          },
-        }
-      );
+      // Parallax effect on giant watermark text
+      if (giantTextRef.current) {
+        gsap.fromTo(
+          giantTextRef.current,
+          { y: 80, scale: 0.9 },
+          {
+            y: -30,
+            scale: 1,
+            ease: "none",
+            scrollTrigger: {
+              trigger: footerRef.current,
+              start: "top bottom",
+              end: "bottom bottom",
+              scrub: 1.2,
+            },
+          }
+        );
+      }
 
-      // Staggered Content Reveal
+      // Elegant staggered entrance reveal that never stays stuck at opacity 0
       gsap.fromTo(
         [headingRef.current, linksRef.current],
-        { y: 50, opacity: 0 },
+        { y: 35, opacity: 0.8 },
         {
           y: 0,
           opacity: 1,
           stagger: 0.15,
-          ease: "power3.out",
+          duration: 0.8,
+          ease: "power2.out",
           scrollTrigger: {
-            trigger: wrapperRef.current,
-            start: "top 40%",
-            end: "bottom bottom",
-            scrub: 1,
+            trigger: footerRef.current,
+            start: "top 85%",
+            toggleActions: "play none none none",
           },
         }
       );
-    }, wrapperRef);
+    }, footerRef);
 
     return () => ctx.revert();
   }, []);
@@ -281,119 +295,162 @@ export function CinematicFooter() {
   return (
     <>
       <style dangerouslySetInnerHTML={{ __html: STYLES }} />
-      
-      {/* 
-        The "Curtain Reveal" Wrapper:
-        It sits in standard flow. Because it has clip-path, its contents
-        are ONLY visible within its bounding box. 
-      */}
-      <div
-        ref={wrapperRef}
-        className="relative h-screen w-full"
-        style={{ clipPath: "polygon(0% 0, 100% 0%, 100% 100%, 0 100%)" }}
+
+      <footer
+        ref={footerRef}
+        className="relative min-h-[92vh] w-full flex flex-col justify-between overflow-hidden bg-[#0A0F1E] text-white cinematic-footer-wrapper border-t border-white/[0.08] pt-12 pb-8 z-10"
       >
-        {/* The actual footer stays fixed to the viewport underneath everything */}
-        <footer className="fixed bottom-0 left-0 flex h-screen w-full flex-col justify-between overflow-hidden bg-[#0A0F1E] text-white cinematic-footer-wrapper">
-          
-          {/* Ambient Light & Grid Background */}
-          <div className="footer-aurora absolute left-1/2 top-1/2 h-[60vh] w-[80vw] -translate-x-1/2 -translate-y-1/2 animate-footer-breathe rounded-[50%] blur-[100px] pointer-events-none z-0" />
-          <div className="footer-bg-grid absolute inset-0 z-0 pointer-events-none" />
+        {/* Ambient Light & Grid Background */}
+        <div className="footer-aurora absolute left-1/2 top-1/2 h-[65vh] w-[85vw] -translate-x-1/2 -translate-y-1/2 animate-footer-breathe rounded-[50%] blur-[110px] pointer-events-none z-0" />
+        <div className="footer-bg-grid absolute inset-0 z-0 pointer-events-none" />
 
-          {/* Giant background text */}
-          <div
-            ref={giantTextRef}
-            className="footer-giant-bg-text absolute -bottom-[3vh] left-1/2 -translate-x-1/2 whitespace-nowrap z-0 pointer-events-none select-none tracking-tight"
+        {/* Giant Watermark Background Text (with smooth scroll parallax) */}
+        <div
+          ref={giantTextRef}
+          className="footer-giant-bg-text absolute -bottom-4 sm:-bottom-8 left-1/2 -translate-x-1/2 whitespace-nowrap z-0 pointer-events-none select-none tracking-tight text-center will-change-transform"
+        >
+          INTERNEXT
+        </div>
+
+        {/* 1. Diagonal Sleek Infinite Marquee Ticker */}
+        <div className="relative w-full overflow-hidden border-y border-white/[0.08] bg-[#0A0F1E]/80 backdrop-blur-md py-4 z-10 -rotate-1 scale-105 shadow-2xl mb-8">
+          <div className="flex w-max animate-footer-scroll-marquee text-xs md:text-sm font-bold tracking-[0.25em] text-[#94A3B8] uppercase">
+            <MarqueeItem />
+            <MarqueeItem />
+          </div>
+        </div>
+
+        {/* 2. Main Center Hero Content */}
+        <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-4 sm:px-6 my-8 w-full max-w-5xl mx-auto text-center">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/[0.05] border border-white/10 text-xs font-mono text-[#06B6D4] mb-6 backdrop-blur-md shadow-sm">
+            <Sparkles className="w-3.5 h-3.5 text-[#CCFF00]" />
+            <span>Official Digital Platform • Class XII RPL</span>
+          </div>
+
+          <h2
+            ref={headingRef}
+            className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black footer-text-glow tracking-tighter mb-8 leading-[1.05]"
           >
-            INTERNEXT
-          </div>
+            Siap Terhubung <br className="hidden sm:block" />
+            <span className="text-gradient">Bersama Kami?</span>
+          </h2>
 
-          {/* 1. Diagonal Sleek Marquee (Top of footer) */}
-          <div className="absolute top-12 left-0 w-full overflow-hidden border-y border-white/[0.08] bg-[#0A0F1E]/80 backdrop-blur-md py-4 z-10 -rotate-1 scale-105 shadow-2xl">
-            <div className="flex w-max animate-footer-scroll-marquee text-xs md:text-sm font-bold tracking-[0.25em] text-[#94A3B8] uppercase">
-              <MarqueeItem />
-              <MarqueeItem />
-            </div>
-          </div>
+          {/* Interactive Magnetic Pills Layout */}
+          <div ref={linksRef} className="flex flex-col items-center gap-5 w-full">
+            {/* Primary Action Magnetic Buttons */}
+            <div className="flex flex-wrap justify-center gap-3 sm:gap-4 w-full">
+              <MagneticButton
+                as={Link}
+                href="/contact"
+                className="footer-glass-pill px-7 sm:px-9 py-3.5 sm:py-4 rounded-full text-white font-bold text-sm sm:text-base flex items-center gap-3 group shadow-lg"
+              >
+                <MessageSquare className="w-5 h-5 text-[#06B6D4] group-hover:scale-110 transition-transform" />
+                <span>Buku Tamu Digital</span>
+              </MagneticButton>
 
-          {/* 2. Main Center Content */}
-          <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-6 mt-16 w-full max-w-5xl mx-auto">
-            <h2
-              ref={headingRef}
-              className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black footer-text-glow tracking-tighter mb-10 text-center"
-            >
-              Siap Terhubung Bersama Kami?
-            </h2>
+              <MagneticButton
+                as={Link}
+                href="/members"
+                className="footer-glass-pill px-7 sm:px-9 py-3.5 sm:py-4 rounded-full text-white font-bold text-sm sm:text-base flex items-center gap-3 group shadow-lg"
+              >
+                <Users className="w-5 h-5 text-[#CCFF00] group-hover:scale-110 transition-transform" />
+                <span>Direktori 36 Anggota</span>
+              </MagneticButton>
 
-            {/* Interactive Magnetic Pills Layout */}
-            <div ref={linksRef} className="flex flex-col items-center gap-6 w-full">
-              {/* Primary Interactive Shortcuts */}
-              <div className="flex flex-wrap justify-center gap-4 w-full">
-                <MagneticButton as={Link} href="/contact" className="footer-glass-pill px-8 py-4 rounded-full text-white font-bold text-sm md:text-base flex items-center gap-3 group">
-                  <MessageSquare className="w-5 h-5 text-[#06B6D4] group-hover:scale-110 transition-transform" />
-                  <span>Buku Tamu Digital</span>
-                </MagneticButton>
-                
-                <MagneticButton as={Link} href="/members" className="footer-glass-pill px-8 py-4 rounded-full text-white font-bold text-sm md:text-base flex items-center gap-3 group">
-                  <Users className="w-5 h-5 text-[#CCFF00] group-hover:scale-110 transition-transform" />
-                  <span>Direktori 36 Anggota</span>
-                </MagneticButton>
-
-                <MagneticButton as={Link} href="/projects" className="footer-glass-pill px-8 py-4 rounded-full text-white font-bold text-sm md:text-base flex items-center gap-3 group">
-                  <Sparkles className="w-5 h-5 text-[#818CF8] group-hover:scale-110 transition-transform" />
-                  <span>Galeri Karya 360°</span>
-                </MagneticButton>
-              </div>
-
-              {/* Secondary Navigation Links */}
-              <div className="flex flex-wrap justify-center gap-3 md:gap-5 w-full mt-2">
-                <MagneticButton as={Link} href="/about" className="footer-glass-pill px-5 py-2.5 rounded-full text-[#CBD5E1] font-medium text-xs md:text-sm hover:text-white flex items-center gap-2">
-                  <BookOpen className="w-3.5 h-3.5 text-[#06B6D4]" />
-                  <span>Tentang Kami</span>
-                </MagneticButton>
-                <MagneticButton as={Link} href="/events" className="footer-glass-pill px-5 py-2.5 rounded-full text-[#CBD5E1] font-medium text-xs md:text-sm hover:text-white flex items-center gap-2">
-                  <Calendar className="w-3.5 h-3.5 text-[#10B981]" />
-                  <span>Agenda Kegiatan</span>
-                </MagneticButton>
-                <MagneticButton as={Link} href="/news" className="footer-glass-pill px-5 py-2.5 rounded-full text-[#CBD5E1] font-medium text-xs md:text-sm hover:text-white">
-                  <span>Warta Berita</span>
-                </MagneticButton>
-                <MagneticButton as={Link} href="/admin" className="footer-glass-pill px-5 py-2.5 rounded-full text-[#CBD5E1] font-medium text-xs md:text-sm hover:text-white flex items-center gap-2">
-                  <ShieldCheck className="w-3.5 h-3.5 text-[#A5B4FC]" />
-                  <span>Portal Admin</span>
-                </MagneticButton>
-              </div>
-            </div>
-          </div>
-
-          {/* 3. Bottom Bar / Credits */}
-          <div className="relative z-20 w-full pb-8 px-6 md:px-12 flex flex-col md:flex-row items-center justify-between gap-6">
-            
-            {/* Copyright */}
-            <div className="text-[#64748B] text-[10px] md:text-xs font-semibold tracking-widest uppercase order-2 md:order-1 font-mono">
-              © 2026 INTERNEXT • CLASS XII RPL. ALL RIGHTS RESERVED.
+              <MagneticButton
+                as={Link}
+                href="/projects"
+                className="footer-glass-pill px-7 sm:px-9 py-3.5 sm:py-4 rounded-full text-white font-bold text-sm sm:text-base flex items-center gap-3 group shadow-lg"
+              >
+                <Sparkles className="w-5 h-5 text-[#818CF8] group-hover:scale-110 transition-transform" />
+                <span>Galeri Karya 360°</span>
+              </MagneticButton>
             </div>
 
-            {/* "Made with Love" Badge */}
-            <div className="footer-glass-pill px-6 py-3 rounded-full flex items-center gap-2 order-1 md:order-2 cursor-default border-white/10">
-              <span className="text-[#94A3B8] text-[10px] md:text-xs font-bold uppercase tracking-widest font-mono">Crafted with</span>
-              <Heart className="w-4 h-4 text-[#EF4444] animate-footer-heartbeat fill-current" />
-              <span className="text-[#94A3B8] text-[10px] md:text-xs font-bold uppercase tracking-widest font-mono">by</span>
-              <span className="text-white font-black text-xs md:text-sm tracking-normal ml-1 font-heading">Internext Crew</span>
+            {/* Secondary Navigation Magnetic Pills */}
+            <div className="flex flex-wrap justify-center gap-2 sm:gap-3 w-full mt-1">
+              <MagneticButton
+                as={Link}
+                href="/about"
+                className="footer-glass-pill px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-[#CBD5E1] font-medium text-xs sm:text-sm hover:text-white flex items-center gap-2"
+              >
+                <BookOpen className="w-3.5 h-3.5 text-[#06B6D4]" />
+                <span>Visi & Misi Kelas</span>
+              </MagneticButton>
+
+              <MagneticButton
+                as={Link}
+                href="/events"
+                className="footer-glass-pill px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-[#CBD5E1] font-medium text-xs sm:text-sm hover:text-white flex items-center gap-2"
+              >
+                <Calendar className="w-3.5 h-3.5 text-[#10B981]" />
+                <span>Agenda Kegiatan</span>
+              </MagneticButton>
+
+              <MagneticButton
+                as={Link}
+                href="/news"
+                className="footer-glass-pill px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-[#CBD5E1] font-medium text-xs sm:text-sm hover:text-white"
+              >
+                <span>Warta Berita</span>
+              </MagneticButton>
+
+              <MagneticButton
+                as="a"
+                href="https://instagram.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="footer-glass-pill px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-[#CBD5E1] font-medium text-xs sm:text-sm hover:text-white flex items-center gap-1.5"
+              >
+                <InstagramIcon className="w-3.5 h-3.5 text-[#EC4899]" />
+                <span>Instagram Resmi</span>
+                <ExternalLink className="w-3 h-3 text-[#64748B]" />
+              </MagneticButton>
+
+              <MagneticButton
+                as={Link}
+                href="/admin"
+                className="footer-glass-pill px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-[#CBD5E1] font-medium text-xs sm:text-sm hover:text-white flex items-center gap-2"
+              >
+                <ShieldCheck className="w-3.5 h-3.5 text-[#A5B4FC]" />
+                <span>Portal Admin</span>
+              </MagneticButton>
             </div>
-
-            {/* Back to top */}
-            <MagneticButton
-              as="button"
-              onClick={scrollToTop}
-              aria-label="Kembali ke atas"
-              className="w-12 h-12 rounded-full footer-glass-pill flex items-center justify-center text-[#94A3B8] hover:text-white group order-3"
-            >
-              <ArrowUp className="w-5 h-5 transform group-hover:-translate-y-1 transition-transform duration-300 text-[#06B6D4]" />
-            </MagneticButton>
-
           </div>
-        </footer>
-      </div>
+        </div>
+
+        {/* 3. Bottom Credits & Back To Top */}
+        <div className="relative z-20 w-full pt-8 px-6 md:px-12 flex flex-col md:flex-row items-center justify-between gap-5 border-t border-white/[0.06] mt-6">
+          {/* Copyright & School Info */}
+          <div className="text-[#64748B] text-[11px] sm:text-xs font-semibold tracking-wider uppercase order-2 md:order-1 font-mono text-center md:text-left">
+            © 2026 INTERNEXT • CLASS XII RPL. ALL RIGHTS RESERVED.
+          </div>
+
+          {/* "Crafted with Love" Badge */}
+          <div className="footer-glass-pill px-5 py-2 rounded-full flex items-center gap-2 order-1 md:order-2 cursor-default border-white/10 shadow-sm">
+            <span className="text-[#94A3B8] text-[11px] font-bold uppercase tracking-widest font-mono">
+              Crafted with
+            </span>
+            <Heart className="w-3.5 h-3.5 text-[#EF4444] animate-footer-heartbeat fill-current" />
+            <span className="text-[#94A3B8] text-[11px] font-bold uppercase tracking-widest font-mono">
+              by
+            </span>
+            <span className="text-white font-black text-xs tracking-normal font-heading">
+              Internext Crew
+            </span>
+          </div>
+
+          {/* Magnetic Back to Top Button */}
+          <MagneticButton
+            as="button"
+            onClick={scrollToTop}
+            aria-label="Kembali ke atas"
+            className="w-11 h-11 sm:w-12 sm:h-12 rounded-full footer-glass-pill flex items-center justify-center text-[#94A3B8] hover:text-white group order-3 shadow-md"
+          >
+            <ArrowUp className="w-5 h-5 transform group-hover:-translate-y-1 transition-transform duration-300 text-[#06B6D4]" />
+          </MagneticButton>
+        </div>
+      </footer>
     </>
   );
 }
