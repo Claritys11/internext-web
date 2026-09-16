@@ -48,7 +48,8 @@ export function Navbar() {
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 40);
+      // Smooth threshold with a small buffer
+      setIsScrolled(window.scrollY > 25);
     };
 
     handleScroll();
@@ -56,407 +57,368 @@ export function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Close mobile drawer on route change
+  useEffect(() => {
+    setMobileOpen(false);
+  }, [pathname]);
+
   return (
     <>
-      <header
-        className={cn(
-          "z-50 transition-all duration-300",
-          isScrolled
-            ? "fixed top-5 sm:top-6 inset-x-0 flex justify-center px-3 sm:px-4 pointer-events-none"
-            : "sticky top-0 w-full glass-nav"
-        )}
-      >
-        {isScrolled ? (
-          /* =========================================================================
-             1. SCROLLED STATE: Floating Rounded Pill with Anime NavBar & Mascot
-             ========================================================================= */
-          <motion.div
-            key="scrolled-nav"
-            initial={{ y: -20, opacity: 0, scale: 0.95 }}
-            animate={{ y: 0, opacity: 1, scale: 1 }}
-            transition={{ type: "spring", stiffness: 280, damping: 22 }}
-            className="pointer-events-auto flex items-center gap-1.5 sm:gap-2.5 bg-[#0A0F1E]/90 border border-white/10 backdrop-blur-xl py-1.5 px-2.5 sm:px-3.5 rounded-full shadow-2xl shadow-black/90 relative max-w-max"
+      {/* 
+        Always Fixed Header Container (z-50)
+        Never changes layout flow height, eliminating double-scrollbars and jumping.
+      */}
+      <header className="fixed top-0 inset-x-0 z-50 pointer-events-none flex justify-center px-3 sm:px-6 pt-4 sm:pt-5 transition-all duration-300">
+        <motion.div
+          layout
+          transition={{
+            type: "spring",
+            stiffness: 260,
+            damping: 24,
+          }}
+          className={cn(
+            "pointer-events-auto flex items-center justify-between transition-all duration-300 relative",
+            isScrolled
+              ? "w-auto max-w-fit mx-auto bg-[#0A0F1E]/92 border border-white/15 backdrop-blur-2xl py-1.5 px-3 sm:px-4 rounded-full shadow-2xl shadow-black/85 gap-2 sm:gap-3"
+              : "w-full max-w-7xl mx-auto bg-[#0A0F1E]/80 border border-white/10 backdrop-blur-xl py-2.5 sm:py-3 px-4 sm:px-6 rounded-2xl sm:rounded-full shadow-lg shadow-black/40 gap-4"
+          )}
+        >
+          {/* ========================================================= */}
+          {/* Brand Logo                                                */}
+          {/* ========================================================= */}
+          <Link
+            href="/"
+            className="flex items-center gap-2.5 shrink-0 group focus:outline-none focus-visible:ring-2 focus-visible:ring-[#06B6D4] rounded-lg"
           >
-            {/* Compact Brand Logo Pill */}
-            <Link
-              href="/"
-              className="flex items-center gap-2 pl-1 pr-2 py-1 rounded-full hover:bg-white/[0.06] transition-colors group"
+            <div
+              className={cn(
+                "rounded-xl bg-gradient-to-br from-[#4F46E5] to-[#06B6D4] p-0.5 shadow-md shadow-[#4F46E5]/25 group-hover:shadow-[#06B6D4]/35 transition-all duration-300",
+                isScrolled ? "w-8 h-8" : "w-9 h-9 sm:w-10 sm:h-10"
+              )}
             >
-              <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-[#4F46E5] to-[#06B6D4] p-0.5 shadow-md shadow-[#06B6D4]/20 group-hover:scale-105 transition-transform">
-                <div className="w-full h-full bg-[#0A0F1E] rounded-[6px] flex items-center justify-center">
-                  <Terminal className="w-3.5 h-3.5 text-[#06B6D4]" />
-                </div>
+              <div className="w-full h-full bg-[#0A0F1E] rounded-[10px] flex items-center justify-center">
+                <Terminal
+                  className={cn(
+                    "text-[#06B6D4] group-hover:text-white transition-colors duration-200",
+                    isScrolled ? "w-4 h-4" : "w-4 h-4 sm:w-5 sm:h-5"
+                  )}
+                />
               </div>
-              <span className="font-heading font-black text-xs tracking-tight text-white hidden lg:inline">
+            </div>
+
+            <div className="flex flex-col">
+              <span
+                className={cn(
+                  "font-heading font-extrabold tracking-tight text-white group-hover:text-[#06B6D4] transition-colors",
+                  isScrolled
+                    ? "text-xs sm:text-sm hidden sm:inline"
+                    : "text-sm sm:text-lg"
+                )}
+              >
                 INTERNEXT
               </span>
-            </Link>
-
-            <div className="w-[1px] h-4 bg-white/10 hidden sm:block" />
-
-            {/* Anime Navigation Links with Mascot */}
-            <nav className="flex items-center gap-0.5 sm:gap-1">
-              {navItems.map((item) => {
-                const Icon = item.icon;
-                const isActive = pathname === item.url;
-                const isHovered = hoveredTab === item.name;
-
-                return (
-                  <Link
-                    key={item.name}
-                    href={item.url}
-                    onMouseEnter={() => setHoveredTab(item.name)}
-                    onMouseLeave={() => setHoveredTab(null)}
-                    className={cn(
-                      "relative cursor-pointer text-xs font-semibold px-2.5 sm:px-3 py-1.5 rounded-full transition-all duration-300",
-                      "text-[#94A3B8] hover:text-white",
-                      isActive && "text-white"
-                    )}
-                  >
-                    {/* Glowing Anime Active Aura */}
-                    {isActive && (
-                      <motion.div
-                        className="absolute inset-0 rounded-full -z-10 overflow-hidden"
-                        initial={{ opacity: 0 }}
-                        animate={{
-                          opacity: [0.3, 0.6, 0.3],
-                          scale: [1, 1.03, 1],
-                        }}
-                        transition={{
-                          duration: 2.2,
-                          repeat: Infinity,
-                          ease: "easeInOut",
-                        }}
-                      >
-                        <div className="absolute inset-0 bg-[#06B6D4]/30 rounded-full blur-sm" />
-                        <div className="absolute inset-[-4px] bg-[#4F46E5]/20 rounded-full blur-md" />
-                        <div
-                          className="absolute inset-0 bg-gradient-to-r from-[#06B6D4]/0 via-[#06B6D4]/30 to-[#06B6D4]/0"
-                          style={{
-                            animation: "shine 3s ease-in-out infinite",
-                          }}
-                        />
-                      </motion.div>
-                    )}
-
-                    {/* Text on larger screens, Icon on smaller screens */}
-                    <span className="hidden xl:inline relative z-10 font-medium">
-                      {item.name}
-                    </span>
-                    <span className="xl:hidden relative z-10 flex items-center justify-center p-0.5">
-                      <Icon size={16} strokeWidth={2.2} />
-                    </span>
-
-                    {/* Hover Glow */}
-                    <AnimatePresence>
-                      {isHovered && !isActive && (
-                        <motion.div
-                          initial={{ opacity: 0, scale: 0.8 }}
-                          animate={{ opacity: 1, scale: 1 }}
-                          exit={{ opacity: 0, scale: 0.8 }}
-                          className="absolute inset-0 bg-white/10 rounded-full -z-10"
-                        />
-                      )}
-                    </AnimatePresence>
-
-                    {/* Animated Anime Mascot on Active Tab */}
-                    {isActive && (
-                      <motion.div
-                        layoutId="anime-mascot-scrolled"
-                        className="absolute -top-11 left-1/2 -translate-x-1/2 pointer-events-none"
-                        initial={false}
-                        transition={{
-                          type: "spring",
-                          stiffness: 300,
-                          damping: 30,
-                        }}
-                      >
-                        <div className="relative w-10 h-10">
-                          <motion.div
-                            className="absolute w-8 h-8 bg-white rounded-full left-1/2 -translate-x-1/2 shadow-lg"
-                            animate={
-                              hoveredTab
-                                ? {
-                                    scale: [1, 1.12, 1],
-                                    rotate: [0, -6, 6, 0],
-                                    transition: {
-                                      duration: 0.45,
-                                      ease: "easeInOut",
-                                    },
-                                  }
-                                : {
-                                    y: [0, -3, 0],
-                                    transition: {
-                                      duration: 2,
-                                      repeat: Infinity,
-                                      ease: "easeInOut",
-                                    },
-                                  }
-                            }
-                          >
-                            {/* Eyes */}
-                            <motion.div
-                              className="absolute w-1.5 h-1.5 bg-black rounded-full"
-                              animate={
-                                hoveredTab
-                                  ? {
-                                      scaleY: [1, 0.2, 1],
-                                      transition: {
-                                        duration: 0.2,
-                                        times: [0, 0.5, 1],
-                                      },
-                                    }
-                                  : {}
-                              }
-                              style={{ left: "24%", top: "38%" }}
-                            />
-                            <motion.div
-                              className="absolute w-1.5 h-1.5 bg-black rounded-full"
-                              animate={
-                                hoveredTab
-                                  ? {
-                                      scaleY: [1, 0.2, 1],
-                                      transition: {
-                                        duration: 0.2,
-                                        times: [0, 0.5, 1],
-                                      },
-                                    }
-                                  : {}
-                              }
-                              style={{ right: "24%", top: "38%" }}
-                            />
-
-                            {/* Cheeks */}
-                            <motion.div
-                              className="absolute w-2 h-1.5 bg-pink-400/80 rounded-full"
-                              animate={{
-                                opacity: hoveredTab ? 0.9 : 0.6,
-                              }}
-                              style={{ left: "14%", top: "52%" }}
-                            />
-                            <motion.div
-                              className="absolute w-2 h-1.5 bg-pink-400/80 rounded-full"
-                              animate={{
-                                opacity: hoveredTab ? 0.9 : 0.6,
-                              }}
-                              style={{ right: "14%", top: "52%" }}
-                            />
-
-                            {/* Mouth */}
-                            <motion.div
-                              className="absolute w-3 h-1.5 border-b-2 border-black rounded-full"
-                              animate={
-                                hoveredTab
-                                  ? {
-                                      scaleY: 1.5,
-                                      y: -1,
-                                    }
-                                  : {
-                                      scaleY: 1,
-                                      y: 0,
-                                    }
-                              }
-                              style={{ left: "31%", top: "56%" }}
-                            />
-
-                            {/* Sparkles on Hover */}
-                            <AnimatePresence>
-                              {hoveredTab && (
-                                <>
-                                  <motion.div
-                                    initial={{ opacity: 0, scale: 0 }}
-                                    animate={{ opacity: 1, scale: 1 }}
-                                    exit={{ opacity: 0, scale: 0 }}
-                                    className="absolute -top-1 -right-1 w-2 h-2 text-yellow-300 select-none text-[10px]"
-                                  >
-                                    ✨
-                                  </motion.div>
-                                  <motion.div
-                                    initial={{ opacity: 0, scale: 0 }}
-                                    animate={{ opacity: 1, scale: 1 }}
-                                    exit={{ opacity: 0, scale: 0 }}
-                                    transition={{ delay: 0.1 }}
-                                    className="absolute -top-2 left-0 w-2 h-2 text-yellow-300 select-none text-[10px]"
-                                  >
-                                    ✨
-                                  </motion.div>
-                                </>
-                              )}
-                            </AnimatePresence>
-                          </motion.div>
-
-                          {/* Pointer triangle */}
-                          <motion.div
-                            className="absolute -bottom-1 left-1/2 w-3 h-3 -translate-x-1/2"
-                            animate={
-                              hoveredTab
-                                ? {
-                                    y: [0, -3, 0],
-                                    transition: {
-                                      duration: 0.3,
-                                      repeat: Infinity,
-                                      repeatType: "reverse",
-                                    },
-                                  }
-                                : {
-                                    y: [0, 2, 0],
-                                    transition: {
-                                      duration: 1,
-                                      repeat: Infinity,
-                                      ease: "easeInOut",
-                                      delay: 0.5,
-                                    },
-                                  }
-                            }
-                          >
-                            <div className="w-full h-full bg-white rotate-45 transform origin-center" />
-                          </motion.div>
-                        </div>
-                      </motion.div>
-                    )}
-                  </Link>
-                );
-              })}
-            </nav>
-
-            <div className="w-[1px] h-4 bg-white/10 hidden sm:block" />
-
-            {/* Quick Action in Pill */}
-            <div className="flex items-center gap-1.5 pl-1">
-              <Link
-                href="/projects"
-                className="btn-gradient px-3 py-1.5 rounded-full text-[11px] font-semibold flex items-center gap-1 shadow-sm"
-              >
-                <span>Karya</span>
-                <ChevronRight className="w-3 h-3" />
-              </Link>
-            </div>
-          </motion.div>
-        ) : (
-          /* =========================================================================
-             2. TOP STATE: Full-Width Fixed Header
-             ========================================================================= */
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-            {/* Brand Logo */}
-            <Link
-              href="/"
-              className="flex items-center gap-3 group focus:outline-none focus-visible:ring-2 focus-visible:ring-[#06B6D4] rounded-lg"
-            >
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#4F46E5] to-[#06B6D4] p-0.5 shadow-lg shadow-[#4F46E5]/20 group-hover:shadow-[#06B6D4]/30 transition-all duration-300">
-                <div className="w-full h-full bg-[#0A0F1E] rounded-[10px] flex items-center justify-center">
-                  <Terminal className="w-5 h-5 text-[#06B6D4] group-hover:text-white transition-colors duration-200" />
-                </div>
-              </div>
-              <div className="flex flex-col">
-                <span className="font-heading font-extrabold text-xl tracking-tight text-white group-hover:text-[#06B6D4] transition-colors">
-                  INTERNEXT
-                </span>
-                <span className="text-[10px] font-mono uppercase tracking-widest text-[#64748B] -mt-1">
+              {!isScrolled && (
+                <span className="text-[9px] sm:text-[10px] font-mono uppercase tracking-widest text-[#64748B] -mt-1 hidden sm:inline">
                   Class HQ
                 </span>
-              </div>
-            </Link>
+              )}
+            </div>
+          </Link>
 
-            {/* Desktop Navigation Links */}
-            <nav className="hidden md:flex items-center gap-1 bg-white/[0.03] border border-white/[0.06] rounded-full px-3.5 py-1.5 backdrop-blur-md">
-              {siteConfig.navLinks.map((link) => {
-                const isActive = pathname === link.href;
-                return (
-                  <Link
-                    key={link.href}
-                    href={link.href}
+          {/* Divider in compact mode */}
+          {isScrolled && <div className="w-[1px] h-4 bg-white/10 hidden md:block" />}
+
+          {/* ========================================================= */}
+          {/* Navigation Links with Anime Mascot & Glow Aura            */}
+          {/* ========================================================= */}
+          <nav
+            className={cn(
+              "hidden md:flex items-center",
+              isScrolled
+                ? "gap-0.5 sm:gap-1"
+                : "gap-1 bg-white/[0.03] border border-white/[0.06] rounded-full px-2 py-1 backdrop-blur-md"
+            )}
+          >
+            {navItems.map((item) => {
+              const Icon = item.icon;
+              const isActive = pathname === item.url;
+              const isHovered = hoveredTab === item.name;
+
+              return (
+                <Link
+                  key={item.name}
+                  href={item.url}
+                  onMouseEnter={() => setHoveredTab(item.name)}
+                  onMouseLeave={() => setHoveredTab(null)}
+                  className={cn(
+                    "relative cursor-pointer text-xs font-semibold rounded-full transition-all duration-300",
+                    isScrolled
+                      ? "px-2.5 sm:px-3 py-1.5"
+                      : "px-3 sm:px-3.5 py-1.5",
+                    "text-[#94A3B8] hover:text-white",
+                    isActive && "text-white"
+                  )}
+                >
+                  {/* Glowing Anime Active Aura */}
+                  {isActive && (
+                    <motion.div
+                      className="absolute inset-0 rounded-full -z-10 overflow-hidden"
+                      initial={{ opacity: 0 }}
+                      animate={{
+                        opacity: [0.3, 0.6, 0.3],
+                        scale: [1, 1.03, 1],
+                      }}
+                      transition={{
+                        duration: 2.2,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                      }}
+                    >
+                      <div className="absolute inset-0 bg-[#06B6D4]/30 rounded-full blur-sm" />
+                      <div className="absolute inset-[-4px] bg-[#4F46E5]/20 rounded-full blur-md" />
+                      <div
+                        className="absolute inset-0 bg-gradient-to-r from-[#06B6D4]/0 via-[#06B6D4]/30 to-[#06B6D4]/0"
+                        style={{
+                          animation: "shine 3s ease-in-out infinite",
+                        }}
+                      />
+                    </motion.div>
+                  )}
+
+                  {/* Text on larger screens, Icon on smaller screens */}
+                  <span
                     className={cn(
-                      "px-3.5 py-1.5 rounded-full text-sm font-medium transition-all duration-200",
-                      isActive
-                        ? "bg-[#4F46E5] text-white shadow-sm shadow-[#4F46E5]/40"
-                        : "text-[#94A3B8] hover:text-white hover:bg-white/[0.05]"
+                      "relative z-10 font-medium",
+                      isScrolled ? "hidden xl:inline" : "hidden lg:inline"
                     )}
                   >
-                    {link.label}
-                  </Link>
-                );
-              })}
-            </nav>
+                    {item.name}
+                  </span>
+                  <span
+                    className={cn(
+                      "relative z-10 flex items-center justify-center p-0.5",
+                      isScrolled ? "xl:hidden" : "lg:hidden"
+                    )}
+                  >
+                    <Icon size={16} strokeWidth={2.2} />
+                  </span>
 
-            {/* Desktop Actions */}
-            <div className="hidden md:flex items-center gap-3">
+                  {/* Hover Glow Pill */}
+                  <AnimatePresence>
+                    {isHovered && !isActive && (
+                      <motion.div
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.8 }}
+                        className="absolute inset-0 bg-white/10 rounded-full -z-10"
+                      />
+                    )}
+                  </AnimatePresence>
+
+                  {/* Animated Anime Mascot on Active Tab (Safely anchored with headroom) */}
+                  {isActive && (
+                    <motion.div
+                      layoutId="anime-mascot-pill"
+                      className="absolute -top-8 left-1/2 -translate-x-1/2 pointer-events-none"
+                      initial={false}
+                      transition={{
+                        type: "spring",
+                        stiffness: 300,
+                        damping: 30,
+                      }}
+                    >
+                      <div className="relative w-9 h-9">
+                        <motion.div
+                          className="absolute w-7 h-7 bg-white rounded-full left-1/2 -translate-x-1/2 shadow-lg"
+                          animate={
+                            hoveredTab
+                              ? {
+                                  scale: [1, 1.12, 1],
+                                  rotate: [0, -6, 6, 0],
+                                  transition: {
+                                    duration: 0.45,
+                                    ease: "easeInOut",
+                                  },
+                                }
+                              : {
+                                  y: [0, -2.5, 0],
+                                  transition: {
+                                    duration: 2,
+                                    repeat: Infinity,
+                                    ease: "easeInOut",
+                                  },
+                                }
+                          }
+                        >
+                          {/* Eyes */}
+                          <motion.div
+                            className="absolute w-1 h-1 bg-black rounded-full"
+                            style={{ left: "24%", top: "38%" }}
+                          />
+                          <motion.div
+                            className="absolute w-1 h-1 bg-black rounded-full"
+                            style={{ right: "24%", top: "38%" }}
+                          />
+
+                          {/* Cheeks */}
+                          <motion.div
+                            className="absolute w-1.5 h-1 bg-pink-400/80 rounded-full"
+                            style={{ left: "14%", top: "52%" }}
+                          />
+                          <motion.div
+                            className="absolute w-1.5 h-1 bg-pink-400/80 rounded-full"
+                            style={{ right: "14%", top: "52%" }}
+                          />
+
+                          {/* Mouth */}
+                          <motion.div
+                            className="absolute w-2.5 h-1 border-b-2 border-black rounded-full"
+                            style={{ left: "31%", top: "56%" }}
+                          />
+
+                          {/* Sparkles on Hover */}
+                          <AnimatePresence>
+                            {hoveredTab && (
+                              <motion.div
+                                initial={{ opacity: 0, scale: 0 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                exit={{ opacity: 0, scale: 0 }}
+                                className="absolute -top-1 -right-1 text-yellow-300 select-none text-[8px]"
+                              >
+                                ✨
+                              </motion.div>
+                            )}
+                          </AnimatePresence>
+                        </motion.div>
+
+                        {/* Pointer triangle */}
+                        <motion.div className="absolute -bottom-1 left-1/2 w-2.5 h-2.5 -translate-x-1/2">
+                          <div className="w-full h-full bg-white rotate-45 transform origin-center" />
+                        </motion.div>
+                      </div>
+                    </motion.div>
+                  )}
+                </Link>
+              );
+            })}
+          </nav>
+
+          {/* ========================================================= */}
+          {/* Right Actions (Wide vs Compact)                           */}
+          {/* ========================================================= */}
+          <div className="flex items-center gap-2">
+            {!isScrolled && (
               <Link
                 href="/admin"
-                className="text-xs font-mono px-3.5 py-2 rounded-lg text-[#94A3B8] hover:text-white border border-white/[0.08] hover:border-white/[0.2] transition-colors flex items-center gap-1.5"
+                className="hidden lg:flex text-xs font-mono px-3 py-1.5 rounded-full text-[#94A3B8] hover:text-white border border-white/[0.08] hover:border-white/[0.2] transition-colors items-center gap-1.5"
               >
                 <ShieldCheck className="w-3.5 h-3.5 text-[#A5B4FC]" />
                 <span>Portal Admin</span>
               </Link>
-              <Link
-                href="/projects"
-                className="btn-gradient px-4 py-2 rounded-lg text-xs font-semibold flex items-center gap-1.5"
-              >
-                <span>Eksplorasi Karya</span>
-                <ChevronRight className="w-3.5 h-3.5" />
-              </Link>
-            </div>
+            )}
 
-            {/* Mobile Menu Toggle Button */}
-            <div className="flex md:hidden items-center gap-2">
-              <button
-                onClick={() => setMobileOpen(!mobileOpen)}
-                aria-label="Toggle navigation menu"
-                className="p-2 rounded-lg bg-white/[0.05] border border-white/[0.1] text-[#F8FAFC] hover:bg-white/[0.1] focus:outline-none focus:ring-2 focus:ring-[#06B6D4]"
-              >
-                {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-              </button>
-            </div>
+            <Link
+              href="/projects"
+              className={cn(
+                "btn-gradient rounded-full font-semibold flex items-center gap-1 shadow-sm transition-all",
+                isScrolled
+                  ? "px-3 py-1.5 text-[11px]"
+                  : "px-3.5 sm:px-4 py-1.5 sm:py-2 text-xs"
+              )}
+            >
+              <span>Karya</span>
+              <ChevronRight className="w-3 h-3" />
+            </Link>
+
+            {/* Mobile Hamburger Button */}
+            <button
+              onClick={() => setMobileOpen(!mobileOpen)}
+              aria-label="Toggle navigation menu"
+              className="md:hidden p-1.5 rounded-lg bg-white/[0.05] border border-white/[0.1] text-[#F8FAFC] hover:bg-white/[0.1] focus:outline-none focus:ring-2 focus:ring-[#06B6D4]"
+            >
+              {mobileOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
+            </button>
           </div>
-        )}
+        </motion.div>
       </header>
 
-      {/* Mobile Drawer Menu (Accessible from either state when clicked) */}
+      {/* ========================================================= */}
+      {/* Mobile Drawer Menu                                        */}
+      {/* ========================================================= */}
       <AnimatePresence>
         {mobileOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.2 }}
-            className="fixed top-20 inset-x-0 z-40 md:hidden border-b border-white/[0.08] bg-[#0A0F1E]/95 backdrop-blur-xl px-4 pt-3 pb-6 space-y-2 shadow-2xl"
-          >
-            <nav className="flex flex-col space-y-1">
-              {siteConfig.navLinks.map((link) => {
-                const isActive = pathname === link.href;
-                return (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    onClick={() => setMobileOpen(false)}
-                    className={cn(
-                      "px-4 py-2.5 rounded-lg text-sm font-medium transition-colors",
-                      isActive
-                        ? "bg-[#4F46E5] text-white font-semibold"
-                        : "text-[#94A3B8] hover:text-white hover:bg-white/[0.05]"
-                    )}
-                  >
-                    {link.label}
-                  </Link>
-                );
-              })}
-            </nav>
-            <div className="pt-4 border-t border-white/[0.08] flex flex-col gap-2">
-              <Link
-                href="/admin"
-                onClick={() => setMobileOpen(false)}
-                className="w-full text-center py-2.5 rounded-lg border border-white/[0.1] text-xs font-mono text-[#94A3B8] hover:text-white"
-              >
-                Portal Admin
-              </Link>
-              <Link
-                href="/projects"
-                onClick={() => setMobileOpen(false)}
-                className="btn-gradient w-full text-center py-2.5 rounded-lg text-xs font-semibold"
-              >
-                Eksplorasi Karya
-              </Link>
-            </div>
-          </motion.div>
+          <>
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setMobileOpen(false)}
+              className="fixed inset-0 bg-black/70 backdrop-blur-sm z-40 md:hidden"
+            />
+
+            {/* Drawer */}
+            <motion.div
+              initial={{ opacity: 0, y: -20, scale: 0.96 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -20, scale: 0.96 }}
+              transition={{ duration: 0.25, ease: "easeOut" }}
+              className="fixed top-20 inset-x-4 z-50 md:hidden rounded-2xl border border-white/[0.1] bg-[#0A0F1E]/95 backdrop-blur-2xl p-4 shadow-2xl space-y-3 max-w-sm mx-auto"
+            >
+              <div className="flex items-center justify-between pb-2 border-b border-white/[0.08]">
+                <div className="flex items-center gap-2">
+                  <Terminal className="w-4 h-4 text-[#06B6D4]" />
+                  <span className="font-heading font-bold text-sm text-white">Menu Navigasi</span>
+                </div>
+                <button
+                  onClick={() => setMobileOpen(false)}
+                  className="p-1 rounded-lg text-[#94A3B8] hover:text-white"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+
+              <nav className="grid grid-cols-2 gap-1.5">
+                {navItems.map((item) => {
+                  const Icon = item.icon;
+                  const isActive = pathname === item.url;
+                  return (
+                    <Link
+                      key={item.name}
+                      href={item.url}
+                      onClick={() => setMobileOpen(false)}
+                      className={cn(
+                        "flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-medium transition-colors",
+                        isActive
+                          ? "bg-[#4F46E5] text-white font-semibold shadow-sm"
+                          : "text-[#94A3B8] hover:text-white hover:bg-white/[0.05]"
+                      )}
+                    >
+                      <Icon className="w-3.5 h-3.5 text-[#06B6D4]" />
+                      <span>{item.name}</span>
+                    </Link>
+                  );
+                })}
+              </nav>
+
+              <div className="pt-2 border-t border-white/[0.08] flex flex-col gap-2">
+                <Link
+                  href="/admin"
+                  onClick={() => setMobileOpen(false)}
+                  className="w-full text-center py-2 rounded-xl border border-white/[0.1] text-xs font-mono text-[#94A3B8] hover:text-white bg-white/[0.02]"
+                >
+                  Portal Admin
+                </Link>
+                <Link
+                  href="/projects"
+                  onClick={() => setMobileOpen(false)}
+                  className="btn-gradient w-full text-center py-2 rounded-xl text-xs font-semibold"
+                >
+                  Eksplorasi Karya
+                </Link>
+              </div>
+            </motion.div>
+          </>
         )}
       </AnimatePresence>
     </>
