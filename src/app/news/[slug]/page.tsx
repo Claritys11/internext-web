@@ -5,7 +5,21 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { getArticleBySlug, getArticles } from "@/lib/api/services";
 import { formatDate } from "@/lib/utils";
+import { pageMetadata } from "@/lib/seo";
+import type { Metadata } from "next";
 import { ArrowLeft, Clock, Calendar, Tag, Share2 } from "lucide-react";
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
+  const article = await getArticleBySlug(slug);
+  if (!article) return { robots: { index: false, follow: false } };
+  const metadata = pageMetadata(article.title, article.summary, `/news/${article.slug}`);
+  return {
+    ...metadata,
+    openGraph: { ...metadata.openGraph, type: "article", publishedTime: article.date, authors: [article.author.name], images: article.coverImage ? [{ url: article.coverImage, alt: article.title }] : undefined },
+    twitter: { ...metadata.twitter, images: article.coverImage ? [article.coverImage] : undefined },
+  };
+}
 
 export async function generateStaticParams() {
   const articles = await getArticles();

@@ -22,11 +22,20 @@ import {
   CheckCircle2,
 } from "lucide-react";
 import { GithubIcon, LinkedinIcon, InstagramIcon } from "@/components/ui/Icons";
+import { pageMetadata } from "@/lib/seo";
+import type { Metadata } from "next";
 
 interface MemberProfilePageProps {
   params: Promise<{
     id: string;
   }>;
+}
+
+export async function generateMetadata({ params }: MemberProfilePageProps): Promise<Metadata> {
+  const { id } = await params;
+  const member = await getMemberById(id);
+  if (!member) return { robots: { index: false, follow: false } };
+  return pageMetadata(`${member.name} — ${member.role}`, member.bio || `${member.name} adalah anggota kelas XI Internasional SMK Telkom Malang.`, `/members/${member.id}`);
 }
 
 export const dynamic = "force-dynamic";
