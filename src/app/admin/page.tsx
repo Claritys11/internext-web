@@ -28,6 +28,7 @@ import {
   X,
   Sliders,
   Sparkles,
+  LogOut,
 } from "lucide-react";
 import {
   ClassProfile,
@@ -40,6 +41,7 @@ import {
   ChatChannel,
 } from "@/lib/types";
 import { ImageUploadInput } from "@/components/ui/ImageUploadInput";
+import { AuthPage } from "@/components/ui/auth-page";
 
 type AdminTab =
   | "overview"
@@ -161,9 +163,37 @@ export default function AdminDashboardPage() {
     }
   };
 
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+
+  const checkAuthAndLoad = async () => {
+    try {
+      const res = await fetch("/api/auth/me");
+      const data = await res.json();
+      if (data.authenticated) {
+        setIsAuthenticated(true);
+        loadAllData();
+      } else {
+        setIsAuthenticated(false);
+        setLoading(false);
+      }
+    } catch {
+      setIsAuthenticated(false);
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    loadAllData();
+    checkAuthAndLoad();
   }, []);
+
+  const handleLogout = async () => {
+    try {
+      await fetch("/api/auth/logout", { method: "POST" });
+    } finally {
+      setIsAuthenticated(false);
+      showToast("Berhasil keluar dari Portal Admin.");
+    }
+  };
 
   // 1. PROFILE HANDLER
   const handleSaveProfile = async (e: React.FormEvent) => {
@@ -553,6 +583,27 @@ export default function AdminDashboardPage() {
     return messages.filter((m) => m.channelId === selectedChatChannel);
   }, [messages, selectedChatChannel]);
 
+  if (isAuthenticated === null) {
+    return (
+      <div className="min-h-screen bg-[#02040A] flex flex-col items-center justify-center text-white">
+        <RefreshCw className="w-8 h-8 text-[#F59E0B] animate-spin mb-4" />
+        <p className="font-mono text-sm text-[#94A3B8]">Memeriksa autentikasi Portal Admin...</p>
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return (
+      <AuthPage
+        onSuccess={() => {
+          setIsAuthenticated(true);
+          setLoading(true);
+          loadAllData();
+        }}
+      />
+    );
+  }
+
   if (loading) {
     return (
       <div className="min-h-screen bg-[#02040A] flex flex-col items-center justify-center text-white">
@@ -744,6 +795,14 @@ export default function AdminDashboardPage() {
             <ArrowLeft className="w-3.5 h-3.5" />
             <span>Kembali ke Beranda</span>
           </Link>
+
+          <button
+            onClick={handleLogout}
+            className="w-full flex items-center gap-2 text-xs font-semibold text-red-400 hover:text-red-300 hover:bg-red-500/10 px-3.5 py-2 rounded-xl border border-red-500/20 transition-colors"
+          >
+            <LogOut className="w-3.5 h-3.5" />
+            <span>Keluar Sesi Admin</span>
+          </button>
         </div>
       </aside>
 
@@ -787,6 +846,14 @@ export default function AdminDashboardPage() {
               <span>Buka Live Chat</span>
               <ExternalLink className="w-3 h-3" />
             </Link>
+            <button
+              onClick={handleLogout}
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-red-500/15 border border-red-500/30 hover:bg-red-500/25 text-xs font-semibold text-red-300 transition-colors"
+              title="Keluar dari Portal Admin"
+            >
+              <LogOut className="w-3.5 h-3.5" />
+              <span>Keluar</span>
+            </button>
           </div>
         </div>
 
