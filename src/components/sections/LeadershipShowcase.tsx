@@ -47,18 +47,18 @@ export function LeadershipShowcase({ members }: LeadershipShowcaseProps) {
     members.find((m) => m.role.toLowerCase().includes("sekretaris 2")) ||
     members.find((m) => m.name.toLowerCase().includes("fatih"));
 
-  // Ordered layout requested:
-  // Row 1 (atas): [Col 1: Wakil Ketua] [Col 2: Bendahara 1] [Col 3: Ketua (Pojok Kanan Atas)]
+  // Ordered layout:
+  // Row 1 (atas): [Col 1: Ketua (Pojok Kiri Atas)] [Col 2: Bendahara 1] [Col 3: Wakil Ketua (Pojok Kanan Atas)]
   // Row 2 (bawah): [Col 1: Sekretaris 1 (Pojok Kiri Bawah)] [Col 2: Bendahara 2] [Col 3: Sekretaris 2]
   const orderedLeaders = [
     {
-      member: wakilKetua,
+      member: ketua,
       desktopClass: "lg:col-start-1 lg:row-start-1",
       style: {
-        rotate: "rotate-[-6deg] hover:rotate-0",
-        offset: "sm:-translate-y-4 sm:-translate-x-1",
-        badgeColor: "from-[#EA580C] to-[#F59E0B]",
-        glowHalo: "bg-[#EA580C]/30",
+        rotate: "rotate-[-4deg] hover:rotate-0",
+        offset: "sm:-translate-y-3 sm:translate-x-1",
+        badgeColor: "from-[#F59E0B] to-[#EA580C]",
+        glowHalo: "bg-[#F59E0B]/40",
       },
     },
     {
@@ -72,13 +72,13 @@ export function LeadershipShowcase({ members }: LeadershipShowcaseProps) {
       },
     },
     {
-      member: ketua,
+      member: wakilKetua,
       desktopClass: "lg:col-start-3 lg:row-start-1",
       style: {
-        rotate: "rotate-[-4deg] hover:rotate-0",
-        offset: "sm:-translate-y-3 sm:translate-x-2",
-        badgeColor: "from-[#F59E0B] to-[#EA580C]",
-        glowHalo: "bg-[#F59E0B]/40",
+        rotate: "rotate-[6deg] hover:rotate-0",
+        offset: "sm:-translate-y-4 sm:translate-x-2",
+        badgeColor: "from-[#EA580C] to-[#F59E0B]",
+        glowHalo: "bg-[#EA580C]/30",
       },
     },
     {
