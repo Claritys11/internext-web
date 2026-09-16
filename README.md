@@ -119,19 +119,23 @@ Platform mengadopsi tema estetika kosmik berdaya pikat tinggi dengan kontras taj
 
 ---
 
-### B. Deployment ke Coolify via Docker Compose
+### B. Deployment ke Coolify
 
-Proyek ini telah dikonfigurasi siap pakai untuk dideploy pada platform **Coolify** menggunakan resource terpisah atau Docker Compose gabungan:
+Proyek ini telah dikonfigurasi siap pakai untuk dideploy pada platform **Coolify** dengan arsitektur decoupled:
 
-1. Buat resource baru di Coolify bertipe **Docker Compose**.
-2. Masukkan file `docker-compose.yml` yang tersedia di root proyek:
-    - Service `web`: Menjalankan Next.js standalone container pada port `3500` (`http://localhost:3500`).
-    - Service `postgres`: Menyediakan instance database PostgreSQL dengan volume data persisten.
-3. Atur environment variables di dashboard Coolify:
-    - `PORT`: `3500`
-    - `DATABASE_URL`: URL koneksi PostgreSQL ke container `postgres`.
-   - `NODE_ENV`: `production`.
-4. Klik **Deploy** — Coolify akan otomatis melakukan *build* multi-stage dan menjalankan platform.
+1. **Database PostgreSQL**:
+   - Buat resource Database **PostgreSQL** di Coolify.
+   - Dapatkan connection string internalnya (misal: `postgresql://postgres:<password>@<coolify-db-host>:5432/internext?schema=public`).
+2. **Aplikasi Web**:
+   - Deploy repository ini menggunakan Docker Compose atau Dockerfile.
+   - Masukkan Environment Variables di Coolify:
+     ```env
+     PORT=3500
+     DATABASE_URL=postgresql://postgres:<password>@<coolify-db-host>:5432/internext?schema=public
+     NODE_ENV=production
+     ```
+   - Service `web` akan berjalan mandiri pada port `3500` tanpa konflik port `5432` di host server.
+3. Klik **Deploy** — Coolify akan otomatis melakukan *build* multi-stage dan menyalakan platform.
 
 ---
 
