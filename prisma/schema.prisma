@@ -1,0 +1,147 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model ClassProfile {
+  id              String   @id @default("default")
+  name            String   @default("XI Internasional")
+  generation      String   @default("Angkatan 2026")
+  school          String   @default("SMK Telkom Malang")
+  tagline         String   @default("Connected. Forward. Together.")
+  description     String   @default("Pusat identitas, dokumentasi, komunikasi, showcase, dan portofolio kelas XI Internasional SMK Telkom Malang yang dibangun dengan standar produk digital modern.")
+  homeroomTeacher String   @default("Drs. Hendra Kusuma, M.Kom")
+  classPresident  String   @default("Fakhri Ramadhan")
+  vicePresident   String   @default("Alya Putri Nuraini")
+  memberCount     Int      @default(25)
+  projectCount    Int      @default(24)
+  achievementCount Int     @default(15)
+  eventCount      Int      @default(18)
+  labLocation     String   @default("Gedung TI & IoT Lab, SMK Telkom Malang, Jl. Danau Ranau, Sawojajar")
+  email           String   @default("contact@internext.web.id")
+  instagram       String   @default("https://instagram.com/internext.class")
+  github          String   @default("https://github.com/internext-class")
+  youtube         String   @default("https://youtube.com/@internext")
+  tiktok          String   @default("https://tiktok.com/@internext.class")
+  updatedAt       DateTime @updatedAt
+}
+
+model Member {
+  id           String   @id @default(cuid())
+  name         String
+  nickname     String
+  role         String
+  department   String?
+  quote        String
+  bio          String
+  avatar       String
+  skills       String[]
+  portfolioUrl String?
+  githubUrl    String?
+  instagramUrl String?
+  linkedinUrl  String?
+  isManagement Boolean  @default(false)
+  isAlumni     Boolean  @default(false)
+  orderIndex   Int      @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Project {
+  id          String   @id @default(cuid())
+  title       String
+  slug        String   @unique
+  tagline     String
+  description String
+  category    String
+  thumbnail   String
+  screenshots String[]
+  demoUrl     String?
+  githubUrl   String?
+  techStack   String[]
+  team        String[]
+  featured    Boolean  @default(false)
+  likes       Int      @default(0)
+  year        Int      @default(2026)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Article {
+  id           String   @id @default(cuid())
+  title        String
+  slug         String   @unique
+  summary      String
+  content      String
+  category     String
+  authorName   String
+  authorAvatar String
+  authorRole   String
+  date         String
+  coverImage   String
+  isPinned     Boolean  @default(false)
+  readTime     String   @default("4 menit baca")
+  tags         String[]
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Event {
+  id              String   @id @default(cuid())
+  title           String
+  description     String
+  date            String
+  endDate         String?
+  location        String
+  committee       String
+  category        String
+  status          String   @default("upcoming")
+  countdownTarget String?
+  coverImage      String
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model Gallery {
+  id           String   @id @default(cuid())
+  title        String
+  type         String   @default("photo")
+  url          String
+  thumbnail    String
+  album        String
+  date         String
+  photographer String
+  caption      String
+  likes        Int      @default(0)
+  createdAt    DateTime @default(now())
+}
+
+model ChatChannel {
+  id         String        @id
+  name       String
+  title      String
+  topic      String
+  badge      String?
+  orderIndex Int           @default(0)
+  createdAt  DateTime      @default(now())
+  messages   ChatMessage[]
+}
+
+model ChatMessage {
+  id             String      @id @default(cuid())
+  channelId      String
+  channel        ChatChannel @relation(fields: [channelId], references: [id], onDelete: Cascade)
+  name           String
+  role           String
+  message        String
+  timestamp      String
+  isBot          Boolean     @default(false)
+  replyToName    String?
+  replyToMessage String?
+  reactions      Json        @default("[]")
+  createdAt      DateTime    @default(now())
+}

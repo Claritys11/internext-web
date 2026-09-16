@@ -99,3 +99,56 @@ export interface GuestbookEntry {
   createdAt: string;
   approved: boolean;
 }
+
+export interface ClassProfile {
+  name: string;
+  generation: string;
+  school: string;
+  tagline: string;
+  description: string;
+  homeroomTeacher: string;
+  classPresident: string;
+  vicePresident: string;
+  memberCount: number;
+  projectCount: number;
+  achievementCount: number;
+  eventCount: number;
+  labLocation: string;
+  email: string;
+  instagram: string;
+  github: string;
+  youtube: string;
+  tiktok: string;
+}
+
+export interface ChatReaction {
+  emoji: string;
+  count: number;
+  userReacted?: boolean;
+}
+
+export interface ChatMessage {
+  id: string;
+  channelId: string;
+  name: string;
+  role: "Siswa" | "Alumni" | "Guru" | "Umum" | "Admin";
+  message: string;
+  timestamp: string;
+  isSelf?: boolean;
+  isBot?: boolean;
+  replyTo?: {
+    name: string;
+    message: string;
+  };
+  reactions: ChatReaction[];
+  createdAt: string;
+}
+
+export interface ChatChannel {
+  id: string;
+  name: string;
+  title: string;
+  topic: string;
+  badge?: string;
+}
+

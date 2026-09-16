@@ -64,7 +64,7 @@ export function Footer() {
               </li>
               <li>
                 <Link href="/members" className="hover:text-[#06B6D4] transition-colors">
-                  Direktori 36 Anggota
+                  Direktori {siteConfig.classInfo.memberCount} Anggota
                 </Link>
               </li>
               <li>

@@ -228,9 +228,9 @@ MagneticButton.displayName = "MagneticButton";
 const MarqueeItem = () => (
   <div className="flex items-center space-x-12 px-6 select-none">
     <span>CONNECTED. FORWARD. TOGETHER.</span> <span className="text-[#06B6D4]">✦</span>
-    <span>CLASS XII RPL • INTERNEXT 2026</span> <span className="text-[#CCFF00]">✦</span>
+    <span>SMK TELKOM MALANG • XI INTERNASIONAL</span> <span className="text-[#CCFF00]">✦</span>
     <span>DIGITAL IDENTITY & INNOVATION</span> <span className="text-[#818CF8]">✦</span>
-    <span>36 TALENTED STUDENT CREATORS</span> <span className="text-[#06B6D4]">✦</span>
+    <span>25 TALENTED STUDENT CREATORS</span> <span className="text-[#06B6D4]">✦</span>
     <span>CRAFTED WITH PRIDE & EXCELLENCE</span> <span className="text-[#CCFF00]">✦</span>
   </div>
 );
@@ -365,7 +365,7 @@ export function CinematicFooter() {
                   className="footer-glass-pill px-6 sm:px-9 py-3 sm:py-4 rounded-full text-white font-bold text-sm sm:text-base flex items-center gap-2.5 sm:gap-3 group shadow-lg"
                 >
                   <Users className="w-4 sm:w-5 h-4 sm:h-5 text-[#CCFF00] group-hover:scale-110 transition-transform" />
-                  <span>Direktori 36 Anggota</span>
+                  <span>Direktori 25 Anggota</span>
                 </MagneticButton>
 
                 <MagneticButton

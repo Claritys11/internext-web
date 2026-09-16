@@ -1,11 +1,12 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import Image from "next/image";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { DomeGallery } from "@/components/ui/DomeGallery";
 import { mockGallery } from "@/lib/data/mock";
+import { GalleryItem } from "@/lib/types";
 import {
   Camera,
   Video,
@@ -18,9 +19,21 @@ import {
 } from "lucide-react";
 
 export default function GalleryPage() {
+  const [galleryList, setGalleryList] = useState<GalleryItem[]>(mockGallery);
   const [activeTab, setActiveTab] = useState<"all" | "photo" | "video">("all");
   const [likes, setLikes] = useState<Record<string, number>>({});
   const [grayscale, setGrayscale] = useState<boolean>(false);
+
+  useEffect(() => {
+    fetch("/api/gallery")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (Array.isArray(data) && data.length > 0) {
+          setGalleryList(data);
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   const handleLike = (id: string) => {
     setLikes((prev) => ({
@@ -29,7 +42,7 @@ export default function GalleryPage() {
     }));
   };
 
-  const filteredItems = mockGallery.filter((item) => {
+  const filteredItems = galleryList.filter((item) => {
     if (activeTab === "all") return true;
     return item.type === activeTab;
   });
@@ -120,7 +133,7 @@ export default function GalleryPage() {
               Kubah Galeri 3D <span className="text-gradient-cyan">Internext</span>
             </h1>
             <p className="text-base sm:text-lg text-[#94A3B8] leading-relaxed max-w-2xl mx-auto">
-              Eksplorasi rekaman visual perjalanan, prestasi, dan kenangan tak terlupakan siswa XII RPL dalam kubah 360° interaktif. Geser untuk memutar sudut pandang dan klik foto mana saja untuk memperbesar memori.
+              Eksplorasi rekaman visual perjalanan, prestasi, dan kenangan tak terlupakan siswa XI Internasional SMK Telkom Malang dalam kubah 360° interaktif. Geser untuk memutar sudut pandang dan klik foto mana saja untuk memperbesar memori.
             </p>
           </div>
 

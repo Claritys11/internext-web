@@ -1,8 +1,18 @@
 import Link from "next/link";
 import { siteConfig } from "@/config/site";
+import { ClassProfile } from "@/lib/types";
 import { ArrowRight, Sparkles, Quote, Terminal } from "lucide-react";
 
-export function HeroSection() {
+interface HeroSectionProps {
+  profile?: ClassProfile;
+}
+
+export function HeroSection({ profile }: HeroSectionProps) {
+  const school = profile?.school || siteConfig.classInfo.school;
+  const className = profile?.name || siteConfig.classInfo.name;
+  const description = profile?.description || siteConfig.description;
+  const memberCount = profile?.memberCount || siteConfig.classInfo.memberCount;
+
   return (
     <section className="relative overflow-hidden bg-grid-pattern pt-16 pb-24 lg:pt-24 lg:pb-32">
       {/* Dynamic ambient gradients */}
@@ -15,9 +25,9 @@ export function HeroSection() {
           {/* Badge Pill */}
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.1] text-xs font-mono text-[#E2E8F0] backdrop-blur-md mb-8 hover:border-[#06B6D4]/40 transition-colors">
             <Terminal className="w-3.5 h-3.5 text-[#06B6D4]" />
-            <span>{siteConfig.classInfo.school}</span>
+            <span>{school}</span>
             <span className="text-white/30">•</span>
-            <span className="text-[#06B6D4] font-semibold">{siteConfig.classInfo.name}</span>
+            <span className="text-[#06B6D4] font-semibold">{className}</span>
           </div>
 
           {/* Hero Title */}
@@ -28,7 +38,7 @@ export function HeroSection() {
 
           {/* Subtitle */}
           <p className="text-base sm:text-lg lg:text-xl text-[#94A3B8] max-w-2xl mx-auto leading-relaxed font-normal">
-            {siteConfig.description}
+            {description}
           </p>
         </div>
 
@@ -38,7 +48,7 @@ export function HeroSection() {
             href="/members"
             className="btn-gradient px-7 py-3.5 rounded-xl text-sm font-semibold flex items-center gap-2 shadow-lg hover:scale-105 transition-transform"
           >
-            <span>Jelajahi 36 Anggota</span>
+            <span>Jelajahi {memberCount} Anggota</span>
             <ArrowRight className="w-4 h-4" />
           </Link>
           <Link

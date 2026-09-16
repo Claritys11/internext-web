@@ -5,17 +5,17 @@ export const siteConfig = {
   description:
     "Pusat identitas, dokumentasi, komunikasi, showcase, dan portofolio kelas yang dibangun dengan standar produk digital modern.",
   classInfo: {
-    name: "XII - Rekayasa Perangkat Lunak",
+    name: "XI Internasional",
     generation: "Angkatan 2026",
-    school: "SMK / SMA Digital Academy",
+    school: "SMK Telkom Malang",
     homeroomTeacher: "Drs. Hendra Kusuma, M.Kom",
     classPresident: "Fakhri Ramadhan",
     vicePresident: "Alya Putri Nuraini",
-    memberCount: 36,
+    memberCount: 25,
     projectCount: 24,
     achievementCount: 15,
     eventCount: 18,
-    // Target graduation date for countdown
+    labLocation: "Gedung TI & IoT Lab, SMK Telkom Malang, Jl. Danau Ranau, Sawojajar, Kota Malang",
     graduationDate: "2026-06-15T09:00:00+07:00",
   },
   navLinks: [

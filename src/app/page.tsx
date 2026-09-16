@@ -8,15 +8,16 @@ import { LeadershipShowcase } from "@/components/sections/LeadershipShowcase";
 import { InfiniteNewsCarousel } from "@/components/sections/InfiniteNewsCarousel";
 import { EventCard } from "@/components/features/EventCard";
 import { ScrollMotionPath } from "@/components/shared/ScrollMotionPath";
-import { getProjects, getArticles, getEvents, getMembers } from "@/lib/api/services";
+import { getProjects, getArticles, getEvents, getMembers, getClassProfile } from "@/lib/api/services";
 import { ArrowRight, Calendar, Sparkles } from "lucide-react";
 
 export default async function HomePage() {
-  const [allProjects, articles, events, members] = await Promise.all([
+  const [allProjects, articles, events, members, profile] = await Promise.all([
     getProjects(),
     getArticles(),
     getEvents(),
     getMembers("management"),
+    getClassProfile(),
   ]);
 
   return (
@@ -28,10 +29,10 @@ export default async function HomePage() {
 
       <main className="flex-1 relative z-10">
         {/* 1. Hero Section (Clean, without countdown) */}
-        <HeroSection />
+        <HeroSection profile={profile} />
 
         {/* 2. Key Metrics Stats Bar */}
-        <StatsBar />
+        <StatsBar profile={profile} />
 
         {/* 3. Interactive Adapted 360° Circular Showcase with Left & Right 3-Card Featured Highlights */}
         <CircularGalleryShowcase projects={allProjects} maxItems={12} />

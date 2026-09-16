@@ -1,17 +1,30 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { ProjectCard } from "@/components/features/ProjectCard";
 import { Masonry, MasonryItem } from "@/components/ui/Masonry";
 import { mockProjects } from "@/lib/data/mock";
+import { Project } from "@/lib/types";
 import { Code2, Search, Sparkles, LayoutGrid } from "lucide-react";
 
 export default function ProjectsPage() {
+  const [projectsList, setProjectsList] = useState<Project[]>(mockProjects);
   const [search, setSearch] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [viewMode, setViewMode] = useState<"masonry" | "grid">("masonry");
+
+  useEffect(() => {
+    fetch("/api/projects")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (Array.isArray(data) && data.length > 0) {
+          setProjectsList(data);
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   const categories = [
     { label: "Semua Kategori", value: "all" },
@@ -22,7 +35,7 @@ export default function ProjectsPage() {
   ];
 
   const filteredProjects = useMemo(() => {
-    return mockProjects.filter((project) => {
+    return projectsList.filter((project) => {
       const matchesCategory =
         selectedCategory === "all" || project.category === selectedCategory;
 
@@ -34,7 +47,7 @@ export default function ProjectsPage() {
 
       return matchesCategory && matchesSearch;
     });
-  }, [search, selectedCategory]);
+  }, [projectsList, search, selectedCategory]);
 
   // Dynamic varied heights for organic staggered masonry layout
   const masonryItems = useMemo<MasonryItem[]>(() => {

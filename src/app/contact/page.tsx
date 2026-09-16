@@ -1,10 +1,9 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { siteConfig } from "@/config/site";
-import { mockGuestbook } from "@/lib/data/mock";
 import {
   MessageSquare,
   Send,
@@ -26,8 +25,8 @@ import {
   Rocket,
   Lightbulb,
   ThumbsUp,
-  ShieldAlert,
-  ChevronRight,
+  RefreshCw,
+  Award,
 } from "lucide-react";
 
 type Role = "Siswa" | "Alumni" | "Guru" | "Umum" | "Admin";
@@ -52,6 +51,7 @@ interface ChatMessage {
     message: string;
   };
   reactions: Reaction[];
+  createdAt?: string;
 }
 
 interface Channel {
@@ -65,135 +65,36 @@ interface Channel {
 
 const CHANNELS: Channel[] = [
   {
-    id: "buku-tamu",
-    name: "buku-tamu-digital",
-    title: "Buku Tamu Publik",
-    topic: "Buku tamu resmi angkatan XII RPL 1. Tinggalkan ucapan, kesan, motivasi & salam hangat.",
+    id: "apresiasi-publik",
+    name: "apresiasi-publik",
+    title: "Kanal Apresiasi & Buku Tamu",
+    topic: "Ruang khusus apresiasi, pesan motivasi & jejak buku tamu resmi siswa XI Internasional SMK Telkom Malang.",
+    icon: Award,
+    badge: "Apresiasi",
+  },
+  {
+    id: "ngobrol-santai",
+    name: "ngobrol-santai",
+    title: "Obrolan Santai & Komunitas",
+    topic: "Ruang diskusi bebas siswa, alumni, dan teman-teman tanpa bot. Tempat bertukar sapa dan obrolan seru!",
     icon: Hash,
-    badge: "Utama",
+    badge: "Komunitas",
   },
   {
     id: "tanya-pengurus",
     name: "tanya-pengurus",
     title: "Tanya & Kontak Pengurus",
-    topic: "Saluran komunikasi langsung dengan ketua kelas, wali kelas, dan jajaran pengurus Internext.",
+    topic: "Saluran komunikasi dan koordinasi langsung dengan ketua kelas, wali kelas, dan tim pengurus XI Internasional.",
     icon: MessageSquare,
+    badge: "Resmi",
   },
   {
-    id: "kolaborasi",
+    id: "kolaborasi-proyek",
     name: "kolaborasi-proyek",
     title: "Kolaborasi & Ide Tech",
-    topic: "Diskusi proyek perangkat lunak, hackathon, peluang kerja sama, atau sharing teknologi.",
+    topic: "Eksplorasi proyek perangkat lunak, hackathon, dan inovasi teknologi bersama siswa SMK Telkom Malang.",
     icon: Sparkles,
-  },
-];
-
-const INITIAL_MESSAGES: ChatMessage[] = [
-  // Channel 1: Buku Tamu
-  {
-    id: "bot-welcome-1",
-    channelId: "buku-tamu",
-    name: "Internext Assistant",
-    role: "Admin",
-    message:
-      "Selamat datang di Live Digital Chatroom & Buku Tamu Internext! 👋 Silakan sapa kelas kami, bagikan ucapan kelulusan, atau kirimkan doa terbaik bagi 36 siswa XII RPL 1.",
-    timestamp: "Hari ini, 08:00",
-    isBot: true,
-    reactions: [
-      { emoji: "🚀", count: 14, userReacted: false },
-      { emoji: "❤️", count: 18, userReacted: false },
-    ],
-  },
-  {
-    id: "gb-1",
-    channelId: "buku-tamu",
-    name: "Drs. Hendra Kusuma, M.Kom",
-    role: "Guru",
-    message:
-      "Bangga melihat dedikasi dan kerja sama anak-anak XII RPL. Teruslah berkarya dan jadilah software engineer yang berintegritas tinggi serta bermanfaat untuk sesama!",
-    timestamp: "10 Feb 2026, 10:00",
-    reactions: [
-      { emoji: "❤️", count: 24, userReacted: false },
-      { emoji: "👏", count: 16, userReacted: false },
-    ],
-  },
-  {
-    id: "gb-2",
-    channelId: "buku-tamu",
-    name: "Kevin Pratama, S.Kom (Alumni 2023)",
-    role: "Alumni",
-    message:
-      "Website kelasnya luar biasa keren! UI dark mode-nya rapi banget serasa tech startup silicon valley. Pertahankan semangat kolaborasinya adik-adik penerus RPL!",
-    timestamp: "14 Feb 2026, 14:30",
-    reactions: [
-      { emoji: "🔥", count: 19, userReacted: false },
-      { emoji: "🚀", count: 11, userReacted: false },
-    ],
-  },
-  {
-    id: "gb-3",
-    channelId: "buku-tamu",
-    name: "Farhan Maulana",
-    role: "Siswa",
-    message:
-      "Semoga seluruh perjuangan kita sampai hari kelulusan nanti berbuah manis. Buat kawan-kawan Internext, mari selesaikan portofolio terbaik kita!",
-    timestamp: "20 Feb 2026, 19:15",
-    reactions: [
-      { emoji: "✨", count: 15, userReacted: false },
-      { emoji: "🔥", count: 8, userReacted: false },
-    ],
-  },
-
-  // Channel 2: Tanya Pengurus
-  {
-    id: "bot-welcome-2",
-    channelId: "tanya-pengurus",
-    name: "Internext Assistant",
-    role: "Admin",
-    message:
-      "Halo! Kanal ini didedikasikan untuk pertanyaan resmi seputar administrasi kelas, kontak wali kelas, kunjungan lab, dan jadwal agenda publik.",
-    timestamp: "Hari ini, 08:00",
-    isBot: true,
-    reactions: [{ emoji: "💡", count: 7, userReacted: false }],
-  },
-  {
-    id: "q-1",
-    channelId: "tanya-pengurus",
-    name: "Fakhri Ramadhan (Ketua Kelas)",
-    role: "Admin",
-    message:
-      "Bagi bapak/ibu guru atau rekan sekolah yang membutuhkan jadwal presentasi proyek akhir atau ingin berkunjung ke Lab RPL 3, jangan ragu untuk kontak langsung di sini atau email ke claritydev.id@gmail.com ya!",
-    timestamp: "Hari ini, 08:45",
-    reactions: [
-      { emoji: "👍", count: 12, userReacted: false },
-      { emoji: "📨", count: 5, userReacted: false },
-    ],
-  },
-
-  // Channel 3: Kolaborasi
-  {
-    id: "bot-welcome-3",
-    channelId: "kolaborasi",
-    name: "Internext Assistant",
-    role: "Admin",
-    message:
-      "Ruang terbuka untuk eksplorasi teknologi bersama! Ajukan ide riset, open-source project, atau kolaborasi antarjurusan dan instansi luar di sini.",
-    timestamp: "Hari ini, 08:00",
-    isBot: true,
-    reactions: [{ emoji: "⚡", count: 9, userReacted: false }],
-  },
-  {
-    id: "c-1",
-    channelId: "kolaborasi",
-    name: "Bima Satria (Divisi IT & Riset)",
-    role: "Admin",
-    message:
-      "Kami sedang mengembangkan fitur eksplorasi 3D Dome Gallery dan Masonry portfolio. Jika ada rekan yang tertarik membangun sistem API backend bersama, drop pesan di sini!",
-    timestamp: "Kemarin, 16:20",
-    reactions: [
-      { emoji: "🚀", count: 11, userReacted: false },
-      { emoji: "🔥", count: 14, userReacted: false },
-    ],
+    badge: "Tech",
   },
 ];
 
@@ -228,8 +129,9 @@ const ROLE_STYLES: Record<Role, { badge: string; text: string; bg: string }> = {
 };
 
 export default function ContactChatPage() {
-  const [activeChannelId, setActiveChannelId] = useState<string>("buku-tamu");
-  const [messages, setMessages] = useState<ChatMessage[]>(INITIAL_MESSAGES);
+  const [activeChannelId, setActiveChannelId] = useState<string>("apresiasi-publik");
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
   const [userName, setUserName] = useState<string>("Tamu Pengunjung");
   const [userRole, setUserRole] = useState<Role>("Umum");
   const [inputMessage, setInputMessage] = useState<string>("");
@@ -244,7 +146,26 @@ export default function ContactChatPage() {
   const inputRef = useRef<HTMLInputElement>(null);
   const isInitialMount = useRef(true);
 
-  // Auto scroll ONLY within the chat messages container, NEVER scrolling the window
+  // Fetch messages from database API
+  const fetchMessages = useCallback(async (channelId: string) => {
+    try {
+      const res = await fetch(`/api/chat?channelId=${channelId}`);
+      if (res.ok) {
+        const data = await res.json();
+        setMessages(data.messages || []);
+      }
+    } catch {
+      // Fallback handled in services
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchMessages(activeChannelId);
+  }, [activeChannelId, fetchMessages]);
+
+  // Scoped Auto Scroll: only within the chat messages container, never the window
   const scrollToBottom = (behavior: ScrollBehavior = "smooth") => {
     if (messagesContainerRef.current) {
       messagesContainerRef.current.scrollTo({
@@ -257,7 +178,6 @@ export default function ContactChatPage() {
   useEffect(() => {
     if (isInitialMount.current) {
       isInitialMount.current = false;
-      // Guarantee window stays firmly at the top of the page on load
       if (typeof window !== "undefined") {
         window.scrollTo({ top: 0, left: 0, behavior: "instant" });
       }
@@ -284,21 +204,19 @@ export default function ContactChatPage() {
     );
   });
 
-  const handleSendMessage = (e?: React.FormEvent) => {
+  const handleSendMessage = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
     const trimmed = inputMessage.trim();
     if (!trimmed) return;
 
     const senderName = userName.trim() || "Pengunjung Anonim";
 
-    const newMessage: ChatMessage = {
-      id: `msg-${Date.now()}`,
+    const payload = {
       channelId: activeChannelId,
       name: senderName,
       role: userRole,
       message: trimmed,
       timestamp: "Baru saja",
-      isSelf: true,
       replyTo: replyingTo
         ? {
             name: replyingTo.name,
@@ -308,12 +226,41 @@ export default function ContactChatPage() {
       reactions: [],
     };
 
-    setMessages((prev) => [...prev, newMessage]);
+    // Optimistic append
+    const tempId = `msg-${Date.now()}`;
+    const optimisticMessage: ChatMessage = {
+      ...payload,
+      id: tempId,
+      isSelf: true,
+      createdAt: new Date().toISOString(),
+    };
+
+    setMessages((prev) => [...prev, optimisticMessage]);
     setInputMessage("");
     setReplyingTo(null);
 
-    // Simulate friendly automatic response from Internext Bot or Class President
-    triggerSimulatedBotReply(senderName, trimmed, activeChannelId);
+    // Save to Database via API
+    try {
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      if (res.ok) {
+        const savedMsg = await res.json();
+        // Replace temp id with real db id
+        setMessages((prev) =>
+          prev.map((m) => (m.id === tempId ? { ...savedMsg, isSelf: true } : m))
+        );
+      }
+    } catch {
+      // Handled gracefully
+    }
+
+    // Bot response logic: ONLY in #apresiasi-publik (not in #ngobrol-santai)
+    if (activeChannelId === "apresiasi-publik") {
+      triggerSimulatedBotReply(senderName, trimmed, activeChannelId);
+    }
   };
 
   const triggerSimulatedBotReply = (
@@ -321,80 +268,85 @@ export default function ContactChatPage() {
     userText: string,
     channelId: string
   ) => {
-    const sender =
-      channelId === "tanya-pengurus"
-        ? "Fakhri Ramadhan (Ketua Kelas)"
-        : "Internext Assistant";
-
+    const sender = "Internext Assistant";
     setIsTyping(true);
     setTypingSender(sender);
 
-    setTimeout(() => {
-      let botResponse = "";
+    setTimeout(async () => {
+      const greetings = [
+        `Halo ${name}! Terima kasih banyak atas apresiasi dan doa terbaiknya untuk seluruh siswa XI Internasional SMK Telkom Malang. Semoga sukses selalu menyertaimu! 🚀✨`,
+        `Salam hangat ${name}! Pesan apresiasimu telah abadi tersimpan di buku tamu digital XI Internasional Moklet. Salam sukses selalu dari kami semua! 🎓🎉`,
+      ];
+      const botResponse = greetings[Math.floor(Math.random() * greetings.length)];
 
-      if (channelId === "buku-tamu") {
-        const greetings = [
-          `Halo ${name}! Terima kasih banyak atas ucapan hangat dan motivasinya untuk kelas Internext. Semoga kebaikan selalu menyertaimu! 🚀✨`,
-          `Wah, terima kasih ${name} sudah singgah di buku tamu kami! Doa dan dukunganmu menjadi pendorong semangat 36 anak XII RPL 1. 🙌💙`,
-          `Salam hangat, ${name}! Pesanmu kini abadi di arsip digital Internext. Salam sukses selalu dari kami semua! 🎓🎉`,
-        ];
-        botResponse = greetings[Math.floor(Math.random() * greetings.length)];
-      } else if (channelId === "tanya-pengurus") {
-        botResponse = `Terima kasih atas pertanyaannya, ${name}. Pesanmu telah masuk ke notifikasi pengurus kelas. Untuk keperluan mendesak, silakan hubungi juga email resmi kami di ${siteConfig.socials.email}. 📩`;
-      } else {
-        botResponse = `Halo ${name}! Ide kolaborasimu sangat menarik untuk didiskusikan di Lab RPL 3. Kami akan meneruskan catatan ini ke Divisi IT & Riset! 💻⚡`;
-      }
-
-      const botMessage: ChatMessage = {
-        id: `bot-reply-${Date.now()}`,
-        channelId: channelId,
+      const botPayload = {
+        channelId,
         name: sender,
-        role: "Admin",
+        role: "Admin" as Role,
         message: botResponse,
         timestamp: "Baru saja",
         isBot: true,
         reactions: [{ emoji: "❤️", count: 1, userReacted: false }],
       };
 
-      setMessages((prev) => [...prev, botMessage]);
+      try {
+        const res = await fetch("/api/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(botPayload),
+        });
+        if (res.ok) {
+          const savedBot = await res.json();
+          setMessages((prev) => [...prev, savedBot]);
+        }
+      } catch {
+        // Fallback
+      }
+
       setIsTyping(false);
       setTypingSender("");
     }, 1200);
   };
 
-  const handleToggleReaction = (msgId: string, emoji: string) => {
+  const handleToggleReaction = async (msgId: string, emoji: string) => {
+    // Optimistic UI update
     setMessages((prev) =>
       prev.map((msg) => {
         if (msg.id !== msgId) return msg;
-
-        const existingReaction = msg.reactions.find((r) => r.emoji === emoji);
-        if (existingReaction) {
+        const existing = msg.reactions.find((r) => r.emoji === emoji);
+        if (existing) {
+          const nextReacted = !existing.userReacted;
           const updatedReactions = msg.reactions
-            .map((r) => {
-              if (r.emoji === emoji) {
-                const nextUserReacted = !r.userReacted;
-                return {
-                  ...r,
-                  count: nextUserReacted ? r.count + 1 : Math.max(0, r.count - 1),
-                  userReacted: nextUserReacted,
-                };
-              }
-              return r;
-            })
+            .map((r) =>
+              r.emoji === emoji
+                ? {
+                    ...r,
+                    count: nextReacted ? r.count + 1 : Math.max(0, r.count - 1),
+                    userReacted: nextReacted,
+                  }
+                : r
+            )
             .filter((r) => r.count > 0);
-
           return { ...msg, reactions: updatedReactions };
         } else {
           return {
             ...msg,
-            reactions: [
-              ...msg.reactions,
-              { emoji, count: 1, userReacted: true },
-            ],
+            reactions: [...msg.reactions, { emoji, count: 1, userReacted: true }],
           };
         }
       })
     );
+
+    // Save reaction to database
+    try {
+      await fetch("/api/chat/react", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ messageId: msgId, emoji }),
+      });
+    } catch {
+      // Ignored
+    }
   };
 
   const handleCopyEmail = () => {
@@ -419,13 +371,13 @@ export default function ContactChatPage() {
           <div>
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#4F46E5]/15 border border-[#4F46E5]/30 text-xs font-mono text-[#A5B4FC] mb-3">
               <span className="w-2 h-2 rounded-full bg-[#10B981] animate-ping" />
-              <span>Live Class Messenger & Buku Tamu</span>
+              <span>Database Integrated • PostgreSQL Ready</span>
             </div>
             <h1 className="font-heading text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
               Kontak & <span className="text-gradient-cyan">Buku Tamu Interaktif</span>
             </h1>
             <p className="text-sm text-[#94A3B8] mt-1">
-              Ruang obrolan langsung dan buku tamu digital kelas XII RPL 1. Tinggalkan jejak atau hubungi pengurus secara real-time.
+              Ruang obrolan langsung dan buku tamu digital kelas XI Internasional SMK Telkom Malang. Tersimpan permanen ke database!
             </p>
           </div>
 
@@ -433,8 +385,8 @@ export default function ContactChatPage() {
           <div className="flex items-center gap-3 bg-white/[0.04] border border-white/[0.08] px-4 py-2.5 rounded-2xl self-start md:self-auto text-xs">
             <div className="w-2.5 h-2.5 rounded-full bg-[#10B981] shadow-[0_0_8px_#10B981]" />
             <div>
-              <p className="font-medium text-white">36 Anggota Kelas</p>
-              <p className="text-[11px] text-[#06B6D4]">Lab RPL 3 Aktif • Siap Berkolaborasi</p>
+              <p className="font-medium text-white">{siteConfig.classInfo.memberCount} Siswa Moklet</p>
+              <p className="text-[11px] text-[#06B6D4]">Lab TI & IoT Aktif • Terhubung Database</p>
             </div>
           </div>
         </div>
@@ -465,7 +417,7 @@ export default function ContactChatPage() {
                     Internext Chat
                   </h3>
                   <span className="text-[10px] font-mono text-[#06B6D4] block">
-                    XII RPL 1 Official
+                    XI Internasional • Moklet
                   </span>
                 </div>
               </div>
@@ -488,7 +440,6 @@ export default function ContactChatPage() {
               {CHANNELS.map((ch) => {
                 const IconComponent = ch.icon;
                 const isActive = ch.id === activeChannelId;
-                const count = messages.filter((m) => m.channelId === ch.id).length;
 
                 return (
                   <button
@@ -515,28 +466,23 @@ export default function ContactChatPage() {
                       <span className="truncate font-mono">{ch.name}</span>
                     </div>
 
-                    <div className="flex items-center gap-1.5 shrink-0">
-                      {ch.badge && (
-                        <span className="text-[9px] px-1.5 py-0.5 rounded-full bg-[#06B6D4]/20 text-[#06B6D4] font-mono">
-                          {ch.badge}
-                        </span>
-                      )}
+                    {ch.badge && (
                       <span
-                        className={`text-[10px] font-mono px-1.5 py-0.5 rounded-md ${
-                          isActive
-                            ? "bg-white/[0.1] text-white"
-                            : "bg-white/[0.04] text-[#64748B]"
+                        className={`text-[9px] px-2 py-0.5 rounded-full font-mono shrink-0 ${
+                          ch.id === "apresiasi-publik"
+                            ? "bg-[#CCFF00]/20 text-[#CCFF00] border border-[#CCFF00]/30 font-bold"
+                            : "bg-[#06B6D4]/20 text-[#06B6D4]"
                         }`}
                       >
-                        {count}
+                        {ch.badge}
                       </span>
-                    </div>
+                    )}
                   </button>
                 );
               })}
             </div>
 
-            {/* Direct Official Contact Cards (Scrollable lower portion) */}
+            {/* Direct Official Contact Cards */}
             <div className="mt-auto p-4 border-t border-white/[0.08] space-y-3 bg-white/[0.02]">
               <span className="text-[11px] font-mono uppercase tracking-wider text-[#64748B] block">
                 Kontak Resmi Tim
@@ -545,7 +491,7 @@ export default function ContactChatPage() {
               {/* Email Card with Copy Button */}
               <div className="p-3 rounded-xl bg-[#0A0F1E]/60 border border-white/[0.06] flex items-center justify-between gap-2">
                 <div className="min-w-0">
-                  <span className="text-[10px] font-mono text-[#64748B] block">Email Kelas</span>
+                  <span className="text-[10px] font-mono text-[#64748B] block">Email Resmi</span>
                   <a
                     href={`mailto:${siteConfig.socials.email}`}
                     className="text-xs text-white hover:text-[#06B6D4] truncate font-mono block transition-colors"
@@ -575,9 +521,9 @@ export default function ContactChatPage() {
               <div className="p-3 rounded-xl bg-[#0A0F1E]/60 border border-white/[0.06] flex items-start gap-2.5 text-xs">
                 <MapPin className="w-4 h-4 text-[#06B6D4] shrink-0 mt-0.5" />
                 <div>
-                  <span className="text-[10px] font-mono text-[#64748B] block">Lokasi Lab</span>
+                  <span className="text-[10px] font-mono text-[#64748B] block">Lokasi Kampus</span>
                   <p className="text-white font-medium">{siteConfig.classInfo.school}</p>
-                  <p className="text-[11px] text-[#94A3B8]">Gedung TI, Lab RPL 3</p>
+                  <p className="text-[11px] text-[#94A3B8]">{siteConfig.classInfo.labLocation}</p>
                 </div>
               </div>
 
@@ -614,7 +560,6 @@ export default function ContactChatPage() {
             {/* Chat Top Header */}
             <div className="h-16 px-4 sm:px-6 border-b border-white/[0.08] flex items-center justify-between gap-3 bg-white/[0.01]">
               <div className="flex items-center gap-3 min-w-0">
-                {/* Mobile sidebar toggle button */}
                 <button
                   onClick={() => setSidebarOpen(true)}
                   className="lg:hidden p-2 rounded-xl bg-white/[0.05] hover:bg-white/[0.1] text-white shrink-0"
@@ -624,10 +569,10 @@ export default function ContactChatPage() {
                 </button>
 
                 <div className="flex items-center gap-2 min-w-0">
-                  <Hash className="w-5 h-5 text-[#06B6D4] shrink-0" />
+                  <activeChannel.icon className="w-5 h-5 text-[#06B6D4] shrink-0" />
                   <div className="min-w-0">
                     <h2 className="font-heading font-bold text-sm sm:text-base text-white truncate">
-                      {activeChannel.name}
+                      #{activeChannel.name}
                     </h2>
                     <p className="text-[11px] text-[#94A3B8] truncate hidden sm:block">
                       {activeChannel.topic}
@@ -636,24 +581,34 @@ export default function ContactChatPage() {
                 </div>
               </div>
 
-              {/* Search in channel */}
-              <div className="relative w-36 sm:w-56 shrink-0">
-                <Search className="w-3.5 h-3.5 text-[#64748B] absolute left-3 top-1/2 -translate-y-1/2" />
-                <input
-                  type="text"
-                  placeholder="Cari pesan..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full bg-white/[0.05] border border-white/[0.08] rounded-xl pl-8 pr-3 py-1.5 text-xs text-white placeholder-[#64748B] focus:outline-none focus:border-[#06B6D4] transition-colors"
-                />
-                {searchQuery && (
-                  <button
-                    onClick={() => setSearchQuery("")}
-                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[#64748B] hover:text-white"
-                  >
-                    <X className="w-3 h-3" />
-                  </button>
-                )}
+              {/* Search & Refresh in channel */}
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => fetchMessages(activeChannelId)}
+                  title="Segarkan pesan dari database"
+                  className="p-1.5 rounded-lg bg-white/[0.05] hover:bg-white/[0.1] text-[#94A3B8] hover:text-white transition-colors"
+                >
+                  <RefreshCw className={`w-3.5 h-3.5 ${loading ? "animate-spin" : ""}`} />
+                </button>
+
+                <div className="relative w-32 sm:w-52 shrink-0">
+                  <Search className="w-3.5 h-3.5 text-[#64748B] absolute left-3 top-1/2 -translate-y-1/2" />
+                  <input
+                    type="text"
+                    placeholder="Cari pesan..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-full bg-white/[0.05] border border-white/[0.08] rounded-xl pl-8 pr-3 py-1.5 text-xs text-white placeholder-[#64748B] focus:outline-none focus:border-[#06B6D4] transition-colors"
+                  />
+                  {searchQuery && (
+                    <button
+                      onClick={() => setSearchQuery("")}
+                      className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[#64748B] hover:text-white"
+                    >
+                      <X className="w-3 h-3" />
+                    </button>
+                  )}
+                </div>
               </div>
             </div>
 
@@ -675,6 +630,16 @@ export default function ContactChatPage() {
                     <p className="text-xs text-[#94A3B8] mt-0.5">
                       {activeChannel.topic}
                     </p>
+                    {activeChannel.id === "apresiasi-publik" && (
+                      <span className="inline-block mt-2 text-[10px] font-mono px-2 py-0.5 rounded bg-[#CCFF00]/15 text-[#CCFF00] border border-[#CCFF00]/30 font-semibold">
+                        ✨ Kanal Apresiasi Resmi • Jejak Buku Tamu Digital
+                      </span>
+                    )}
+                    {activeChannel.id === "ngobrol-santai" && (
+                      <span className="inline-block mt-2 text-[10px] font-mono px-2 py-0.5 rounded bg-[#06B6D4]/15 text-[#06B6D4] border border-[#06B6D4]/30 font-semibold">
+                        💬 Obrolan Murni • Tanpa Bot Otomatis
+                      </span>
+                    )}
                   </div>
                 </div>
               </div>
@@ -693,11 +658,11 @@ export default function ContactChatPage() {
               )}
 
               {/* Empty State */}
-              {currentChannelMessages.length === 0 && (
+              {currentChannelMessages.length === 0 && !loading && (
                 <div className="text-center py-12 text-[#64748B]">
                   <MessageSquare className="w-8 h-8 mx-auto mb-2 opacity-40" />
-                  <p className="text-sm">Belum ada pesan yang cocok.</p>
-                  <p className="text-xs text-[#475569]">Jadilah yang pertama mengirim pesan di kanal ini!</p>
+                  <p className="text-sm">Belum ada pesan di kanal #{activeChannel.name}.</p>
+                  <p className="text-xs text-[#475569]">Jadilah yang pertama menulis pesan!</p>
                 </div>
               )}
 
@@ -810,7 +775,7 @@ export default function ContactChatPage() {
                           </button>
                         ))}
 
-                        {/* Quick Reaction Shortcut Buttons (visible on hover) */}
+                        {/* Quick Reaction Shortcut Buttons */}
                         <div className="opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1">
                           {["❤️", "🔥", "🚀"].map((emoji) => (
                             <button
@@ -823,7 +788,6 @@ export default function ContactChatPage() {
                             </button>
                           ))}
 
-                          {/* Reply Button */}
                           <button
                             onClick={() => {
                               setReplyingTo(msg);
@@ -866,7 +830,6 @@ export default function ContactChatPage() {
             {/* BOTTOM INPUT BAR: Identity, Emojis, Input & Send Button      */}
             {/* ============================================================ */}
             <div className="p-3 sm:p-4 border-t border-white/[0.08] bg-[#0E1528]/80 backdrop-blur-md">
-              {/* Replying Banner */}
               {replyingTo && (
                 <div className="mb-2 px-3 py-1.5 rounded-xl bg-[#4F46E5]/15 border border-[#4F46E5]/30 flex items-center justify-between text-xs">
                   <div className="flex items-center gap-2 truncate text-[#A5B4FC]">
@@ -930,7 +893,11 @@ export default function ContactChatPage() {
                     type="text"
                     value={inputMessage}
                     onChange={(e) => setInputMessage(e.target.value)}
-                    placeholder={`Kirim pesan ke #${activeChannel.name}...`}
+                    placeholder={
+                      activeChannel.id === "apresiasi-publik"
+                        ? "Tuliskan ucapan apresiasi & motivasi untuk XI Internasional..."
+                        : `Kirim pesan santai ke #${activeChannel.name}...`
+                    }
                     className="w-full bg-[#0A0F1E] border border-white/[0.1] rounded-xl pl-4 pr-24 py-3 text-sm text-white placeholder-[#64748B] focus:outline-none focus:border-[#06B6D4] transition-colors"
                   />
 
@@ -971,7 +938,7 @@ export default function ContactChatPage() {
                   </div>
 
                   <span className="text-[10px] font-mono text-[#475569] hidden md:inline">
-                    Tekan <strong>Enter ↵</strong> untuk kirim
+                    Tekan <strong>Enter ↵</strong> untuk kirim • Tersimpan ke database
                   </span>
                 </div>
               </form>

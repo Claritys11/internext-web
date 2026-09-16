@@ -1,14 +1,22 @@
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { siteConfig } from "@/config/site";
+import { getClassProfile } from "@/lib/api/services";
 import { Sparkles, Target, Compass, Flag, Award, History, Users } from "lucide-react";
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const profile = await getClassProfile();
+  const school = profile.school || siteConfig.classInfo.school;
+  const className = profile.name || siteConfig.classInfo.name;
+  const generation = profile.generation || siteConfig.classInfo.generation;
+  const homeroomTeacher = profile.homeroomTeacher || siteConfig.classInfo.homeroomTeacher;
+  const memberCount = profile.memberCount || siteConfig.classInfo.memberCount;
+
   const milestones = [
     {
       year: "Juli 2023",
       title: "Kick-off & Masa Pengenalan Lingkungan Sekolah",
-      desc: "Pertemuan perdana 36 siswa dari berbagai latar belakang, pembentukan pengurus kelas dan visi kebersamaan.",
+      desc: `Pertemuan perdana ${memberCount} siswa kelas ${className} ${school} dari berbagai latar belakang, pembentukan pengurus kelas dan visi kebersamaan.`,
     },
     {
       year: "Desember 2023",
@@ -60,11 +68,11 @@ export default function AboutPage() {
               </div>
               <h3 className="font-heading text-lg font-bold text-white mb-2">Identitas Kelas</h3>
               <p className="text-xs text-[#94A3B8] leading-relaxed mb-4">
-                Komunitas belajar beranggotakan 36 siswa jurusan Rekayasa Perangkat Lunak yang berdedikasi membangun solusi digital berdampak nyata.
+                Komunitas belajar beranggotakan {memberCount} siswa kelas {className} {school} yang berdedikasi membangun solusi digital berstandar global.
               </p>
               <div className="text-xs font-mono space-y-1 text-[#CBD5E1]">
-                <p>• Angkatan: <span className="text-white font-semibold">{siteConfig.classInfo.generation}</span></p>
-                <p>• Wali Kelas: <span className="text-white font-semibold">{siteConfig.classInfo.homeroomTeacher}</span></p>
+                <p>• Angkatan: <span className="text-white font-semibold">{generation}</span></p>
+                <p>• Wali Kelas: <span className="text-white font-semibold">{homeroomTeacher}</span></p>
               </div>
             </div>
 

@@ -1,32 +1,42 @@
 import { siteConfig } from "@/config/site";
+import { ClassProfile } from "@/lib/types";
 import { Users, Code2, Trophy, CalendarCheck } from "lucide-react";
 
-export function StatsBar() {
+interface StatsBarProps {
+  profile?: ClassProfile;
+}
+
+export function StatsBar({ profile }: StatsBarProps) {
+  const memberCount = profile?.memberCount ?? siteConfig.classInfo.memberCount;
+  const projectCount = profile?.projectCount ?? siteConfig.classInfo.projectCount;
+  const achievementCount = profile?.achievementCount ?? siteConfig.classInfo.achievementCount;
+  const eventCount = profile?.eventCount ?? siteConfig.classInfo.eventCount;
+
   const stats = [
     {
       label: "Anggota Kelas",
-      value: `${siteConfig.classInfo.memberCount}`,
+      value: `${memberCount}`,
       sub: "Siswa Berbakat",
       icon: Users,
       color: "from-[#4F46E5] to-[#6366F1]",
     },
     {
       label: "Karya Siswa",
-      value: `${siteConfig.classInfo.projectCount}+`,
+      value: `${projectCount}+`,
       sub: "Aplikasi & Riset",
       icon: Code2,
       color: "from-[#06B6D4] to-[#3B82F6]",
     },
     {
       label: "Prestasi Diraih",
-      value: `${siteConfig.classInfo.achievementCount}`,
+      value: `${achievementCount}`,
       sub: "Tingkat LKS & Nasional",
       icon: Trophy,
       color: "from-[#F59E0B] to-[#EF4444]",
     },
     {
       label: "Agenda & Kegiatan",
-      value: `${siteConfig.classInfo.eventCount}`,
+      value: `${eventCount}`,
       sub: "Dokumentasi Lengkap",
       icon: CalendarCheck,
       color: "from-[#10B981] to-[#059669]",

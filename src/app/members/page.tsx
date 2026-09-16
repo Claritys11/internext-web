@@ -1,18 +1,31 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { MemberCard } from "@/components/features/MemberCard";
 import { mockMembers } from "@/lib/data/mock";
+import { Member } from "@/lib/types";
 import { Search, Users, Sparkles, Filter } from "lucide-react";
 
 export default function MembersPage() {
+  const [membersList, setMembersList] = useState<Member[]>(mockMembers);
   const [search, setSearch] = useState("");
   const [filterType, setFilterType] = useState<"all" | "management" | "member">("all");
 
+  useEffect(() => {
+    fetch("/api/members")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (Array.isArray(data) && data.length > 0) {
+          setMembersList(data);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
   const filteredMembers = useMemo(() => {
-    return mockMembers.filter((member) => {
+    return membersList.filter((member) => {
       const matchesSearch =
         member.name.toLowerCase().includes(search.toLowerCase()) ||
         member.nickname.toLowerCase().includes(search.toLowerCase()) ||
@@ -25,7 +38,7 @@ export default function MembersPage() {
       if (filterType === "member") return !member.isManagement;
       return true;
     });
-  }, [search, filterType]);
+  }, [membersList, search, filterType]);
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -43,7 +56,7 @@ export default function MembersPage() {
               Keluarga Besar <span className="text-gradient-cyan">Internext</span>
             </h1>
             <p className="text-base text-[#94A3B8] leading-relaxed">
-              Profil, keahlian, dan kutipan personal 36 siswa yang siap berkolaborasi menghasilkan karya terbaik.
+              Profil, keahlian, dan kutipan personal 25 siswa yang siap berkolaborasi menghasilkan karya terbaik.
             </p>
           </div>
 
