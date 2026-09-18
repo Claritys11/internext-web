@@ -371,13 +371,13 @@ export default function ContactChatPage() {
           <div>
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#F59E0B]/15 border border-[#F59E0B]/30 text-xs font-mono text-[#F59E0B] mb-3">
               <span className="w-2 h-2 rounded-full bg-[#10B981] animate-ping" />
-              <span>Database Integrated • PostgreSQL Ready</span>
+              <span>Chit-Chat</span>
             </div>
             <h1 className="font-heading text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
               Kontak & <span className="text-gradient">Buku Tamu Interaktif</span>
             </h1>
             <p className="text-sm text-[#94A3B8] mt-1">
-              Ruang obrolan langsung dan buku tamu digital kelas XI Internasional SMK Telkom Malang. Tersimpan permanen ke database!
+              Ruang obrolan langsung dan buku tamu digital kelas XI Internasional SMK Telkom Malang.
             </p>
           </div>
 
@@ -386,7 +386,7 @@ export default function ContactChatPage() {
             <div className="w-2.5 h-2.5 rounded-full bg-[#10B981] shadow-[0_0_8px_#10B981]" />
             <div>
               <p className="font-medium text-white">{siteConfig.classInfo.memberCount} Siswa Moklet</p>
-              <p className="text-[11px] text-[#F59E0B]">Lab TI & IoT Aktif • Terhubung Database</p>
+              <p className="text-[11px] text-[#F59E0B]">Chatting</p>
             </div>
           </div>
         </div>
@@ -938,7 +938,7 @@ export default function ContactChatPage() {
                   </div>
 
                   <span className="text-[10px] font-mono text-[#475569] hidden md:inline">
-                    Tekan <strong>Enter ↵</strong> untuk kirim • Tersimpan ke database
+                    Tekan <strong>Enter ↵</strong> untuk kirim
                   </span>
                 </div>
               </form>

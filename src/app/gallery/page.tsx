@@ -146,7 +146,7 @@ export default function GalleryPage() {
               Kubah Galeri 3D <span className="text-gradient">Internext</span>
             </h1>
             <p className="text-base sm:text-lg text-[#94A3B8] leading-relaxed max-w-2xl mx-auto">
-              Eksplorasi rekaman visual perjalanan, prestasi, dan kenangan tak terlupakan siswa XI Internasional SMK Telkom Malang dalam kubah 360° interaktif. Geser untuk memutar sudut pandang dan klik foto mana saja untuk memperbesar memori.
+              Eksplorasi rekaman visual perjalanan, prestasi, dan kenangan tak terlupakan siswa XI Internasional SMK Telkom Malang.
             </p>
           </div>
 
