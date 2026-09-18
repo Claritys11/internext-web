@@ -211,7 +211,7 @@ export function LeadershipShowcase({ members }: LeadershipShowcaseProps) {
             <span>Core Leadership Team</span>
           </div>
           <h2 className="font-heading text-3xl sm:text-5xl font-extrabold text-white tracking-tight mb-4">
-            Nahkoda & Penggerak <span className="text-[#F59E0B]">Internext</span>
+            The Executives of <span className="text-[#F59E0B]">Internext</span>
           </h2>
           <p className="text-sm sm:text-base text-[#94A3B8] max-w-2xl mx-auto leading-relaxed">
             Struktur kepemimpinan kelas yang bertanggung jawab mengawal visi, memelihara kultur belajar, dan mengorkestrasi proyek digital angkatan.

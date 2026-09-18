@@ -320,7 +320,7 @@ export function CircularGalleryShowcase({
           </h2>
 
           <p className="text-sm sm:text-base text-[#94A3B8] max-w-2xl mx-auto leading-relaxed">
-            Pusat demonstrasi karya interaktif 360 derajat portofolio unggulan siswa. Diapit oleh 6 karya unggulan pilihan di samping kiri dan kanan.
+            Pusat demonstrasi karya interaktif 360 derajat portofolio unggulan siswa.
           </p>
         </div>
 

@@ -33,7 +33,7 @@ export function HeroSection({ profile }: HeroSectionProps) {
           {/* Hero Title */}
           <h1 className="font-heading text-4xl sm:text-6xl lg:text-7xl font-extrabold text-white tracking-tight leading-[1.1] max-w-4xl mb-6">
             Pusat Identitas, Dokumentasi & Portofolio{" "}
-            <span className="text-gradient">Digital Kelas</span>
+            <span className="text-gradient">International Class</span>
           </h1>
 
           {/* Subtitle */}

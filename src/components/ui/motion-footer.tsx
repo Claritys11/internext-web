@@ -359,8 +359,8 @@ export function CinematicFooter({ initialProfile }: { initialProfile?: ClassProf
               ref={headingRef}
               className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black footer-text-glow tracking-tighter mb-6 sm:mb-8 leading-[1.05]"
             >
-              Siap Terhubung <br className="hidden sm:block" />
-              <span className="text-gradient">Bersama Kami?</span>
+              Curious to know <br className="hidden sm:block" />
+              <span className="text-gradient">us better?</span>
             </h2>
 
             {/* Interactive Magnetic Pills Layout */}

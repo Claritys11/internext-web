@@ -131,7 +131,7 @@ export function InfiniteNewsCarousel({ articles }: InfiniteNewsCarouselProps) {
               <Newspaper className="w-3.5 h-3.5" />
               <span>Warta Terkini & Pengumuman</span>
               <span className="text-white/30">•</span>
-              <span className="text-[#EA580C]">GSAP Interactive Carousel</span>
+              <span className="text-[#EA580C]">News</span>
             </div>
             <h2 className="font-heading text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
               Kabar Terbaru <span className="text-gradient">Internext</span>
