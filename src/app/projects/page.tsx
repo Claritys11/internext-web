@@ -81,7 +81,7 @@ export default function ProjectsPage() {
               Karya & Proyek <span className="text-gradient">Siswa</span>
             </h1>
             <p className="text-base text-[#94A3B8] leading-relaxed">
-              Kumpulan inovasi aplikasi web, mobile, Internet of Things, dan kecerdasan buatan yang dirancang dan dibangun oleh siswa Internext.
+              Kumpulan inovasi dan karya yang dirancang dan dibangun oleh siswa Internext.
             </p>
           </div>
 
