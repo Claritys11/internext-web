@@ -47,7 +47,7 @@ export default async function ArticleDetailPage({
     <div className="flex flex-col min-h-screen">
       <Navbar />
 
-      <main className="flex-1 py-14">
+      <main className="flex-1 pt-28 sm:pt-32 md:pt-36 lg:pt-40 pb-16">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Back link */}
           <Link

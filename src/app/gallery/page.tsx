@@ -134,7 +134,7 @@ export default function GalleryPage() {
     <div className="flex flex-col min-h-screen bg-[#02040A]">
       <Navbar />
 
-      <main className="flex-1 py-12 md:py-16">
+      <main className="flex-1 pt-28 sm:pt-32 md:pt-36 lg:pt-40 pb-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* 1. Header: Judul & Penjelasan Singkat */}
           <div className="text-center max-w-3xl mx-auto mb-10">

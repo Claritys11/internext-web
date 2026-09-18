@@ -8,7 +8,7 @@ export default function NotFound() {
     <div className="flex flex-col min-h-screen">
       <Navbar />
 
-      <main className="flex-1 flex items-center justify-center py-24 px-4">
+      <main className="flex-1 flex items-center justify-center pt-32 sm:pt-36 pb-24 px-4">
         <div className="glass-card max-w-md w-full p-8 text-center border-white/[0.1]">
           <div className="w-16 h-16 rounded-2xl bg-[#F59E0B]/20 border border-[#F59E0B]/40 flex items-center justify-center mx-auto mb-6">
             <Terminal className="w-8 h-8 text-[#F59E0B]" />

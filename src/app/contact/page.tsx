@@ -365,7 +365,7 @@ export default function ContactChatPage() {
       <Navbar />
 
       {/* Main Container */}
-      <main className="flex-1 pt-24 pb-16 px-3 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
+      <main className="flex-1 pt-28 sm:pt-32 md:pt-36 lg:pt-40 pb-16 px-3 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
         {/* Page Top Title */}
         <div className="mb-6 flex flex-col md:flex-row md:items-end md:justify-between gap-4">
           <div>

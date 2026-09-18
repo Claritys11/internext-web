@@ -78,7 +78,7 @@ export default async function MemberProfilePage({ params }: MemberProfilePagePro
     <div className="flex flex-col min-h-screen bg-[#02040A] text-[#F8FAFC]">
       <Navbar />
 
-      <main className="flex-1 py-10 sm:py-16">
+      <main className="flex-1 pt-28 sm:pt-32 md:pt-36 lg:pt-40 pb-16">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
           {/* Breadcrumb Navigation */}
           <div className="flex items-center justify-between text-xs font-mono text-[#94A3B8]">

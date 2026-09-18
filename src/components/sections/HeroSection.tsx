@@ -14,7 +14,7 @@ export function HeroSection({ profile }: HeroSectionProps) {
   const memberCount = profile?.memberCount || siteConfig.classInfo.memberCount;
 
   return (
-    <section className="relative overflow-hidden bg-grid-pattern pt-16 pb-24 lg:pt-24 lg:pb-32">
+    <section className="relative overflow-hidden bg-grid-pattern pt-28 sm:pt-32 md:pt-36 lg:pt-40 pb-20 sm:pb-24 lg:pb-32">
       {/* Dynamic ambient gradients (Gargantua Accretion Disk Glow) */}
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] bg-[#F59E0B]/15 rounded-full blur-[130px] pointer-events-none" />
       <div className="absolute top-1/3 left-1/3 w-[300px] h-[250px] bg-[#EA580C]/12 rounded-full blur-[100px] pointer-events-none" />
