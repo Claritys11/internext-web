@@ -37,9 +37,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     lastModified: article.date ? new Date(article.date) : now,
     changeFrequency: "weekly",
     priority: 0.85,
-    images: article.coverImage
-      ? [article.coverImage.startsWith("http") ? article.coverImage : absoluteUrl(article.coverImage)]
-      : undefined,
   }));
 
   const memberEntries: MetadataRoute.Sitemap = members.map((member) => ({
@@ -47,9 +44,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     lastModified: now,
     changeFrequency: "monthly",
     priority: 0.75,
-    images: member.avatar
-      ? [member.avatar.startsWith("http") ? member.avatar : absoluteUrl(member.avatar)]
-      : undefined,
   }));
 
   return [...staticEntries, ...articleEntries, ...memberEntries];
