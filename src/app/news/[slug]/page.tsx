@@ -146,15 +146,17 @@ export default async function ArticleDetailPage({
           </div>
 
           {/* Featured Image */}
-          <div className="relative w-full h-72 sm:h-96 rounded-2xl overflow-hidden mb-10 border border-white/[0.1] shadow-2xl">
-            <Image
-              src={article.coverImage}
-              alt={article.title}
-              fill
-              priority
-              className="object-cover"
-            />
-          </div>
+          {article.coverImage && (
+            <div className="relative w-full h-72 sm:h-96 rounded-2xl overflow-hidden mb-10 border border-white/[0.1] shadow-2xl">
+              <Image
+                src={article.coverImage}
+                alt={article.title}
+                fill
+                priority
+                className="object-cover"
+              />
+            </div>
+          )}
 
           {/* Article Content */}
           <div className="glass-card p-6 sm:p-10 mb-10">

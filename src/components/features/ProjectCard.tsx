@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Project } from "@/lib/types";
-import { ExternalLink, Heart, Users } from "lucide-react";
+import { ExternalLink, Heart, Users, Code2 } from "lucide-react";
 import { GithubIcon } from "@/components/ui/Icons";
 
 export function ProjectCard({ project }: { project: Project }) {
@@ -13,13 +13,20 @@ export function ProjectCard({ project }: { project: Project }) {
       <div>
         {/* Project Thumbnail Image */}
         <div className="relative w-full h-48 sm:h-52 overflow-hidden bg-[#02040A]">
-          <Image
-            src={project.thumbnail}
-            alt={project.title}
-            fill
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            className="object-cover group-hover:scale-105 transition-transform duration-300"
-          />
+          {project.thumbnail ? (
+            <Image
+              src={project.thumbnail}
+              alt={project.title}
+              fill
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              className="object-cover group-hover:scale-105 transition-transform duration-300"
+            />
+          ) : (
+            <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-[#0F172A] to-[#02040A] text-[#64748B]">
+              <Code2 className="w-12 h-12 text-[#F59E0B]/40 mb-2" />
+              <span className="text-xs font-mono text-[#94A3B8]">Showcase Karya</span>
+            </div>
+          )}
           <div className="absolute inset-0 bg-gradient-to-t from-[#0F172A] via-transparent to-transparent" />
 
           {/* Category Pill */}

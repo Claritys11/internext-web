@@ -2,20 +2,27 @@ import Image from "next/image";
 import Link from "next/link";
 import { Article } from "@/lib/types";
 import { formatDate } from "@/lib/utils";
-import { Clock, Tag, ArrowRight } from "lucide-react";
+import { Clock, Tag, ArrowRight, Newspaper } from "lucide-react";
 
 export function ArticleCard({ article }: { article: Article }) {
   return (
     <article className="glass-card overflow-hidden transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-between group">
       <div>
         <div className="relative w-full h-44 sm:h-48 overflow-hidden bg-[#02040A]">
-          <Image
-            src={article.coverImage}
-            alt={article.title}
-            fill
-            sizes="(max-width: 768px) 100vw, 50vw"
-            className="object-cover group-hover:scale-105 transition-transform duration-300"
-          />
+          {article.coverImage ? (
+            <Image
+              src={article.coverImage}
+              alt={article.title}
+              fill
+              sizes="(max-width: 768px) 100vw, 50vw"
+              className="object-cover group-hover:scale-105 transition-transform duration-300"
+            />
+          ) : (
+            <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-[#0F172A] to-[#02040A] text-[#64748B]">
+              <Newspaper className="w-12 h-12 text-[#F59E0B]/40 mb-2" />
+              <span className="text-xs font-mono text-[#94A3B8]">Warta Resmi</span>
+            </div>
+          )}
           <div className="absolute inset-0 bg-gradient-to-t from-[#0F172A] via-transparent to-transparent" />
 
           <div className="absolute top-3 left-3 flex gap-2">

@@ -12,15 +12,21 @@ export function MemberCard({ member }: { member: Member }) {
         <div className="relative p-5 pb-0 flex items-start justify-between gap-4">
           <Link
             href={`/members/${member.id}`}
-            className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-2xl overflow-hidden border-2 border-white/[0.1] group-hover:border-[#F59E0B]/50 transition-colors shadow-md block"
+            className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-2xl overflow-hidden border-2 border-white/[0.1] group-hover:border-[#F59E0B]/50 transition-colors shadow-md block bg-[#0F172A]"
           >
-            <Image
-              src={member.avatar}
-              alt={member.name}
-              fill
-              sizes="(max-width: 640px) 64px, 80px"
-              className="object-cover group-hover:scale-105 transition-transform duration-300"
-            />
+            {member.avatar ? (
+              <Image
+                src={member.avatar}
+                alt={member.name}
+                fill
+                sizes="(max-width: 640px) 64px, 80px"
+                className="object-cover group-hover:scale-105 transition-transform duration-300"
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center font-heading font-black text-lg sm:text-xl text-[#F59E0B] bg-gradient-to-br from-white/10 to-white/5">
+                {member.nickname ? member.nickname.slice(0, 2).toUpperCase() : member.name.slice(0, 2).toUpperCase()}
+              </div>
+            )}
           </Link>
 
           <div className="flex flex-col items-end gap-1">

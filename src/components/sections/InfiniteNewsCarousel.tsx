@@ -183,12 +183,19 @@ export function InfiniteNewsCarousel({ articles }: InfiniteNewsCarouselProps) {
                 <div>
                   {/* Image with category pill */}
                   <div className="relative w-full h-48 overflow-hidden bg-[#02040A]">
-                    <Image
-                      src={article.coverImage}
-                      alt={article.title}
-                      fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-500 pointer-events-none"
-                    />
+                    {article.coverImage ? (
+                      <Image
+                        src={article.coverImage}
+                        alt={article.title}
+                        fill
+                        className="object-cover group-hover:scale-105 transition-transform duration-500 pointer-events-none"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-[#0F172A] to-[#02040A] text-[#64748B]">
+                        <Newspaper className="w-12 h-12 text-[#F59E0B]/40 mb-2" />
+                        <span className="text-xs font-mono text-[#94A3B8]">Warta Resmi</span>
+                      </div>
+                    )}
                     <div className="absolute inset-0 bg-gradient-to-t from-[#0F172A] via-transparent to-transparent" />
                     <div className="absolute top-3 left-3 flex gap-2">
                       <span className="text-xs font-mono font-semibold px-2.5 py-1 rounded-full bg-gradient-to-r from-[#F59E0B] to-[#EA580C] text-[#02040A] shadow-md">

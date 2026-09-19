@@ -17,7 +17,7 @@ export function ImageUploadInput({
   label,
   value,
   onChange,
-  placeholder = "https://... atau klik Unggah Gambar",
+  placeholder = "Unggah file gambar atau tempel URL...",
   aspectRatio = "video",
   helperText,
 }: ImageUploadInputProps) {

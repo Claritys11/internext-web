@@ -168,15 +168,21 @@ export default async function MemberProfilePage({ params }: MemberProfilePagePro
             <div className="px-6 sm:px-10 pb-8 pt-0 relative">
               {/* Avatar Positioned Overlapping Cover */}
               <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 -mt-16 sm:-mt-20 mb-6">
-                <div className="relative w-28 h-28 sm:w-36 sm:h-36 rounded-3xl overflow-hidden border-4 border-[#02040A] shadow-2xl bg-[#0F172A]">
-                  <Image
-                    src={member.avatar}
-                    alt={member.name}
-                    fill
-                    priority
-                    sizes="(max-width: 640px) 112px, 144px"
-                    className="object-cover"
-                  />
+                <div className="relative w-28 h-28 sm:w-36 sm:h-36 rounded-3xl overflow-hidden border-4 border-[#02040A] shadow-2xl bg-[#0F172A] flex items-center justify-center">
+                  {member.avatar ? (
+                    <Image
+                      src={member.avatar}
+                      alt={member.name}
+                      fill
+                      priority
+                      sizes="(max-width: 640px) 112px, 144px"
+                      className="object-cover"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center font-heading font-black text-3xl sm:text-4xl text-[#F59E0B] bg-gradient-to-br from-white/10 to-white/5">
+                      {member.nickname ? member.nickname.slice(0, 2).toUpperCase() : member.name.slice(0, 2).toUpperCase()}
+                    </div>
+                  )}
                   {member.isManagement && (
                     <div
                       title="Nahkoda / Pengurus Kelas"

@@ -112,10 +112,9 @@ export function EventsTimelineSection({
         year: "numeric",
       });
 
-      const timeStr = d.toLocaleTimeString("id-ID", {
-        hour: "2-digit",
-        minute: "2-digit",
-      });
+      const timeStr = event.date.includes("T") || event.date.includes(":")
+        ? `${d.getHours().toString().padStart(2, "0")}.${d.getMinutes().toString().padStart(2, "0")} WIB`
+        : "";
 
       const titleNode = (
         <div className="flex flex-col">
@@ -171,7 +170,7 @@ export function EventsTimelineSection({
 
             <div className="text-xs font-mono text-[#64748B] flex items-center gap-1.5">
               <CalendarDays className="w-3.5 h-3.5 text-[#F59E0B]" />
-              <span>{fullDateStr}</span>
+              <span>{fullDateStr}{timeStr ? ` • ${timeStr}` : ""}</span>
             </div>
           </div>
 
