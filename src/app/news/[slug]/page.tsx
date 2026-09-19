@@ -5,7 +5,7 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { getArticleBySlug, getArticles } from "@/lib/api/services";
 import { formatDate } from "@/lib/utils";
-import { pageMetadata } from "@/lib/seo";
+import { pageMetadata, absoluteUrl, createBreadcrumbJsonLd } from "@/lib/seo";
 import type { Metadata } from "next";
 import { ArrowLeft, Clock, Calendar, Tag, Share2 } from "lucide-react";
 
@@ -13,12 +13,14 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const article = await getArticleBySlug(slug);
   if (!article) return { robots: { index: false, follow: false } };
-  const metadata = pageMetadata(article.title, article.summary, `/news/${article.slug}`);
-  return {
-    ...metadata,
-    openGraph: { ...metadata.openGraph, type: "article", publishedTime: article.date, authors: [article.author.name], images: article.coverImage ? [{ url: article.coverImage, alt: article.title }] : undefined },
-    twitter: { ...metadata.twitter, images: article.coverImage ? [article.coverImage] : undefined },
-  };
+  const metadata = pageMetadata(article.title, article.summary, `/news/${article.slug}`, {
+    image: article.coverImage,
+    keywords: [article.title, article.category, article.author.name, "Internext", "SMK Telkom Malang"],
+    type: "article",
+    publishedTime: article.date,
+    authors: [article.author.name],
+  });
+  return metadata;
 }
 
 export async function generateStaticParams() {
@@ -43,8 +45,54 @@ export default async function ArticleDetailPage({
     notFound();
   }
 
+  const articleJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "NewsArticle",
+    headline: article.title,
+    description: article.summary,
+    image: article.coverImage
+      ? [article.coverImage.startsWith("http") ? article.coverImage : absoluteUrl(article.coverImage)]
+      : [absoluteUrl("/opengraph-image")],
+    datePublished: article.date,
+    dateModified: article.date,
+    author: [
+      {
+        "@type": "Person",
+        name: article.author.name,
+        jobTitle: article.author.role,
+      },
+    ],
+    publisher: {
+      "@type": "Organization",
+      name: "Internext",
+      url: absoluteUrl("/"),
+      logo: {
+        "@type": "ImageObject",
+        url: absoluteUrl("/opengraph-image"),
+      },
+    },
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": absoluteUrl(`/news/${article.slug}`),
+    },
+  };
+
+  const breadcrumbsJsonLd = createBreadcrumbJsonLd([
+    { name: "Beranda", path: "/" },
+    { name: "Berita", path: "/news" },
+    { name: article.title, path: `/news/${article.slug}` },
+  ]);
+
   return (
     <div className="flex flex-col min-h-screen">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbsJsonLd) }}
+      />
       <Navbar />
 
       <main className="flex-1 pt-28 sm:pt-32 md:pt-36 lg:pt-40 pb-16">

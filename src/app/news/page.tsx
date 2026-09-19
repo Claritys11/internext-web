@@ -1,8 +1,19 @@
+import type { Metadata } from "next";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { NewsExplorer } from "@/components/features/NewsExplorer";
 import { getArticles } from "@/lib/api/services";
+import { pageMetadata, createBreadcrumbJsonLd } from "@/lib/seo";
 import { Newspaper } from "lucide-react";
+
+export const metadata: Metadata = pageMetadata(
+  "Kabar & Warta Resmi",
+  "Arsip berita prestasi, kunjungan industri, pengumuman akademik, dan perkembangan terkini dari kelas XI Internasional SMK Telkom Malang.",
+  "/news",
+  {
+    keywords: ["Berita Internext", "Kabar Moklet", "Prestasi Siswa", "Kunjungan Industri SMK Telkom Malang", "Pengumuman Kelas"],
+  }
+);
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -10,8 +21,17 @@ export const revalidate = 0;
 export default async function NewsPage() {
   const articles = await getArticles();
 
+  const breadcrumbs = createBreadcrumbJsonLd([
+    { name: "Beranda", path: "/" },
+    { name: "Berita", path: "/news" },
+  ]);
+
   return (
     <div className="flex flex-col min-h-screen">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbs) }}
+      />
       <Navbar />
 
       <main className="flex-1 pt-28 sm:pt-32 md:pt-36 lg:pt-40 pb-16">

@@ -14,14 +14,62 @@ export const metadata: Metadata = {
   description: siteConfig.description,
   applicationName: siteConfig.name,
   category: "education",
-  keywords: ["Internext", "XI Internasional", "SMK Telkom Malang", "website kelas", "portofolio siswa", "karya siswa", "komunitas teknologi"],
+  keywords: [
+    "Internext",
+    "internext.web.id",
+    "XI Internasional",
+    "SMK Telkom Malang",
+    "Moklet",
+    "website kelas",
+    "portofolio siswa",
+    "karya siswa",
+    "komunitas teknologi",
+    "rekayasa perangkat lunak",
+    "talenta digital muda",
+    "showcase proyek",
+  ],
   authors: [{ name: "Internext Class Community", url: siteUrl }],
   creator: "Kelas XI Internasional SMK Telkom Malang",
   publisher: "Internext Class Community",
   alternates: { canonical: siteUrl },
-  robots: { index: true, follow: true, nocache: false, googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1, "max-video-preview": -1 } },
-  openGraph: { title: `${siteConfig.name} — ${siteConfig.tagline}`, description: siteConfig.description, url: siteUrl, siteName: siteConfig.name, locale: "id_ID", type: "website" },
-  twitter: { card: "summary", title: `${siteConfig.name} — ${siteConfig.tagline}`, description: siteConfig.description },
+  robots: {
+    index: true,
+    follow: true,
+    nocache: false,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
+  openGraph: {
+    title: `${siteConfig.name} — ${siteConfig.tagline}`,
+    description: siteConfig.description,
+    url: siteUrl,
+    siteName: siteConfig.name,
+    locale: "id_ID",
+    type: "website",
+    images: [
+      {
+        url: `${siteUrl}/opengraph-image`,
+        width: 1200,
+        height: 630,
+        alt: `${siteConfig.name} — ${siteConfig.tagline}`,
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `${siteConfig.name} — ${siteConfig.tagline}`,
+    description: siteConfig.description,
+    images: [`${siteUrl}/opengraph-image`],
+  },
+  icons: {
+    icon: "/favicon.ico",
+    apple: "/favicon.ico",
+  },
 };
 
 const organizationJsonLd = {
@@ -29,13 +77,44 @@ const organizationJsonLd = {
   "@type": ["Organization", "EducationalOrganization"],
   name: siteConfig.name,
   url: siteUrl,
+  logo: `${siteUrl}/opengraph-image`,
   description: siteConfig.description,
   email: siteConfig.socials.email,
   sameAs: Object.values(siteConfig.socials).filter((value) => value.startsWith("http")),
-  parentOrganization: { "@type": "EducationalOrganization", name: siteConfig.classInfo.school },
+  parentOrganization: {
+    "@type": "EducationalOrganization",
+    name: siteConfig.classInfo.school,
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: siteConfig.classInfo.labLocation,
+      addressLocality: "Kota Malang",
+      addressRegion: "Jawa Timur",
+      addressCountry: "ID",
+    },
+  },
+  contactPoint: {
+    "@type": "ContactPoint",
+    email: siteConfig.socials.email,
+    contactType: "Class Representative",
+  },
 };
 
-const websiteJsonLd = { "@context": "https://schema.org", "@type": "WebSite", name: siteConfig.name, url: siteUrl, inLanguage: "id-ID", publisher: { "@type": "Organization", name: siteConfig.name } };
+const websiteJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: siteConfig.name,
+  url: siteUrl,
+  inLanguage: "id-ID",
+  publisher: { "@type": "Organization", name: siteConfig.name },
+  potentialAction: {
+    "@type": "SearchAction",
+    target: {
+      "@type": "EntryPoint",
+      urlTemplate: `${siteUrl}/projects?q={search_term_string}`,
+    },
+    "query-input": "required name=search_term_string",
+  },
+};
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (

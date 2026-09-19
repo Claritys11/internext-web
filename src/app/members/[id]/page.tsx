@@ -22,7 +22,7 @@ import {
   CheckCircle2,
 } from "lucide-react";
 import { GithubIcon, LinkedinIcon, InstagramIcon } from "@/components/ui/Icons";
-import { pageMetadata } from "@/lib/seo";
+import { pageMetadata, absoluteUrl, createBreadcrumbJsonLd } from "@/lib/seo";
 import type { Metadata } from "next";
 
 interface MemberProfilePageProps {
@@ -35,7 +35,22 @@ export async function generateMetadata({ params }: MemberProfilePageProps): Prom
   const { id } = await params;
   const member = await getMemberById(id);
   if (!member) return { robots: { index: false, follow: false } };
-  return pageMetadata(`${member.name} — ${member.role}`, member.bio || `${member.name} adalah anggota kelas XI Internasional SMK Telkom Malang.`, `/members/${member.id}`);
+  const title = `${member.name} (${member.nickname}) — ${member.role}`;
+  const description =
+    member.bio ||
+    `${member.name} adalah talenta digital kelas XI Internasional SMK Telkom Malang dengan fokus keahlian di bidang ${member.skills.join(", ")}.`;
+  return pageMetadata(title, description, `/members/${member.id}`, {
+    image: member.avatar,
+    keywords: [member.name, member.nickname, member.role, ...member.skills, "Internext", "SMK Telkom Malang"],
+    type: "profile",
+  });
+}
+
+export async function generateStaticParams() {
+  const members = await getMembers();
+  return members.map((member) => ({
+    id: member.id,
+  }));
 }
 
 export const dynamic = "force-dynamic";
@@ -74,8 +89,45 @@ export default async function MemberProfilePage({ params }: MemberProfilePagePro
   const nextMember =
     currentIndex < allMembers.length - 1 ? allMembers[currentIndex + 1] : allMembers[0];
 
+  const profileJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "ProfilePage",
+    mainEntity: {
+      "@type": "Person",
+      name: member.name,
+      alternateName: member.nickname,
+      description: member.bio,
+      image: member.avatar.startsWith("http") ? member.avatar : absoluteUrl(member.avatar),
+      jobTitle: member.role,
+      worksFor: {
+        "@type": "EducationalOrganization",
+        name: profile?.school || "SMK Telkom Malang",
+      },
+      memberOf: {
+        "@type": "Organization",
+        name: "Internext",
+      },
+      knowsAbout: member.skills,
+      sameAs: [member.githubUrl, member.linkedinUrl, member.instagramUrl, member.portfolioUrl].filter(Boolean),
+    },
+  };
+
+  const breadcrumbsJsonLd = createBreadcrumbJsonLd([
+    { name: "Beranda", path: "/" },
+    { name: "Anggota", path: "/members" },
+    { name: member.name, path: `/members/${member.id}` },
+  ]);
+
   return (
     <div className="flex flex-col min-h-screen bg-[#02040A] text-[#F8FAFC]">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(profileJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbsJsonLd) }}
+      />
       <Navbar />
 
       <main className="flex-1 pt-28 sm:pt-32 md:pt-36 lg:pt-40 pb-16">

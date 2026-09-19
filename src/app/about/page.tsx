@@ -1,8 +1,19 @@
+import type { Metadata } from "next";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { siteConfig } from "@/config/site";
 import { getClassProfile } from "@/lib/api/services";
+import { pageMetadata, createBreadcrumbJsonLd } from "@/lib/seo";
 import { Sparkles, Target, Compass, Flag, Award, History, Users } from "lucide-react";
+
+export const metadata: Metadata = pageMetadata(
+  "Tentang Kami — Profil & Visi Misi",
+  "Mengenal lebih dekat kelas XI Internasional SMK Telkom Malang: sejarah, visi misi, nahkoda kepengurusan, dan budaya kolaborasi berstandar industri.",
+  "/about",
+  {
+    keywords: ["Tentang Internext", "Profil XI Internasional", "SMK Telkom Malang", "Visi Misi Kelas", "Nahkoda Kelas"],
+  }
+);
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -14,6 +25,11 @@ export default async function AboutPage() {
   const generation = profile.generation || siteConfig.classInfo.generation;
   const homeroomTeacher = profile.homeroomTeacher || siteConfig.classInfo.homeroomTeacher;
   const memberCount = profile.memberCount || siteConfig.classInfo.memberCount;
+
+  const breadcrumbs = createBreadcrumbJsonLd([
+    { name: "Beranda", path: "/" },
+    { name: "Tentang Kami", path: "/about" },
+  ]);
 
   const milestones = [
     {
@@ -45,6 +61,10 @@ export default async function AboutPage() {
 
   return (
     <div className="flex flex-col min-h-screen">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbs) }}
+      />
       <Navbar />
 
       <main className="flex-1 pt-28 sm:pt-32 md:pt-36 lg:pt-40 pb-16">

@@ -3,12 +3,54 @@ import { getArticles, getMembers } from "@/lib/api/services";
 import { absoluteUrl } from "@/lib/seo";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [articles, members] = await Promise.all([getArticles(), getMembers()]);
+  const [articles, members] = await Promise.all([
+    getArticles().catch(() => []),
+    getMembers().catch(() => []),
+  ]);
+
   const now = new Date();
-  const staticRoutes = ["/", "/about", "/members", "/projects", "/news", "/events", "/gallery", "/contact"];
-  return [
-    ...staticRoutes.map((path) => ({ url: absoluteUrl(path), lastModified: now, changeFrequency: path === "/" ? "weekly" as const : "monthly" as const, priority: path === "/" ? 1 : 0.7 })),
-    ...articles.map((article) => ({ url: absoluteUrl(`/news/${article.slug}`), lastModified: new Date(article.date), changeFrequency: "monthly" as const, priority: 0.6 })),
-    ...members.map((member) => ({ url: absoluteUrl(`/members/${member.id}`), lastModified: now, changeFrequency: "monthly" as const, priority: 0.5 })),
+
+  const staticRoutes: {
+    path: string;
+    priority: number;
+    changeFrequency: "always" | "hourly" | "daily" | "weekly" | "monthly" | "yearly" | "never";
+  }[] = [
+    { path: "/", priority: 1.0, changeFrequency: "daily" },
+    { path: "/projects", priority: 0.9, changeFrequency: "weekly" },
+    { path: "/news", priority: 0.9, changeFrequency: "daily" },
+    { path: "/members", priority: 0.8, changeFrequency: "weekly" },
+    { path: "/events", priority: 0.8, changeFrequency: "weekly" },
+    { path: "/gallery", priority: 0.8, changeFrequency: "weekly" },
+    { path: "/about", priority: 0.7, changeFrequency: "monthly" },
+    { path: "/contact", priority: 0.6, changeFrequency: "monthly" },
   ];
+
+  const staticEntries: MetadataRoute.Sitemap = staticRoutes.map((route) => ({
+    url: absoluteUrl(route.path),
+    lastModified: now,
+    changeFrequency: route.changeFrequency,
+    priority: route.priority,
+  }));
+
+  const articleEntries: MetadataRoute.Sitemap = articles.map((article) => ({
+    url: absoluteUrl(`/news/${article.slug}`),
+    lastModified: article.date ? new Date(article.date) : now,
+    changeFrequency: "weekly",
+    priority: 0.85,
+    images: article.coverImage
+      ? [article.coverImage.startsWith("http") ? article.coverImage : absoluteUrl(article.coverImage)]
+      : undefined,
+  }));
+
+  const memberEntries: MetadataRoute.Sitemap = members.map((member) => ({
+    url: absoluteUrl(`/members/${member.id}`),
+    lastModified: now,
+    changeFrequency: "monthly",
+    priority: 0.75,
+    images: member.avatar
+      ? [member.avatar.startsWith("http") ? member.avatar : absoluteUrl(member.avatar)]
+      : undefined,
+  }));
+
+  return [...staticEntries, ...articleEntries, ...memberEntries];
 }
