@@ -66,18 +66,33 @@ const useMedia = (queries: string[], values: number[], defaultValue: number) => 
 
 const useMeasure = (): [React.RefObject<HTMLDivElement | null>, { width: number; height: number }] => {
   const ref = useRef<HTMLDivElement | null>(null);
-  const [size, setSize] = useState({ width: 0, height: 0 });
+  const [size, setSize] = useState({
+    width: typeof window !== "undefined" ? Math.min(window.innerWidth - 32, 1200) : 1200,
+    height: 0,
+  });
 
   useIsomorphicLayoutEffect(() => {
     if (!ref.current) return;
+    const updateSize = () => {
+      if (ref.current) {
+        const clientWidth = ref.current.clientWidth;
+        const rectWidth = ref.current.getBoundingClientRect().width;
+        const w = clientWidth > 0 ? clientWidth : rectWidth > 0 ? rectWidth : (typeof window !== "undefined" ? window.innerWidth - 32 : 1200);
+        setSize({ width: w, height: ref.current.clientHeight || 0 });
+      }
+    };
+    updateSize();
     const ro = new ResizeObserver(([entry]) => {
-      if (entry) {
-        const { width, height } = entry.contentRect;
-        setSize({ width, height });
+      if (entry && entry.contentRect.width > 0) {
+        setSize({ width: entry.contentRect.width, height: entry.contentRect.height });
       }
     });
     ro.observe(ref.current);
-    return () => ro.disconnect();
+    window.addEventListener("resize", updateSize);
+    return () => {
+      ro.disconnect();
+      window.removeEventListener("resize", updateSize);
+    };
   }, []);
 
   return [ref, size];
@@ -96,7 +111,7 @@ const preloadImages = async (urls: string[]) => {
           img.src = src;
           img.onload = img.onerror = () => resolve();
           // Timeout failsafe to never block render on slow connections
-          setTimeout(resolve, 1500);
+          setTimeout(resolve, 800);
         })
     )
   );
@@ -129,7 +144,7 @@ export const Masonry: React.FC<MasonryProps> = ({
   );
 
   const [containerRef, { width }] = useMeasure();
-  const [imagesReady, setImagesReady] = useState(false);
+  const [imagesReady, setImagesReady] = useState(true);
 
   const getInitialPosition = (item: { x: number; y: number; w: number; h: number }) => {
     const containerRect = containerRef.current?.getBoundingClientRect();
@@ -166,19 +181,22 @@ export const Masonry: React.FC<MasonryProps> = ({
   };
 
   useEffect(() => {
-    preloadImages(items.map((i) => i.img)).then(() => setImagesReady(true));
+    if (items.length > 0) {
+      preloadImages(items.map((i) => i.img).filter(Boolean));
+    }
   }, [items]);
 
   const { grid, totalHeight } = useMemo(() => {
-    if (!width || items.length === 0) return { grid: [], totalHeight: 0 };
+    const effectiveWidth = width > 0 ? width : (typeof window !== "undefined" ? window.innerWidth - 32 : 1200);
+    if (items.length === 0) return { grid: [], totalHeight: 0 };
 
     const colHeights = new Array(columns).fill(0);
-    const columnWidth = width / columns;
+    const columnWidth = effectiveWidth / columns;
 
     const positioned = items.map((child) => {
       const col = colHeights.indexOf(Math.min(...colHeights));
       const x = columnWidth * col;
-      const height = child.height;
+      const height = child.height || 420;
       const y = colHeights[col];
 
       colHeights[col] += height;
@@ -195,7 +213,7 @@ export const Masonry: React.FC<MasonryProps> = ({
   const hasMounted = useRef(false);
 
   useIsomorphicLayoutEffect(() => {
-    if (!imagesReady || grid.length === 0) return;
+    if (grid.length === 0) return;
 
     grid.forEach((item, index) => {
       const selector = `[data-key="${item.id}"]`;
@@ -221,12 +239,13 @@ export const Masonry: React.FC<MasonryProps> = ({
           opacity: 1,
           ...animationProps,
           ...(blurToFocus && { filter: "blur(0px)" }),
-          duration: 0.8,
+          duration: 0.6,
           ease: "power3.out",
           delay: index * stagger,
         });
       } else {
         gsap.to(selector, {
+          opacity: 1,
           ...animationProps,
           duration: duration,
           ease: ease,
@@ -237,7 +256,7 @@ export const Masonry: React.FC<MasonryProps> = ({
 
     hasMounted.current = true;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [grid, imagesReady, stagger, animateFrom, blurToFocus, duration, ease]);
+  }, [grid, stagger, animateFrom, blurToFocus, duration, ease]);
 
   const handleMouseEnter = (e: React.MouseEvent<HTMLDivElement>, item: MasonryItem) => {
     const element = e.currentTarget;
@@ -305,13 +324,26 @@ export const Masonry: React.FC<MasonryProps> = ({
             key={item.id}
             data-key={item.id}
             className="item-wrapper group"
+            style={{
+              position: "absolute",
+              left: 0,
+              top: 0,
+              transform: `translate3d(${item.x}px, ${item.y}px, 0)`,
+              width: `${item.w}px`,
+              height: `${item.h}px`,
+              opacity: 1,
+              visibility: "visible",
+            }}
             onClick={() => handleItemClick(item)}
             onMouseEnter={(e) => handleMouseEnter(e, item)}
             onMouseLeave={(e) => handleMouseLeave(e, item)}
           >
             <div
               className="item-img relative"
-              style={{ backgroundImage: `url(${item.img})` }}
+              style={{
+                backgroundImage: item.img ? `url("${item.img}")` : undefined,
+                backgroundColor: "#0d1527",
+              }}
             >
               {/* Optional Custom Card Content or Default Rich Brand Overlay */}
               {renderItem ? (

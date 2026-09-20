@@ -21,6 +21,7 @@ export function ProjectCard({ project }: { project: Project }) {
               src={project.thumbnail}
               alt={project.title}
               fill
+              unoptimized={true}
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               className="object-cover group-hover/thumb:scale-105 transition-transform duration-300"
             />

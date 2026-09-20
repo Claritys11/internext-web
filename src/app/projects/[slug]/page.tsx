@@ -252,10 +252,11 @@ export default async function ProjectDetailPage({
                   alt={project.title}
                   fill
                   priority
-                  sizes="(max-width: 1024px) 100vw, 1024px"
+                  unoptimized={true}
+                  sizes="(max-width: 1200px) 100vw, 1200px"
                   className="object-cover"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#02040A] via-transparent to-transparent opacity-80" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#02040A] via-transparent to-transparent opacity-60 pointer-events-none" />
               </div>
             ) : (
               <div className="w-full h-64 sm:h-80 flex flex-col items-center justify-center bg-gradient-to-br from-[#0F172A] via-[#02040A] to-[#02040A] text-[#64748B]">
@@ -300,6 +301,7 @@ export default async function ProjectDetailPage({
                           src={shot}
                           alt={`${project.title} screenshot ${idx + 1}`}
                           fill
+                          unoptimized={true}
                           sizes="(max-width: 640px) 100vw, 50vw"
                           className="object-cover hover:scale-105 transition-transform duration-300"
                         />
@@ -361,6 +363,7 @@ export default async function ProjectDetailPage({
                                 src={member.avatar}
                                 alt={member.name}
                                 fill
+                                unoptimized={true}
                                 className="object-cover"
                               />
                             ) : (

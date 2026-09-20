@@ -13,7 +13,7 @@ export default function ProjectsPage() {
   const [projectsList, setProjectsList] = useState<Project[]>(mockProjects);
   const [search, setSearch] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
-  const [viewMode, setViewMode] = useState<"masonry" | "grid">("masonry");
+  const [viewMode, setViewMode] = useState<"masonry" | "grid">("grid");
 
   useEffect(() => {
     fetch("/api/projects")
