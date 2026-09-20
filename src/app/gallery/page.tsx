@@ -49,7 +49,7 @@ export default function GalleryPage() {
 
   // Dynamic pool for the 3D Dome Gallery, configurable from /admin (album: "Kubah 3D")
   const domeImages = useMemo(() => {
-    const customDome = galleryList.filter((item) => item.album === "Kubah 3D");
+    const customDome = galleryList.filter((item) => item.album?.includes("Kubah 3D"));
     if (customDome.length > 0) {
       return customDome.map((item) => ({
         src: item.url,
@@ -271,10 +271,19 @@ export default function GalleryPage() {
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-[#02040A] via-transparent to-transparent opacity-85" />
 
-                      <div className="absolute top-3 left-3">
-                        <span className="text-xs font-mono font-semibold px-2.5 py-1 rounded-full bg-black/60 text-[#F59E0B] backdrop-blur-md border border-[#F59E0B]/30">
-                          {item.album}
-                        </span>
+                      <div className="absolute top-3 left-3 flex flex-wrap gap-1 max-w-[85%]">
+                        {(item.album || "Dokumentasi")
+                          .split(",")
+                          .map((cat) => cat.trim())
+                          .filter(Boolean)
+                          .map((cat) => (
+                            <span
+                              key={cat}
+                              className="text-[11px] font-mono font-semibold px-2.5 py-0.5 rounded-full bg-black/70 text-[#F59E0B] backdrop-blur-md border border-[#F59E0B]/30"
+                            >
+                              {cat}
+                            </span>
+                          ))}
                       </div>
 
                       <div className="absolute bottom-4 left-4 right-4 flex items-end justify-between">

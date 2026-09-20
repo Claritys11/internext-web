@@ -12,14 +12,17 @@ export function ProjectCard({ project }: { project: Project }) {
     >
       <div>
         {/* Project Thumbnail Image */}
-        <div className="relative w-full h-48 sm:h-52 overflow-hidden bg-[#02040A]">
+        <Link
+          href={`/projects/${project.slug}`}
+          className="block relative w-full h-48 sm:h-52 overflow-hidden bg-[#02040A] group/thumb"
+        >
           {project.thumbnail ? (
             <Image
               src={project.thumbnail}
               alt={project.title}
               fill
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-              className="object-cover group-hover:scale-105 transition-transform duration-300"
+              className="object-cover group-hover/thumb:scale-105 transition-transform duration-300"
             />
           ) : (
             <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-[#0F172A] to-[#02040A] text-[#64748B]">
@@ -41,13 +44,15 @@ export function ProjectCard({ project }: { project: Project }) {
             <Heart className="w-3.5 h-3.5 text-[#EF4444] fill-[#EF4444]" />
             <span>{project.likes}</span>
           </div>
-        </div>
+        </Link>
 
         {/* Project Info */}
         <div className="p-5">
-          <h3 className="font-heading text-lg font-bold text-white group-hover:text-[#F59E0B] transition-colors mb-1.5 leading-snug">
-            {project.title}
-          </h3>
+          <Link href={`/projects/${project.slug}`} className="block group/title">
+            <h3 className="font-heading text-lg font-bold text-white group-hover/title:text-[#F59E0B] transition-colors mb-1.5 leading-snug">
+              {project.title}
+            </h3>
+          </Link>
 
           <p className="text-xs text-[#94A3B8] leading-relaxed mb-4 line-clamp-3">
             {project.description}

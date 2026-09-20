@@ -103,12 +103,43 @@ export default function AdminDashboardPage() {
     caption: "Dokumentasi kegiatan siswa XI Internasional.",
   });
   const [isGalleryModalOpen, setIsGalleryModalOpen] = useState(false);
+  const [selectedGalleryCategories, setSelectedGalleryCategories] = useState<string[]>(["Kegiatan"]);
+  const [customGalleryCategoryInput, setCustomGalleryCategoryInput] = useState<string>("");
+  const [customCategoriesList, setCustomCategoriesList] = useState<string[]>([]);
 
   // Admin Broadcast Chat State
   const [broadcastName, setBroadcastName] = useState("Admin Kelas");
   const [broadcastRole, setBroadcastRole] = useState<"Admin" | "Guru" | "Siswa">("Admin");
   const [broadcastMessage, setBroadcastMessage] = useState("");
   const [isSendingBroadcast, setIsSendingBroadcast] = useState(false);
+
+  const availableGalleryCategories = useMemo(() => {
+    const base = ["Kubah 3D", "Kegiatan", "Prestasi", "Akademik", "Sosial", "Workshop"];
+    const fromGallery = gallery.flatMap((g) =>
+      (g.album || "").split(",").map((s) => s.trim()).filter(Boolean)
+    );
+    return Array.from(new Set([...base, ...fromGallery, ...customCategoriesList]));
+  }, [gallery, customCategoriesList]);
+
+  const toggleGalleryCategory = (cat: string) => {
+    if (selectedGalleryCategories.includes(cat)) {
+      setSelectedGalleryCategories((prev) => prev.filter((c) => c !== cat));
+    } else {
+      setSelectedGalleryCategories((prev) => [...prev, cat]);
+    }
+  };
+
+  const handleAddCustomCategory = () => {
+    const trimmed = customGalleryCategoryInput.trim();
+    if (!trimmed) return;
+    if (!customCategoriesList.includes(trimmed)) {
+      setCustomCategoriesList((prev) => [...prev, trimmed]);
+    }
+    if (!selectedGalleryCategories.includes(trimmed)) {
+      setSelectedGalleryCategories((prev) => [...prev, trimmed]);
+    }
+    setCustomGalleryCategoryInput("");
+  };
 
   const showToast = (msg: string) => {
     setToastMessage(msg);
@@ -287,18 +318,18 @@ export default function AdminDashboardPage() {
     setEditingProject({
       id: "",
       title: "",
-      slug: `proyek-${Date.now()}`,
+      slug: "",
       tagline: "",
       description: "",
       thumbnail: "",
       category: "Web App",
-      techStack: ["Next.js", "TypeScript", "PostgreSQL"],
-      team: ["Fakhri Ramadhan", "Alya Izzah"],
-      demoUrl: "https://example.com",
-      githubUrl: "https://github.com",
-      featured: true,
-      likes: 35,
-      year: 2026,
+      techStack: ["Next.js", "TypeScript"],
+      team: [],
+      demoUrl: "",
+      githubUrl: "",
+      featured: false,
+      likes: 0,
+      year: new Date().getFullYear(),
     });
     setIsProjectModalOpen(true);
   };
@@ -311,10 +342,27 @@ export default function AdminDashboardPage() {
       const url = isNew ? "/api/projects" : `/api/projects/${editingProject.id}`;
       const method = isNew ? "POST" : "PUT";
 
+      const computedSlug =
+        editingProject.slug && editingProject.slug.trim() !== ""
+          ? editingProject.slug
+              .trim()
+              .toLowerCase()
+              .replace(/[^a-z0-9]+/g, "-")
+              .replace(/^-+|-+$/g, "")
+          : editingProject.title
+              .toLowerCase()
+              .replace(/[^a-z0-9]+/g, "-")
+              .replace(/^-+|-+$/g, "") || `proyek-${Date.now()}`;
+
+      const payload = {
+        ...editingProject,
+        slug: computedSlug,
+      };
+
       const res = await fetch(url, {
         method,
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(editingProject),
+        body: JSON.stringify(payload),
       });
 
       if (res.ok) {
@@ -475,19 +523,24 @@ export default function AdminDashboardPage() {
     e.preventDefault();
     if (!newGalleryForm.title || !newGalleryForm.url) return;
     try {
+      const finalAlbum =
+        selectedGalleryCategories.length > 0
+          ? selectedGalleryCategories.join(", ")
+          : "Kegiatan";
+
       const res = await fetch("/api/gallery", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           title: newGalleryForm.title,
-          album: newGalleryForm.album,
+          album: finalAlbum,
           url: newGalleryForm.url,
           thumbnail: newGalleryForm.url,
           caption: newGalleryForm.caption,
           date: "Feb 2026",
           type: "photo",
           photographer: "Dokumentasi Kelas",
-          likes: 12,
+          likes: 0,
         }),
       });
 
@@ -500,6 +553,8 @@ export default function AdminDashboardPage() {
           url: "",
           caption: "Dokumentasi kegiatan siswa XI Internasional.",
         });
+        setSelectedGalleryCategories(["Kegiatan"]);
+        setCustomGalleryCategoryInput("");
         setIsGalleryModalOpen(false);
         showToast("Foto dokumentasi berhasil ditambahkan ke galeri!");
       }
@@ -2125,13 +2180,39 @@ export default function AdminDashboardPage() {
                 <label className="block font-mono text-[#94A3B8] mb-1">Judul Proyek</label>
                 <input
                   type="text"
+                  placeholder="Contoh: Portal Presensi & Absensi IoT"
                   value={editingProject.title}
-                  onChange={(e) =>
-                    setEditingProject({ ...editingProject, title: e.target.value })
-                  }
+                  onChange={(e) => {
+                    const title = e.target.value;
+                    const autoSlug = title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+                    setEditingProject({
+                      ...editingProject,
+                      title,
+                      slug: !editingProject.id ? autoSlug : editingProject.slug,
+                    });
+                  }}
                   required
                   className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-3 py-2 text-white"
                 />
+              </div>
+
+              <div>
+                <label className="block font-mono text-[#94A3B8] mb-1">Custom Slug / URL (Opsional)</label>
+                <div className="flex items-center gap-1 bg-white/[0.04] border border-white/10 rounded-xl px-3 py-2 text-xs text-[#94A3B8]">
+                  <span className="font-mono text-[#64748B]">/projects/</span>
+                  <input
+                    type="text"
+                    placeholder="nama-proyek-unik"
+                    value={editingProject.slug}
+                    onChange={(e) =>
+                      setEditingProject({
+                        ...editingProject,
+                        slug: e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ""),
+                      })
+                    }
+                    className="flex-1 bg-transparent text-white font-mono focus:outline-none"
+                  />
+                </div>
               </div>
 
               <div className="grid grid-cols-2 gap-3">
@@ -2187,11 +2268,11 @@ export default function AdminDashboardPage() {
                   </span>
                 </label>
                 <p className="text-[11px] text-[#64748B] mb-2 leading-tight">
-                  Pilih siswa kelas XI Internasional yang berkontribusi dalam karya ini. Proyek ini akan otomatis tampil di portofolio profil LinkedIn masing-masing siswa.
+                  Pilih siswa kelas XI Internasional yang berkontribusi dalam karya ini. Siswa yang terpilih akan langsung masuk ke daftar kontributor di atas dan hilang dari daftar pilihan di bawah.
                 </p>
 
                 {/* Selected chips with avatar */}
-                {editingProject.team.length > 0 && (
+                {editingProject.team.length > 0 ? (
                   <div className="flex flex-wrap gap-1.5 mb-2.5 p-2 bg-black/40 rounded-xl border border-white/10">
                     {editingProject.team.map((memberName) => {
                       const found = members.find(
@@ -2219,6 +2300,7 @@ export default function AdminDashboardPage() {
                               })
                             }
                             className="hover:text-white ml-0.5"
+                            title="Hapus dari kontributor"
                           >
                             <X className="w-3 h-3" />
                           </button>
@@ -2226,54 +2308,61 @@ export default function AdminDashboardPage() {
                       );
                     })}
                   </div>
+                ) : (
+                  <div className="mb-2.5 p-2 text-center rounded-xl bg-white/[0.02] border border-dashed border-white/10 text-xs text-[#64748B]">
+                    Belum ada kontributor dipilih. Klik siswa di bawah untuk menambahkan.
+                  </div>
                 )}
 
-                {/* Member selector grid */}
-                <div className="max-h-36 overflow-y-auto p-2 bg-white/[0.02] rounded-xl border border-white/10 space-y-1">
-                  <div className="grid grid-cols-2 gap-1.5">
-                    {members.map((m) => {
-                      const isSelected = editingProject.team.some(
+                {/* Member selector grid: unselected only */}
+                {(() => {
+                  const unselectedMembers = members.filter(
+                    (m) =>
+                      !editingProject.team.some(
                         (t) =>
                           t.toLowerCase() === m.name.toLowerCase() ||
                           t.toLowerCase() === m.nickname.toLowerCase()
-                      );
-                      return (
-                        <button
-                          key={m.id}
-                          type="button"
-                          onClick={() => {
-                            if (isSelected) {
-                              setEditingProject({
-                                ...editingProject,
-                                team: editingProject.team.filter(
-                                  (t) =>
-                                    t.toLowerCase() !== m.name.toLowerCase() &&
-                                    t.toLowerCase() !== m.nickname.toLowerCase()
-                                ),
-                              });
-                            } else {
-                              setEditingProject({
-                                ...editingProject,
-                                team: [...editingProject.team, m.nickname || m.name],
-                              });
-                            }
-                          }}
-                          className={`flex items-center gap-2 p-1.5 rounded-lg text-left transition-colors border ${
-                            isSelected
-                              ? "bg-[#F59E0B]/20 border-[#F59E0B]/50 text-white"
-                              : "bg-white/[0.03] border-white/5 text-[#94A3B8] hover:bg-white/[0.08]"
-                          }`}
-                        >
-                          <div className="w-5 h-5 rounded-full overflow-hidden relative shrink-0">
-                            <Image src={m.avatar} alt={m.name} fill className="object-cover" />
+                      )
+                  );
+                  return (
+                    <div>
+                      <div className="text-[10px] font-mono text-[#94A3B8] mb-1">
+                        Pilih Siswa Kelas ({unselectedMembers.length} belum dipilih):
+                      </div>
+                      <div className="max-h-36 overflow-y-auto p-2 bg-[#02040A] rounded-xl border border-white/10">
+                        {unselectedMembers.length > 0 ? (
+                          <div className="grid grid-cols-2 sm:grid-cols-3 gap-1.5">
+                            {unselectedMembers.map((m) => (
+                              <button
+                                key={m.id}
+                                type="button"
+                                onClick={() => {
+                                  setEditingProject({
+                                    ...editingProject,
+                                    team: [...editingProject.team, m.nickname || m.name],
+                                  });
+                                }}
+                                className="flex items-center gap-2 p-1.5 rounded-lg text-left transition-all border bg-white/[0.03] border-white/5 text-[#94A3B8] hover:bg-[#F59E0B]/10 hover:border-[#F59E0B]/30 hover:text-white group"
+                              >
+                                <div className="w-5 h-5 rounded-full overflow-hidden relative shrink-0">
+                                  <Image src={m.avatar} alt={m.name} fill className="object-cover" />
+                                </div>
+                                <span className="truncate text-[11px] font-medium group-hover:text-[#F59E0B]">
+                                  {m.nickname || m.name}
+                                </span>
+                                <Plus className="w-3 h-3 text-[#64748B] ml-auto shrink-0 group-hover:text-[#F59E0B]" />
+                              </button>
+                            ))}
                           </div>
-                          <span className="truncate text-[11px] font-medium">{m.nickname || m.name}</span>
-                          {isSelected && <Check className="w-3 h-3 text-[#F59E0B] ml-auto shrink-0" />}
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
+                        ) : (
+                          <p className="text-center py-2 text-[11px] text-[#64748B]">
+                            Semua siswa kelas sudah terpilih sebagai kontributor.
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })()}
               </div>
 
               <div>
@@ -2626,21 +2715,62 @@ export default function AdminDashboardPage() {
               </div>
 
               <div>
-                <label className="block font-mono text-[#94A3B8] mb-1">Album / Kategori</label>
-                <select
-                  value={newGalleryForm.album}
-                  onChange={(e) =>
-                    setNewGalleryForm({ ...newGalleryForm, album: e.target.value })
-                  }
-                  className="w-full bg-[#02040A] border border-white/10 rounded-xl px-3 py-2 text-white"
-                >
-                  <option value="Kubah 3D">Kubah 3D (360° Dome Gallery)</option>
-                  <option value="Kegiatan">Kegiatan</option>
-                  <option value="Prestasi">Prestasi</option>
-                  <option value="Akademik">Akademik</option>
-                  <option value="Sosial">Sosial</option>
-                  <option value="Workshop">Workshop</option>
-                </select>
+                <div className="flex items-center justify-between mb-1">
+                  <label className="block font-mono text-[#94A3B8]">Album / Kategori</label>
+                  <span className="text-[10px] font-mono text-[#F59E0B]">
+                    {selectedGalleryCategories.length} kategori dipilih
+                  </span>
+                </div>
+                <p className="text-[11px] text-[#64748B] mb-2 leading-tight">
+                  Pilih satu atau lebih kategori untuk foto ini.
+                </p>
+
+                {/* Multi-select category pills */}
+                <div className="flex flex-wrap gap-1.5 mb-2.5 max-h-32 overflow-y-auto p-2 bg-[#02040A] rounded-xl border border-white/10">
+                  {availableGalleryCategories.map((cat) => {
+                    const isSelected = selectedGalleryCategories.includes(cat);
+                    return (
+                      <button
+                        key={cat}
+                        type="button"
+                        onClick={() => toggleGalleryCategory(cat)}
+                        className={`px-2.5 py-1 rounded-lg text-xs font-mono transition-all flex items-center gap-1.5 border ${
+                          isSelected
+                            ? "bg-[#F59E0B]/20 border-[#F59E0B]/60 text-[#F59E0B] font-semibold"
+                            : "bg-white/[0.04] border-white/5 text-[#94A3B8] hover:text-white hover:bg-white/[0.08]"
+                        }`}
+                      >
+                        {isSelected && <Check className="w-3 h-3 text-[#F59E0B]" />}
+                        <span>{cat}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {/* Form Buat Kategori Baru */}
+                <div className="flex items-center gap-2">
+                  <input
+                    type="text"
+                    placeholder="Buat kategori baru..."
+                    value={customGalleryCategoryInput}
+                    onChange={(e) => setCustomGalleryCategoryInput(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        e.preventDefault();
+                        handleAddCustomCategory();
+                      }
+                    }}
+                    className="flex-1 bg-white/[0.04] border border-white/10 rounded-xl px-3 py-1.5 text-xs text-white placeholder:text-[#64748B]"
+                  />
+                  <button
+                    type="button"
+                    onClick={handleAddCustomCategory}
+                    disabled={!customGalleryCategoryInput.trim()}
+                    className="px-3 py-1.5 rounded-xl bg-[#F59E0B]/15 hover:bg-[#F59E0B]/30 border border-[#F59E0B]/30 text-xs font-mono text-[#F59E0B] font-semibold disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+                  >
+                    + Buat
+                  </button>
+                </div>
               </div>
 
               <ImageUploadInput

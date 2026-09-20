@@ -348,8 +348,19 @@ export async function getProjects(category?: string): Promise<Project[]> {
 }
 
 export async function getProjectBySlug(slug: string): Promise<Project | null> {
+  const decoded = decodeURIComponent(slug).trim();
   try {
-    const p = await prisma.project.findUnique({ where: { slug } });
+    const p = await prisma.project.findFirst({
+      where: {
+        OR: [
+          { slug: slug },
+          { slug: decoded },
+          { slug: decoded.toLowerCase() },
+          { id: slug },
+          { id: decoded },
+        ],
+      },
+    });
     if (p) {
       return {
         id: p.id,
@@ -372,7 +383,15 @@ export async function getProjectBySlug(slug: string): Promise<Project | null> {
   } catch {
     // Fallback
   }
-  return fallbackProjects.find((p) => p.slug === slug) || null;
+  return (
+    fallbackProjects.find(
+      (p) =>
+        p.slug === slug ||
+        p.slug.toLowerCase() === decoded.toLowerCase() ||
+        p.id === slug ||
+        p.id.toLowerCase() === decoded.toLowerCase()
+    ) || null
+  );
 }
 
 export async function getFeaturedProjects(): Promise<Project[]> {

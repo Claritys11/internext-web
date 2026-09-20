@@ -1,11 +1,12 @@
 import type { MetadataRoute } from "next";
-import { getArticles, getMembers } from "@/lib/api/services";
+import { getArticles, getMembers, getProjects } from "@/lib/api/services";
 import { absoluteUrl } from "@/lib/seo";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [articles, members] = await Promise.all([
+  const [articles, members, projects] = await Promise.all([
     getArticles().catch(() => []),
     getMembers().catch(() => []),
+    getProjects().catch(() => []),
   ]);
 
   const now = new Date();
@@ -46,5 +47,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.75,
   }));
 
-  return [...staticEntries, ...articleEntries, ...memberEntries];
+  const projectEntries: MetadataRoute.Sitemap = projects.map((project) => ({
+    url: absoluteUrl(`/projects/${project.slug}`),
+    lastModified: now,
+    changeFrequency: "weekly",
+    priority: 0.85,
+  }));
+
+  return [...staticEntries, ...articleEntries, ...memberEntries, ...projectEntries];
 }
