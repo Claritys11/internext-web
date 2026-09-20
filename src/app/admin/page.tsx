@@ -91,17 +91,7 @@ export default function AdminDashboardPage() {
   const [editingEvent, setEditingEvent] = useState<EventItem | null>(null);
   const [isEventModalOpen, setIsEventModalOpen] = useState(false);
 
-  const [newGalleryForm, setNewGalleryForm] = useState<{
-    title: string;
-    album: string;
-    url: string;
-    caption: string;
-  }>({
-    title: "",
-    album: "Kegiatan",
-    url: "",
-    caption: "Dokumentasi kegiatan siswa XI Internasional.",
-  });
+  const [editingGallery, setEditingGallery] = useState<GalleryItem | null>(null);
   const [isGalleryModalOpen, setIsGalleryModalOpen] = useState(false);
   const [selectedGalleryCategories, setSelectedGalleryCategories] = useState<string[]>(["Kegiatan"]);
   const [customGalleryCategoryInput, setCustomGalleryCategoryInput] = useState<string>("");
@@ -259,13 +249,17 @@ export default function AdminDashboardPage() {
       name: "",
       nickname: "",
       role: "Software Engineer",
-      bio: "Siswa bersemangat dalam pengembangan web dan teknologi digital.",
+      department: "Divisi IT & Riset",
+      bio: "Siswa bersemangat dalam inovasi teknologi digital, coding, dan riset di SMK Telkom Malang.",
       avatar: "",
       quote: "Always code as if the guy who ends up maintaining your code will be a violent psychopath who knows where you live.",
       skills: ["Next.js", "TypeScript", "Tailwind CSS"],
+      portfolioUrl: "",
+      githubUrl: "",
+      instagramUrl: "",
+      linkedinUrl: "",
       isManagement: false,
-      instagramUrl: "https://instagram.com",
-      githubUrl: "https://github.com",
+      isAlumni: false,
     });
     setIsMemberModalOpen(true);
   };
@@ -322,6 +316,7 @@ export default function AdminDashboardPage() {
       tagline: "",
       description: "",
       thumbnail: "",
+      screenshots: [],
       category: "Web App",
       techStack: ["Next.js", "TypeScript"],
       team: [],
@@ -399,7 +394,7 @@ export default function AdminDashboardPage() {
     setEditingArticle({
       id: "",
       title: "",
-      slug: `artikel-${Date.now()}`,
+      slug: "",
       summary: "",
       content: "",
       category: "Prestasi",
@@ -412,6 +407,7 @@ export default function AdminDashboardPage() {
       },
       readTime: "4 min baca",
       tags: ["SMK Telkom Malang", "XI Internasional"],
+      isPinned: false,
     });
     setIsArticleModalOpen(true);
   };
@@ -424,10 +420,27 @@ export default function AdminDashboardPage() {
       const url = isNew ? "/api/articles" : `/api/articles/${editingArticle.id}`;
       const method = isNew ? "POST" : "PUT";
 
+      const computedSlug =
+        editingArticle.slug && editingArticle.slug.trim() !== ""
+          ? editingArticle.slug
+              .trim()
+              .toLowerCase()
+              .replace(/[^a-z0-9]+/g, "-")
+              .replace(/^-+|-+$/g, "")
+          : editingArticle.title
+              .toLowerCase()
+              .replace(/[^a-z0-9]+/g, "-")
+              .replace(/^-+|-+$/g, "") || `artikel-${Date.now()}`;
+
+      const payload = {
+        ...editingArticle,
+        slug: computedSlug,
+      };
+
       const res = await fetch(url, {
         method,
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(editingArticle),
+        body: JSON.stringify(payload),
       });
 
       if (res.ok) {
@@ -465,11 +478,13 @@ export default function AdminDashboardPage() {
       id: "",
       title: "",
       date: new Date().toLocaleDateString("id-ID", { day: "numeric", month: "long", year: "numeric" }),
+      endDate: "",
       location: "Aula Graha Moklet, SMK Telkom Malang",
       category: "Akademik",
       description: "Deskripsi agenda kegiatan siswa XI Internasional.",
       status: "upcoming",
       committee: "Pengurus Kelas",
+      countdownTarget: "",
       coverImage: "",
     });
     setIsEventModalOpen(true);
@@ -519,47 +534,73 @@ export default function AdminDashboardPage() {
   };
 
   // 6. GALLERY HANDLERS
+  const handleOpenNewGallery = (defaultAlbum: string = "Kegiatan") => {
+    const cats = defaultAlbum
+      ? defaultAlbum.split(",").map((s) => s.trim()).filter(Boolean)
+      : ["Kegiatan"];
+    setSelectedGalleryCategories(cats.length > 0 ? cats : ["Kegiatan"]);
+    setEditingGallery({
+      id: "",
+      title: "",
+      type: "photo",
+      url: "",
+      thumbnail: "",
+      album: defaultAlbum || "Kegiatan",
+      date: new Date().toLocaleDateString("id-ID", { month: "short", year: "numeric" }),
+      photographer: "Dokumentasi Kelas",
+      caption: "Dokumentasi kegiatan siswa XI Internasional.",
+      likes: 0,
+    });
+    setIsGalleryModalOpen(true);
+  };
+
+  const handleEditGallery = (item: GalleryItem) => {
+    const cats = (item.album || "")
+      .split(",")
+      .map((s) => s.trim())
+      .filter(Boolean);
+    setSelectedGalleryCategories(cats.length > 0 ? cats : ["Kegiatan"]);
+    setEditingGallery({ ...item });
+    setIsGalleryModalOpen(true);
+  };
+
   const handleSaveGallery = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newGalleryForm.title || !newGalleryForm.url) return;
+    if (!editingGallery || !editingGallery.title || !editingGallery.url) return;
     try {
+      const isNew = !editingGallery.id;
+      const url = isNew ? "/api/gallery" : `/api/gallery/${editingGallery.id}`;
+      const method = isNew ? "POST" : "PUT";
       const finalAlbum =
         selectedGalleryCategories.length > 0
           ? selectedGalleryCategories.join(", ")
           : "Kegiatan";
 
-      const res = await fetch("/api/gallery", {
-        method: "POST",
+      const payload = {
+        ...editingGallery,
+        album: finalAlbum,
+        thumbnail: editingGallery.thumbnail || editingGallery.url,
+      };
+
+      const res = await fetch(url, {
+        method,
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          title: newGalleryForm.title,
-          album: finalAlbum,
-          url: newGalleryForm.url,
-          thumbnail: newGalleryForm.url,
-          caption: newGalleryForm.caption,
-          date: "Feb 2026",
-          type: "photo",
-          photographer: "Dokumentasi Kelas",
-          likes: 0,
-        }),
+        body: JSON.stringify(payload),
       });
 
       if (res.ok) {
         const saved = await res.json();
-        setGallery((prev) => [saved, ...prev]);
-        setNewGalleryForm({
-          title: "",
-          album: "Kegiatan",
-          url: "",
-          caption: "Dokumentasi kegiatan siswa XI Internasional.",
-        });
-        setSelectedGalleryCategories(["Kegiatan"]);
-        setCustomGalleryCategoryInput("");
+        if (isNew) {
+          setGallery((prev) => [saved, ...prev]);
+          showToast(`Foto "${saved.title}" berhasil ditambahkan ke galeri!`);
+        } else {
+          setGallery((prev) => prev.map((g) => (g.id === saved.id ? saved : g)));
+          showToast(`Foto "${saved.title}" berhasil diperbarui!`);
+        }
         setIsGalleryModalOpen(false);
-        showToast("Foto dokumentasi berhasil ditambahkan ke galeri!");
       }
     } catch (err) {
-      showToast("Gagal menambahkan foto galeri.");
+      showToast("Gagal menyimpan foto galeri.");
     }
   };
 
@@ -1763,15 +1804,7 @@ export default function AdminDashboardPage() {
                 </div>
 
                 <button
-                  onClick={() => {
-                    setNewGalleryForm({
-                      title: "",
-                      album: "Kubah 3D",
-                      url: "",
-                      caption: "Momen dokumentasi Kubah 3D XI Internasional.",
-                    });
-                    setIsGalleryModalOpen(true);
-                  }}
+                  onClick={() => handleOpenNewGallery("Kubah 3D")}
                   className="btn-gradient px-4 py-2.5 rounded-xl text-xs font-semibold flex items-center gap-2 shrink-0 shadow-lg"
                 >
                   <Plus className="w-4 h-4" />
@@ -1802,13 +1835,22 @@ export default function AdminDashboardPage() {
                             unoptimized
                           />
                           <div className="absolute inset-0 bg-gradient-to-t from-[#02040A] via-transparent to-transparent opacity-80" />
-                          <button
-                            onClick={() => handleDeleteGallery(item.id, item.title)}
-                            className="absolute top-1.5 right-1.5 p-1 rounded-lg bg-red-500/80 hover:bg-red-600 text-white opacity-0 group-hover:opacity-100 transition-opacity"
-                            title="Hapus dari Kubah 3D"
-                          >
-                            <Trash2 className="w-3 h-3" />
-                          </button>
+                          <div className="absolute top-1.5 right-1.5 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <button
+                              onClick={() => handleEditGallery(item)}
+                              className="p-1 rounded-lg bg-black/70 hover:bg-[#F59E0B] text-white transition-colors"
+                              title="Edit Foto"
+                            >
+                              <Edit className="w-3 h-3" />
+                            </button>
+                            <button
+                              onClick={() => handleDeleteGallery(item.id, item.title)}
+                              className="p-1 rounded-lg bg-red-500/80 hover:bg-red-600 text-white transition-colors"
+                              title="Hapus dari Kubah 3D"
+                            >
+                              <Trash2 className="w-3 h-3" />
+                            </button>
+                          </div>
                         </div>
                         <div className="p-2">
                           <h6 className="text-[11px] font-semibold text-white truncate" title={item.title}>
@@ -1835,15 +1877,7 @@ export default function AdminDashboardPage() {
                 </div>
 
                 <button
-                  onClick={() => {
-                    setNewGalleryForm({
-                      title: "",
-                      album: "Kegiatan",
-                      url: "",
-                      caption: "Dokumentasi kegiatan siswa XI Internasional.",
-                    });
-                    setIsGalleryModalOpen(true);
-                  }}
+                  onClick={() => handleOpenNewGallery("Kegiatan")}
                   className="px-3.5 py-2 rounded-xl text-xs font-semibold bg-white/[0.06] hover:bg-white/[0.12] border border-white/10 text-white flex items-center gap-2 transition-colors"
                 >
                   <Plus className="w-4 h-4 text-[#F59E0B]" />
@@ -1855,7 +1889,7 @@ export default function AdminDashboardPage() {
                 {gallery.map((item) => (
                   <div
                     key={item.id}
-                    className="glass-card overflow-hidden border-white/[0.08] group relative"
+                    className="glass-card overflow-hidden border-white/[0.08] group relative rounded-xl"
                   >
                     <div className="relative h-44 w-full bg-[#02040A]">
                       <Image
@@ -1866,13 +1900,22 @@ export default function AdminDashboardPage() {
                         unoptimized
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-[#02040A] via-transparent to-transparent opacity-80" />
-                      <button
-                        onClick={() => handleDeleteGallery(item.id, item.title)}
-                        className="absolute top-2 right-2 p-1.5 rounded-lg bg-red-500/80 text-white opacity-0 group-hover:opacity-100 transition-opacity"
-                        title="Hapus Foto"
-                      >
-                        <Trash2 className="w-3.5 h-3.5" />
-                      </button>
+                      <div className="absolute top-2 right-2 flex items-center gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <button
+                          onClick={() => handleEditGallery(item)}
+                          className="p-1.5 rounded-lg bg-black/70 hover:bg-[#F59E0B] text-white transition-colors"
+                          title="Edit Foto"
+                        >
+                          <Edit className="w-3.5 h-3.5" />
+                        </button>
+                        <button
+                          onClick={() => handleDeleteGallery(item.id, item.title)}
+                          className="p-1.5 rounded-lg bg-red-500/80 hover:bg-red-600 text-white transition-colors"
+                          title="Hapus Foto"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
                     </div>
                     <div className="p-3">
                       <span className="text-[10px] font-mono text-[#F59E0B] block mb-0.5">
@@ -2044,20 +2087,20 @@ export default function AdminDashboardPage() {
             </div>
 
             <form onSubmit={handleSaveMember} className="space-y-4 text-xs">
-              <div>
-                <label className="block font-mono text-[#94A3B8] mb-1">Nama Lengkap</label>
-                <input
-                  type="text"
-                  value={editingMember.name}
-                  onChange={(e) =>
-                    setEditingMember({ ...editingMember, name: e.target.value })
-                  }
-                  required
-                  className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-3 py-2 text-white"
-                />
-              </div>
-
               <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block font-mono text-[#94A3B8] mb-1">Nama Lengkap</label>
+                  <input
+                    type="text"
+                    value={editingMember.name}
+                    onChange={(e) =>
+                      setEditingMember({ ...editingMember, name: e.target.value })
+                    }
+                    required
+                    className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-3 py-2 text-white"
+                  />
+                </div>
+
                 <div>
                   <label className="block font-mono text-[#94A3B8] mb-1">Nama Panggilan</label>
                   <input
@@ -2069,14 +2112,30 @@ export default function AdminDashboardPage() {
                     className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-3 py-2 text-white"
                   />
                 </div>
+              </div>
 
+              <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="block font-mono text-[#94A3B8] mb-1">Peran / Role</label>
                   <input
                     type="text"
+                    placeholder="Contoh: Frontend Developer"
                     value={editingMember.role}
                     onChange={(e) =>
                       setEditingMember({ ...editingMember, role: e.target.value })
+                    }
+                    className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-3 py-2 text-white"
+                  />
+                </div>
+
+                <div>
+                  <label className="block font-mono text-[#94A3B8] mb-1">Departemen / Divisi</label>
+                  <input
+                    type="text"
+                    placeholder="Contoh: Divisi IT & Riset"
+                    value={editingMember.department || ""}
+                    onChange={(e) =>
+                      setEditingMember({ ...editingMember, department: e.target.value })
                     }
                     className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-3 py-2 text-white"
                   />
@@ -2097,9 +2156,23 @@ export default function AdminDashboardPage() {
                 <label className="block font-mono text-[#94A3B8] mb-1">Personal Quote</label>
                 <textarea
                   rows={2}
+                  placeholder="Kutipan inspiratif..."
                   value={editingMember.quote}
                   onChange={(e) =>
                     setEditingMember({ ...editingMember, quote: e.target.value })
+                  }
+                  className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-3 py-2 text-white"
+                />
+              </div>
+
+              <div>
+                <label className="block font-mono text-[#94A3B8] mb-1">Biografi Lengkap Siswa</label>
+                <textarea
+                  rows={3}
+                  placeholder="Ceritakan latar belakang minat, keahlian, dan dedikasi siswa..."
+                  value={editingMember.bio || ""}
+                  onChange={(e) =>
+                    setEditingMember({ ...editingMember, bio: e.target.value })
                   }
                   className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-3 py-2 text-white"
                 />
@@ -2111,6 +2184,7 @@ export default function AdminDashboardPage() {
                 </label>
                 <input
                   type="text"
+                  placeholder="Next.js, TypeScript, UI/UX, Python"
                   value={editingMember.skills.join(", ")}
                   onChange={(e) =>
                     setEditingMember({
@@ -2122,19 +2196,104 @@ export default function AdminDashboardPage() {
                 />
               </div>
 
-              <div className="flex items-center gap-2 pt-1">
-                <input
-                  type="checkbox"
-                  id="isManagementCheckbox"
-                  checked={editingMember.isManagement}
-                  onChange={(e) =>
-                    setEditingMember({ ...editingMember, isManagement: e.target.checked })
-                  }
-                  className="rounded bg-white/10 border-white/20 text-[#EA580C]"
-                />
-                <label htmlFor="isManagementCheckbox" className="font-mono text-[#CBD5E1]">
-                  Tandai sebagai Pengurus Kelas / Nahkoda
-                </label>
+              {/* Tautan Media Sosial & Portofolio */}
+              <div className="pt-2 border-t border-white/10">
+                <span className="block font-mono text-[#F59E0B] text-[11px] mb-2 font-semibold">
+                  Tautan Portofolio & Media Sosial
+                </span>
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="block font-mono text-[#94A3B8] text-[11px] mb-1">
+                      Website / Portofolio URL
+                    </label>
+                    <input
+                      type="url"
+                      placeholder="https://portofolio.dev"
+                      value={editingMember.portfolioUrl || ""}
+                      onChange={(e) =>
+                        setEditingMember({ ...editingMember, portfolioUrl: e.target.value })
+                      }
+                      className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-3 py-1.5 text-white"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block font-mono text-[#94A3B8] text-[11px] mb-1">
+                      GitHub URL
+                    </label>
+                    <input
+                      type="url"
+                      placeholder="https://github.com/username"
+                      value={editingMember.githubUrl || ""}
+                      onChange={(e) =>
+                        setEditingMember({ ...editingMember, githubUrl: e.target.value })
+                      }
+                      className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-3 py-1.5 text-white"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block font-mono text-[#94A3B8] text-[11px] mb-1">
+                      LinkedIn URL
+                    </label>
+                    <input
+                      type="url"
+                      placeholder="https://linkedin.com/in/username"
+                      value={editingMember.linkedinUrl || ""}
+                      onChange={(e) =>
+                        setEditingMember({ ...editingMember, linkedinUrl: e.target.value })
+                      }
+                      className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-3 py-1.5 text-white"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block font-mono text-[#94A3B8] text-[11px] mb-1">
+                      Instagram URL
+                    </label>
+                    <input
+                      type="url"
+                      placeholder="https://instagram.com/username"
+                      value={editingMember.instagramUrl || ""}
+                      onChange={(e) =>
+                        setEditingMember({ ...editingMember, instagramUrl: e.target.value })
+                      }
+                      className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-3 py-1.5 text-white"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex flex-col sm:flex-row gap-3 pt-2">
+                <div className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    id="isManagementCheckbox"
+                    checked={editingMember.isManagement}
+                    onChange={(e) =>
+                      setEditingMember({ ...editingMember, isManagement: e.target.checked })
+                    }
+                    className="rounded bg-white/10 border-white/20 text-[#EA580C]"
+                  />
+                  <label htmlFor="isManagementCheckbox" className="font-mono text-[#CBD5E1]">
+                    Tandai sebagai Pengurus Kelas / Nahkoda
+                  </label>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    id="isAlumniCheckbox"
+                    checked={editingMember.isAlumni || false}
+                    onChange={(e) =>
+                      setEditingMember({ ...editingMember, isAlumni: e.target.checked })
+                    }
+                    className="rounded bg-white/10 border-white/20 text-[#10B981]"
+                  />
+                  <label htmlFor="isAlumniCheckbox" className="font-mono text-[#CBD5E1]">
+                    Tandai sebagai Alumni
+                  </label>
+                </div>
               </div>
 
               <div className="flex justify-end gap-2 pt-3 border-t border-white/10">
@@ -2394,6 +2553,105 @@ export default function AdminDashboardPage() {
                 />
               </div>
 
+              {/* Tautan Live Demo & Source Code */}
+              <div className="pt-2 border-t border-white/10">
+                <span className="block font-mono text-[#F59E0B] text-[11px] mb-2 font-semibold">
+                  Tautan Interaktif & Repositori Proyek
+                </span>
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="block font-mono text-[#94A3B8] text-[11px] mb-1">
+                      URL Live Demo (Tombol &ldquo;Buka Live Demo&rdquo;)
+                    </label>
+                    <input
+                      type="url"
+                      placeholder="https://demo-proyek.web.id"
+                      value={editingProject.demoUrl || ""}
+                      onChange={(e) =>
+                        setEditingProject({ ...editingProject, demoUrl: e.target.value })
+                      }
+                      className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-3 py-1.5 text-white"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block font-mono text-[#94A3B8] text-[11px] mb-1">
+                      URL Source Code (Tombol &ldquo;Lihat Source Code&rdquo;)
+                    </label>
+                    <input
+                      type="url"
+                      placeholder="https://github.com/organisasi/repo"
+                      value={editingProject.githubUrl || ""}
+                      onChange={(e) =>
+                        setEditingProject({ ...editingProject, githubUrl: e.target.value })
+                      }
+                      className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-3 py-1.5 text-white"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Meta Informasi & Screenshots */}
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block font-mono text-[#94A3B8] text-[11px] mb-1">
+                    Tahun Pembuatan
+                  </label>
+                  <input
+                    type="number"
+                    value={editingProject.year}
+                    onChange={(e) =>
+                      setEditingProject({
+                        ...editingProject,
+                        year: parseInt(e.target.value) || new Date().getFullYear(),
+                      })
+                    }
+                    className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-3 py-1.5 text-white"
+                  />
+                </div>
+
+                <div>
+                  <label className="block font-mono text-[#94A3B8] text-[11px] mb-1">
+                    Jumlah Likes / Apresiasi Awal
+                  </label>
+                  <input
+                    type="number"
+                    value={editingProject.likes}
+                    onChange={(e) =>
+                      setEditingProject({
+                        ...editingProject,
+                        likes: parseInt(e.target.value) || 0,
+                      })
+                    }
+                    className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-3 py-1.5 text-white"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block font-mono text-[#94A3B8] mb-1">
+                  Cuplikan Screenshots Galeri (Pisahkan baris atau koma)
+                </label>
+                <textarea
+                  rows={2}
+                  placeholder="https://images.unsplash.com/..., https://..."
+                  value={(editingProject.screenshots || []).join("\n")}
+                  onChange={(e) =>
+                    setEditingProject({
+                      ...editingProject,
+                      screenshots: e.target.value
+                        .split(/[\n,]+/)
+                        .map((s) => s.trim())
+                        .filter(Boolean),
+                    })
+                  }
+                  className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-3 py-2 text-white font-mono text-[11px]"
+                />
+                <span className="text-[10px] text-[#64748B] block mt-0.5">
+                  Screenshots ini akan tampil rapi di galeri halaman detail /projects/[slug].
+                </span>
+              </div>
+
               <div className="flex items-center gap-2 pt-1">
                 <input
                   type="checkbox"
@@ -2452,13 +2710,39 @@ export default function AdminDashboardPage() {
                 <label className="block font-mono text-[#94A3B8] mb-1">Judul Artikel</label>
                 <input
                   type="text"
+                  placeholder="Contoh: Tim Siswa Raih Medali Emas di Hackathon Nasional"
                   value={editingArticle.title}
-                  onChange={(e) =>
-                    setEditingArticle({ ...editingArticle, title: e.target.value })
-                  }
+                  onChange={(e) => {
+                    const title = e.target.value;
+                    const autoSlug = title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+                    setEditingArticle({
+                      ...editingArticle,
+                      title,
+                      slug: !editingArticle.id ? autoSlug : editingArticle.slug,
+                    });
+                  }}
                   required
                   className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-3 py-2 text-white"
                 />
+              </div>
+
+              <div>
+                <label className="block font-mono text-[#94A3B8] mb-1">Custom Slug / URL Berita (Opsional)</label>
+                <div className="flex items-center gap-1 bg-white/[0.04] border border-white/10 rounded-xl px-3 py-2 text-xs text-[#94A3B8]">
+                  <span className="font-mono text-[#64748B]">/news/</span>
+                  <input
+                    type="text"
+                    placeholder="judul-artikel-unik"
+                    value={editingArticle.slug}
+                    onChange={(e) =>
+                      setEditingArticle({
+                        ...editingArticle,
+                        slug: e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ""),
+                      })
+                    }
+                    className="flex-1 bg-transparent text-white font-mono focus:outline-none"
+                  />
+                </div>
               </div>
 
               <div className="grid grid-cols-2 gap-3">
@@ -2483,12 +2767,46 @@ export default function AdminDashboardPage() {
                 </div>
 
                 <div>
-                  <label className="block font-mono text-[#94A3B8] mb-1">Estimasi Baca</label>
+                  <label className="block font-mono text-[#94A3B8] mb-1">Estimasi Waktu Baca</label>
                   <input
                     type="text"
+                    placeholder="Contoh: 4 min baca"
                     value={editingArticle.readTime}
                     onChange={(e) =>
                       setEditingArticle({ ...editingArticle, readTime: e.target.value })
+                    }
+                    className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-3 py-2 text-white"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block font-mono text-[#94A3B8] mb-1">Tanggal Publikasi</label>
+                  <input
+                    type="text"
+                    placeholder="Contoh: 16 September 2026"
+                    value={editingArticle.date}
+                    onChange={(e) =>
+                      setEditingArticle({ ...editingArticle, date: e.target.value })
+                    }
+                    className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-3 py-2 text-white"
+                  />
+                </div>
+
+                <div>
+                  <label className="block font-mono text-[#94A3B8] mb-1">
+                    Tags Topik (Pisahkan koma)
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="SMK Telkom Malang, Juara, IoT"
+                    value={editingArticle.tags.join(", ")}
+                    onChange={(e) =>
+                      setEditingArticle({
+                        ...editingArticle,
+                        tags: e.target.value.split(",").map((t) => t.trim()).filter(Boolean),
+                      })
                     }
                     className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-3 py-2 text-white"
                   />
@@ -2527,6 +2845,85 @@ export default function AdminDashboardPage() {
                   }
                   className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-3 py-2 text-white"
                 />
+              </div>
+
+              {/* Data Penulis Artikel */}
+              <div className="pt-2 border-t border-white/10">
+                <span className="block font-mono text-[#F59E0B] text-[11px] mb-2 font-semibold">
+                  Informasi Penulis / Redaksi
+                </span>
+                <div className="grid grid-cols-2 gap-3 mb-2">
+                  <div>
+                    <label className="block font-mono text-[#94A3B8] text-[11px] mb-1">
+                      Nama Penulis
+                    </label>
+                    <input
+                      type="text"
+                      value={editingArticle.author?.name || ""}
+                      onChange={(e) =>
+                        setEditingArticle({
+                          ...editingArticle,
+                          author: {
+                            ...(editingArticle.author || { avatar: "", role: "" }),
+                            name: e.target.value,
+                          },
+                        })
+                      }
+                      className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-3 py-1.5 text-white"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block font-mono text-[#94A3B8] text-[11px] mb-1">
+                      Jabatan / Peran Penulis
+                    </label>
+                    <input
+                      type="text"
+                      value={editingArticle.author?.role || ""}
+                      onChange={(e) =>
+                        setEditingArticle({
+                          ...editingArticle,
+                          author: {
+                            ...(editingArticle.author || { name: "", avatar: "" }),
+                            role: e.target.value,
+                          },
+                        })
+                      }
+                      className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-3 py-1.5 text-white"
+                    />
+                  </div>
+                </div>
+
+                <ImageUploadInput
+                  label="Foto Avatar Penulis (Opsional)"
+                  value={editingArticle.author?.avatar || ""}
+                  onChange={(url) =>
+                    setEditingArticle({
+                      ...editingArticle,
+                      author: {
+                        ...(editingArticle.author || { name: "", role: "" }),
+                        avatar: url,
+                      },
+                    })
+                  }
+                  aspectRatio="square"
+                  helperText="Avatar kecil penulis artikel"
+                />
+              </div>
+
+              <div className="flex items-center gap-2 pt-1">
+                <input
+                  type="checkbox"
+                  id="isPinnedCheckbox"
+                  checked={editingArticle.isPinned || false}
+                  onChange={(e) =>
+                    setEditingArticle({ ...editingArticle, isPinned: e.target.checked })
+                  }
+                  className="rounded bg-white/10 border-white/20 text-[#EA580C]"
+                />
+                <label htmlFor="isPinnedCheckbox" className="font-mono text-[#CBD5E1]">
+                  Sematkan Warta di Paling Atas (Pinned Headline)
+                </label>
               </div>
 
               <div className="flex justify-end gap-2 pt-3 border-t border-white/10">
@@ -2583,18 +2980,6 @@ export default function AdminDashboardPage() {
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block font-mono text-[#94A3B8] mb-1">Tanggal</label>
-                  <input
-                    type="text"
-                    value={editingEvent.date}
-                    onChange={(e) =>
-                      setEditingEvent({ ...editingEvent, date: e.target.value })
-                    }
-                    className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-3 py-2 text-white"
-                  />
-                </div>
-
-                <div>
                   <label className="block font-mono text-[#94A3B8] mb-1">Kategori</label>
                   <select
                     value={editingEvent.category}
@@ -2613,29 +2998,95 @@ export default function AdminDashboardPage() {
                     <option value="Nasional">Nasional</option>
                   </select>
                 </div>
+
+                <div>
+                  <label className="block font-mono text-[#94A3B8] mb-1">Status Kegiatan</label>
+                  <select
+                    value={editingEvent.status}
+                    onChange={(e) =>
+                      setEditingEvent({
+                        ...editingEvent,
+                        status: e.target.value as any,
+                      })
+                    }
+                    className="w-full bg-[#02040A] border border-white/10 rounded-xl px-3 py-2 text-white font-medium"
+                  >
+                    <option value="upcoming">Mendatang (Upcoming)</option>
+                    <option value="ongoing">Sedang Berlangsung (Ongoing / Hari Ini)</option>
+                    <option value="completed">Telah Selesai (Completed)</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block font-mono text-[#94A3B8] mb-1">Tanggal Mulai / Pelaksanaan</label>
+                  <input
+                    type="text"
+                    placeholder="Contoh: 16 September 2026 atau 2026-09-16"
+                    value={editingEvent.date}
+                    onChange={(e) =>
+                      setEditingEvent({ ...editingEvent, date: e.target.value })
+                    }
+                    required
+                    className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-3 py-2 text-white"
+                  />
+                </div>
+
+                <div>
+                  <label className="block font-mono text-[#94A3B8] mb-1">Tanggal Selesai (Opsional)</label>
+                  <input
+                    type="text"
+                    placeholder="Contoh: 18 September 2026"
+                    value={editingEvent.endDate || ""}
+                    onChange={(e) =>
+                      setEditingEvent({ ...editingEvent, endDate: e.target.value })
+                    }
+                    className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-3 py-2 text-white"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block font-mono text-[#94A3B8] mb-1">Lokasi Kegiatan</label>
+                  <input
+                    type="text"
+                    placeholder="Contoh: Aula Graha Moklet"
+                    value={editingEvent.location}
+                    onChange={(e) =>
+                      setEditingEvent({ ...editingEvent, location: e.target.value })
+                    }
+                    className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-3 py-2 text-white"
+                  />
+                </div>
+
+                <div>
+                  <label className="block font-mono text-[#94A3B8] mb-1">Panitia / Penanggung Jawab</label>
+                  <input
+                    type="text"
+                    placeholder="Contoh: Divisi Acara & Pengurus Kelas"
+                    value={editingEvent.committee}
+                    onChange={(e) =>
+                      setEditingEvent({ ...editingEvent, committee: e.target.value })
+                    }
+                    className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-3 py-2 text-white"
+                  />
+                </div>
               </div>
 
               <div>
-                <label className="block font-mono text-[#94A3B8] mb-1">Lokasi</label>
+                <label className="block font-mono text-[#94A3B8] mb-1">
+                  Target Waktu Hitung Mundur / Countdown (Opsional)
+                </label>
                 <input
                   type="text"
-                  value={editingEvent.location}
+                  placeholder="Format ISO e.g. 2026-10-15T09:00:00 atau YYYY-MM-DD"
+                  value={editingEvent.countdownTarget || ""}
                   onChange={(e) =>
-                    setEditingEvent({ ...editingEvent, location: e.target.value })
+                    setEditingEvent({ ...editingEvent, countdownTarget: e.target.value })
                   }
-                  className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-3 py-2 text-white"
-                />
-              </div>
-
-              <div>
-                <label className="block font-mono text-[#94A3B8] mb-1">Panitia / Penanggung Jawab</label>
-                <input
-                  type="text"
-                  value={editingEvent.committee}
-                  onChange={(e) =>
-                    setEditingEvent({ ...editingEvent, committee: e.target.value })
-                  }
-                  className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-3 py-2 text-white"
+                  className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-3 py-2 text-white font-mono text-[11px]"
                 />
               </div>
 
@@ -2682,14 +3133,14 @@ export default function AdminDashboardPage() {
       )}
 
       {/* ========================================================================= */}
-      {/* MODAL 5: ADD PHOTO TO GALLERY */}
+      {/* MODAL 5: ADD / EDIT PHOTO GALLERY */}
       {/* ========================================================================= */}
-      {isGalleryModalOpen && (
+      {isGalleryModalOpen && editingGallery && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-in fade-in">
-          <div className="bg-[#02040A] border border-white/20 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
+          <div className="bg-[#02040A] border border-white/20 rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between pb-3 border-b border-white/10">
               <h3 className="font-heading font-bold text-base text-white">
-                Tambah Foto Galeri
+                {editingGallery.id ? "Edit Foto Galeri" : "Tambah Foto Galeri"}
               </h3>
               <button
                 onClick={() => setIsGalleryModalOpen(false)}
@@ -2705,13 +3156,45 @@ export default function AdminDashboardPage() {
                 <input
                   type="text"
                   placeholder="Contoh: Workshop Cloud & DevOps"
-                  value={newGalleryForm.title}
+                  value={editingGallery.title}
                   onChange={(e) =>
-                    setNewGalleryForm({ ...newGalleryForm, title: e.target.value })
+                    setEditingGallery({ ...editingGallery, title: e.target.value })
                   }
                   required
                   className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-3 py-2 text-white"
                 />
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block font-mono text-[#94A3B8] mb-1">Tipe Media</label>
+                  <select
+                    value={editingGallery.type || "photo"}
+                    onChange={(e) =>
+                      setEditingGallery({
+                        ...editingGallery,
+                        type: e.target.value as any,
+                      })
+                    }
+                    className="w-full bg-[#02040A] border border-white/10 rounded-xl px-3 py-2 text-white"
+                  >
+                    <option value="photo">Foto (Photo)</option>
+                    <option value="video">Video</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block font-mono text-[#94A3B8] mb-1">Tanggal / Periode</label>
+                  <input
+                    type="text"
+                    placeholder="Contoh: Feb 2026 atau 16 Sep 2026"
+                    value={editingGallery.date}
+                    onChange={(e) =>
+                      setEditingGallery({ ...editingGallery, date: e.target.value })
+                    }
+                    className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-3 py-2 text-white"
+                  />
+                </div>
               </div>
 
               <div>
@@ -2775,13 +3258,59 @@ export default function AdminDashboardPage() {
 
               <ImageUploadInput
                 label="Foto Galeri (URL atau Unggah File)"
-                value={newGalleryForm.url}
+                value={editingGallery.url}
                 onChange={(url) =>
-                  setNewGalleryForm({ ...newGalleryForm, url })
+                  setEditingGallery({ ...editingGallery, url, thumbnail: url })
                 }
                 aspectRatio="video"
-                helperText="Foto dokumentasi angkatan"
+                helperText="Foto dokumentasi angkatan atau Kubah 3D"
               />
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block font-mono text-[#94A3B8] mb-1">
+                    Fotografer / Dokumentator
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="Contoh: Divisi Media & Humas"
+                    value={editingGallery.photographer}
+                    onChange={(e) =>
+                      setEditingGallery({ ...editingGallery, photographer: e.target.value })
+                    }
+                    className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-3 py-2 text-white"
+                  />
+                </div>
+
+                <div>
+                  <label className="block font-mono text-[#94A3B8] mb-1">
+                    Jumlah Likes / Apresiasi Awal
+                  </label>
+                  <input
+                    type="number"
+                    value={editingGallery.likes}
+                    onChange={(e) =>
+                      setEditingGallery({
+                        ...editingGallery,
+                        likes: parseInt(e.target.value) || 0,
+                      })
+                    }
+                    className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-3 py-2 text-white"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block font-mono text-[#94A3B8] mb-1">Keterangan / Caption</label>
+                <textarea
+                  rows={2}
+                  value={editingGallery.caption}
+                  onChange={(e) =>
+                    setEditingGallery({ ...editingGallery, caption: e.target.value })
+                  }
+                  className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-3 py-2 text-white"
+                />
+              </div>
 
               <div className="flex justify-end gap-2 pt-3 border-t border-white/10">
                 <button
@@ -2795,7 +3324,7 @@ export default function AdminDashboardPage() {
                   type="submit"
                   className="btn-gradient px-4 py-2 rounded-xl text-white font-semibold"
                 >
-                  Tambahkan Foto
+                  {editingGallery.id ? "Simpan Perubahan" : "Tambahkan Foto"}
                 </button>
               </div>
             </form>

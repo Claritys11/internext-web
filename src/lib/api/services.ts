@@ -694,7 +694,12 @@ export async function saveGallery(item: GalleryItem): Promise<GalleryItem> {
   } catch {
     // Fallback
   }
-  fallbackGallery.unshift(item);
+  const idx = fallbackGallery.findIndex((g) => g.id === item.id);
+  if (idx >= 0) {
+    fallbackGallery[idx] = item;
+  } else {
+    fallbackGallery.unshift(item);
+  }
   return item;
 }
 
