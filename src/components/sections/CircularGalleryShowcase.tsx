@@ -58,6 +58,7 @@ function FlipCard({ project, className, style, isActive, onSelect }: FlipCardPro
               src={project.thumbnail}
               alt={project.title}
               fill
+              unoptimized={true}
               className="object-cover"
               sizes="(max-width: 640px) 112px, 128px"
             />
@@ -102,12 +103,12 @@ function FlipCard({ project, className, style, isActive, onSelect }: FlipCardPro
             </div>
           </div>
           <Link
-            href={`/projects#${project.slug}`}
+            href={`/projects/${project.slug}`}
             onClick={(e) => e.stopPropagation()}
-            className="w-full py-1 rounded-md bg-gradient-to-r from-[#F59E0B] to-[#EA580C] text-[#02040A] font-bold text-[10px] flex items-center justify-center gap-1 hover:brightness-110 transition-all"
+            className="w-full py-1.5 rounded-lg bg-gradient-to-r from-[#F59E0B] to-[#EA580C] text-[#02040A] font-bold text-xs flex items-center justify-center gap-1.5 hover:brightness-110 shadow-md shadow-[#EA580C]/20 transition-all"
           >
-            <span>Detail</span>
-            <ExternalLink className="w-2.5 h-2.5" />
+            <span>Buka Detail Karya</span>
+            <ExternalLink className="w-3 h-3" />
           </Link>
         </div>
       </div>
@@ -130,7 +131,7 @@ function FeaturedHighlightCard({
 }: FeaturedCardProps) {
   return (
     <Link
-      href={`/projects#${project.slug}`}
+      href={`/projects/${project.slug}`}
       className="group relative z-20 block rounded-2xl bg-[#0F172A]/80 hover:bg-[#1E293B]/90 border border-white/[0.08] hover:border-[#F59E0B]/50 p-3.5 backdrop-blur-xl transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_12px_32px_rgba(245,158,11,0.18)] select-none"
     >
       <div className="flex items-start gap-3">
@@ -140,6 +141,7 @@ function FeaturedHighlightCard({
             src={project.thumbnail}
             alt={project.title}
             fill
+            unoptimized={true}
             sizes="80px"
             className="object-cover group-hover:scale-110 transition-transform duration-500"
           />
